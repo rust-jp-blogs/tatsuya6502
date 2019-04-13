@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Oxidized Bookshelf</title>
+    <link>https://blog.rust-jp.rs/tatsuya6502/posts/</link>
+    <description>Recent content in Posts on Oxidized Bookshelf</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <copyright>&amp;copy; 2019 Tatsuya Kawano</copyright>
+    <lastBuildDate>Sat, 13 Apr 2019 08:00:00 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ブログを開設しました</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-hello/</link>
+      <pubDate>Sat, 13 Apr 2019 08:00:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-hello/</guid>
+      <description>こんにちは。tatsuya6502こと河野 達也（かわの たつや）です。共著で執筆した書籍の出版をきっかけに、このブログを開設しました。 ここでは</description>
+    </item>
+    
+  </channel>
+</rss>
