@@ -3,30 +3,49 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/</loc>
+    <lastmod>2019-04-23T12:20:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/</loc>
-    <lastmod>2019-04-13T08:00:00+08:00</lastmod>
+    <lastmod>2019-04-23T12:20:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/posts/</loc>
-    <lastmod>2019-04-13T08:00:00+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-hello/</loc>
-    <lastmod>2019-04-13T08:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/</loc>
+    <lastmod>2019-04-23T12:20:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/tags/</loc>
+    <lastmod>2019-04-23T12:20:00+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/%E5%AE%9F%E8%B7%B5rust%E5%85%A5%E9%96%80/</loc>
+    <lastmod>2019-04-23T12:20:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/%E6%9B%B8%E7%B1%8D/</loc>
+    <lastmod>2019-04-23T12:20:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-rust-bicycle-book-toc/</loc>
+    <lastmod>2019-04-23T12:20:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-hello/</loc>
+    <lastmod>2019-04-13T08:00:00+08:00</lastmod>
   </url>
   
 </urlset>

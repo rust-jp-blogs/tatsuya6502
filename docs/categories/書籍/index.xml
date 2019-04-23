@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Oxidized Bookshelf</title>
-    <link>https://blog.rust-jp.rs/tatsuya6502/posts/</link>
-    <description>Recent content in Posts on Oxidized Bookshelf</description>
+    <title>書籍 on Oxidized Bookshelf</title>
+    <link>https://blog.rust-jp.rs/tatsuya6502/categories/%E6%9B%B8%E7%B1%8D/</link>
+    <description>Recent content in 書籍 on Oxidized Bookshelf</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019 Tatsuya Kawano</copyright>
     <lastBuildDate>Tue, 23 Apr 2019 12:20:00 +0800</lastBuildDate>
     
-	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/posts/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/categories/%E6%9B%B8%E7%B1%8D/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,15 +19,6 @@
       
       <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-rust-bicycle-book-toc/</guid>
       <description>2019年5月8日発売予定の『実践Rust入門』（以下 本書）の目次を公開します。 購入前の参考にしてください。 実は本書は私が想像していたのより</description>
-    </item>
-    
-    <item>
-      <title>ブログを開設しました</title>
-      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-hello/</link>
-      <pubDate>Sat, 13 Apr 2019 08:00:00 +0800</pubDate>
-      
-      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-hello/</guid>
-      <description>こんにちは。tatsuya6502こと河野 達也（かわの たつや）です。共著で執筆した書籍の出版をきっかけに、このブログを開設しました。 ここでは</description>
     </item>
     
   </channel>
