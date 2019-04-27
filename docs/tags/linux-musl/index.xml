@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux-musl on Oxidized Bookshelf</title>
+    <link>https://blog.rust-jp.rs/tatsuya6502/tags/linux-musl/</link>
+    <description>Recent content in Linux-musl on Oxidized Bookshelf</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <copyright>&amp;copy; 2019 Tatsuya Kawano</copyright>
+    <lastBuildDate>Sat, 27 Apr 2019 12:17:54 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/linux-musl/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Comming Soon：Rustバイナリ入りの極小Dockerイメージを作る</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-comming-soon/</link>
+      <pubDate>Sat, 27 Apr 2019 12:17:54 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-comming-soon/</guid>
+      <description>書籍『実践Rust入門』の2-5-4項では、クロスコンパイルを応用した極小のDockerイメージを紹介しています。 書籍内で予告したとおり、そ</description>
+    </item>
+    
+  </channel>
+</rss>

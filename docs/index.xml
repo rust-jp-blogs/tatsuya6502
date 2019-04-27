@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019 Tatsuya Kawano</copyright>
-    <lastBuildDate>Tue, 23 Apr 2019 12:20:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 27 Apr 2019 12:17:54 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Comming Soon：Rustバイナリ入りの極小Dockerイメージを作る</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-comming-soon/</link>
+      <pubDate>Sat, 27 Apr 2019 12:17:54 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-comming-soon/</guid>
+      <description>書籍『実践Rust入門』の2-5-4項では、クロスコンパイルを応用した極小のDockerイメージを紹介しています。 書籍内で予告したとおり、そ</description>
+    </item>
     
     <item>
       <title>書籍『実践Rust入門』の詳細な目次です</title>
