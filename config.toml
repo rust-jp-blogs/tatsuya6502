@@ -11,12 +11,12 @@ theme = "hugo_theme_pickles"
 publishDir = "docs"
 
 # Copyright notice. This is displayer in the footer.
-copyright = "&copy; 2019 Tatsuya Kawano"
+copyright = "&copy; 2019 Tatsuya Kawano (tatsuya6502)"
 # custom_css = "/static/css/custom.css"
 
 [params]
   # Short subtitle/tagline. This is displayed in the header.
-  subtitle = "プログラミング言語Rustについて気の向くままに綴っていきます | tatsuya6502"
+  subtitle = "プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502"
 
   paginate = 10
   # Social accounts. Link to these accounts are displayed in the header and footer
@@ -39,12 +39,12 @@ copyright = "&copy; 2019 Tatsuya Kawano"
   # disqus = ""
   # Google Analytics API key.
   # ga_api_key = "Your Google Analytics tracking id"
-  
+
   author = "Tatsuya Kawano (tatsuya6502)"
   # authorwebsite = "example.com"
   # avatar = "/path/to/avatar"
   # contact = "Your contact link (ex. mailto:foo@example.com)"
-  bio = "Erlang/OTPやRustで分散DBを開発してます。最近Rustの本を書きました"
+  bio = "Erlang/OTPやRustで分散DBを開発してます。最近、Rustの本を書きました。上海在住"
   # Logo image. This is displayed ogp image.
   # logo = "/path/to/logo"
   # favicon = "/path/to/favicon"

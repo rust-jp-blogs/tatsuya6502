@@ -7,6 +7,7 @@ isCJKLanguage: true
 categories:
 - Rust Tips
 tags:
+- 実践Rust入門
 - Docker
 - Linux-musl
 ---

@@ -22,7 +22,7 @@ Gihyo Digital Publising（EPUB/PDFフォーマット）、Amazon Kindle、楽天
 物理本の先行販売については、共著者である [κeenさんのツィート][presales] を参照してください。
 
 [book-info]: http://gihyo.jp/book/2019/978-4-297-10559-4
-[presales]: https://
+[presales]: https://twitter.com/blackenedgold/status/1120501628858249217
 
 Twitterなどでは、早くも本書を入手し、連休を活用してRustに入門・再入門されている方が観測できます。
 内容については概ね好評のようで、私もホッと胸をなでおろすと同時に、Rustの普及に少しでも役立っているのかなと、共著者の一人として喜びを感じています。
