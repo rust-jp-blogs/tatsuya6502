@@ -1,5 +1,5 @@
 ---
-title: "Comming Soon：Rustバイナリ入りの極小Dockerイメージを作る"
+title: "Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る"
 # summary: ""
 date: 2019-04-27T12:17:54+08:00
 draft: false
