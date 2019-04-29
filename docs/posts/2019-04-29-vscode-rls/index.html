@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>ブログを開設しました</title>
-  <meta property="og:title" content="ブログを開設しました" />
-  <meta name="twitter:title" content="ブログを開設しました" />
+  <title>VS Code Rust (rls)拡張機能でcargo runタスクが見つからない場合の対処法</title>
+  <meta property="og:title" content="VS Code Rust (rls)拡張機能でcargo runタスクが見つからない場合の対処法" />
+  <meta name="twitter:title" content="VS Code Rust (rls)拡張機能でcargo runタスクが見つからない場合の対処法" />
   
 
   
@@ -17,7 +17,7 @@
 
   <meta name="author" content="Tatsuya Kawano (tatsuya6502)"/>
   <meta property="og:site_name" content="Oxidized Bookshelf" />
-  <meta property="og:url" content="https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-hello/" />
+  <meta property="og:url" content="https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-29-vscode-rls/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -55,30 +55,158 @@
 
 <article class="p-article">
   <header>
-    <h1>ブログを開設しました</h1>
+    <h1>VS Code Rust (rls)拡張機能でcargo runタスクが見つからない場合の対処法</h1>
     <div>
       <div class="c-time">
         Posted on
-        <time datetime="2019-04-13T08:00:00&#43;08:00">
-          Apr 13, 2019
+        <time datetime="2019-04-29T11:15:00&#43;08:00">
+          Apr 29, 2019
         </time>
       </div>
+      
+      <a href="https://blog.rust-jp.rs/tatsuya6502/tags/%E5%AE%9F%E8%B7%B5rust%E5%85%A5%E9%96%80" class="c-tag">実践Rust入門</a>
+      
+      <a href="https://blog.rust-jp.rs/tatsuya6502/tags/vs-code" class="c-tag">VS Code</a>
       
     </div>
   </header>
   
   <section id="js-article" class="p-article__body">
-    <p>こんにちは。<strong>tatsuya6502</strong>こと河野 達也（かわの たつや）です。共著で執筆した書籍の出版をきっかけに、このブログを開設しました。
-ここでは<a href="https://www.rust-lang.org">Rustというプログラミング言語</a>に関連する情報を発信していきます。</p>
+    
+
+<h2 id="まずは近況など">まずは近況など</h2>
+
+<p>共著で出版した書籍『実践Rust入門』（以下 本書）ですが、2019年4月26日に電子版が発売されました。
+また物理本（紙の本）の発売日は10連休明けの5月8日ですが、東京都内の一部の大手書店では先行販売しているようです。</p>
+
+<p>電子版の販売サイトへは <a href="http://gihyo.jp/book/2019/978-4-297-10559-4">本書の書籍情報ページ</a>（gihyo.jp）からリンクされています。
+Gihyo Digital Publising（EPUB/PDFフォーマット）、Amazon Kindle、楽天koboから販売されています。</p>
+
+<p>物理本の先行販売については、共著者である <a href="https://">κeenさんのツィート</a> を参照してください。</p>
+
+<p>Twitterなどでは、早くも本書を入手し、連休を活用してRustに入門・再入門されている方が観測できます。
+内容については概ね好評のようで、私もホッと胸をなでおろすと同時に、Rustの普及に少しでも役立っているのかなと、共著者の一人として喜びを感じています。</p>
+
+<h2 id="本題-rust-rls-プラグイン最新版の不具合について">本題：Rust (rls) プラグイン最新版の不具合について</h2>
+
+<p>前置きが長くなりました。
+本題に入りましょう。</p>
+
+<p>本書の2章では開発環境のセットアップと称して、Visual Studio Code（VS Code）のインストール手順や、ごく基本的な使いかたを紹介しています。</p>
+
+<blockquote>
+<p>本節では執筆時点の最新版を使ってインストール方法を説明します。</p>
 
 <ul>
-<li>Rustを使う上で役立つテクニック</li>
-<li>Rustの最新情報</li>
-<li>Rustの学習方法</li>
-<li>Rustの書籍に関する補足情報、など</li>
+<li>VS Code 1.32.0</li>
+<li>Rust (rls)拡張機能 0.5.3</li>
 </ul>
 
-<p>最初は書籍のプロモーション成分が多めになりそうですが、興味のあるところだけ読んでいただければと思います。</p>
+<p>&hellip;</p>
+
+<h4 id="2-3-5-基本的な使い方">2-3-5　基本的な使い方</h4>
+
+<p>&hellip;</p>
+
+<p>また<code>Ctrl</code>+<code>Shift</code>+<code>p</code>でコマンドパレットを開き、<code>run</code>と入力してから<code>Tasks: Run Tasks</code>を選びます。
+<code>cargo run</code>や<code>cargo test</code>などが表示されますので<code>cargo run</code>を選んでみてください。</p>
+</blockquote>
+
+<p><em>&mdash;実践Rust入門 ［言語仕様から開発手法まで］ より</em></p>
+
+<p>この章は私が執筆したのですが、試してくださった方からこんなツィートが、</p>
+
+<blockquote>
+<p><strong>puffin</strong> 2019-04-28 9:18PM JST</p>
+
+<p>実践Rust入門でVSCodeに拡張入れてcargo runしろって書いてあるのにコマンドが表示されないのでGitHubのissuesを調べてみたら一時的に削除したみたいなことが書かれてあってオイ</p>
+</blockquote>
+
+<p><em>&mdash;<a href="https://twitter.com/puffin555/status/1122475268533149697">https://twitter.com/puffin555/status/1122475268533149697</a> より</em></p>
+
+<p>えっ、そんなことが？</p>
+
+<p>Rust (rls)拡張機能のGitHub issueを調べてみたところ、たしかにそういうissueがありました。</p>
+
+<ul>
+<li>rust-lang/rls-vscode: <a href="https://github.com/rust-lang/rls-vscode/issues/557">#557 VS tasks not present on install version 0.6.0</a></li>
+</ul>
+
+<p>経緯をまとめると、以下のようになります。</p>
+
+<h3 id="経緯">経緯</h3>
+
+<ol>
+<li>Rust (rls) 拡張機能 0.6.0で行ったリファクタリングの結果、タスク機能が動作しなくなってしまった</li>
+<li>リリース後 issue #557 で報告があり、タスク機能が動作するように修正
+
+<ul>
+<li>しかし<code>cargo run</code>タスクだけは意図的に復活させなかった</li>
+<li>この状態で0.6.1をリリース</li>
+<li><code>cargo run</code>タスクを復活させなかった理由は、同じことが「デバッグ」メニューの「デバッグの開始」や「デバッグなしで開始」でできるため</li>
+<li>ただしこれらのメニューを使うには、ユーザーが<code>tasks.json</code>ファイルを作成する必要がある</li>
+</ul></li>
+<li>Issue #557のコメントで複数のユーザーが<code>cargo run</code>タスクの復活を希望</li>
+<li>4月5日の <a href="https://github.com/rust-lang/rls-vscode/commit/ff119775bdd8760c94502036ec6af431e7f6fede">このコミット</a> で<code>cargo run</code>タスクを復活
+
+<ul>
+<li>次回のポイントリリース（0.6.2）からは元通り使えるようになる予定</li>
+</ul></li>
+</ol>
+
+<p>次のバージョン（0.6.2）では<code>cargo run</code>タスクが復活するはずですが、リリースの時期はまだわかりません。</p>
+
+<h2 id="修正版がリリースされるまでのワークアラウンド">修正版がリリースされるまでのワークアラウンド</h2>
+
+<p>Rust (rls)拡張機能0.6.2がリリースされるまでの間は、古いバージョン（0.5.4）を使うのが良いでしょう。
+以下の手順でダウングレードできます。</p>
+
+<h3 id="古いバージョン-0-5-4-へのダウングレード">古いバージョン（0.5.4）へのダウングレード</h3>
+
+<p>以下の手順はVS Codeの最新版 1.33.1で動作確認済みです。</p>
+
+<ol>
+<li>拡張機能の自動更新をオフにする
+
+<ul>
+<li><code>Ctrl/Command</code>+<code>Shift</code>+<code>p</code>でコマンドパレットを開き、<code>disable auto</code>と入力する</li>
+<li>表示された「Disable Auto Updating Extentions」を選択する</li>
+<li>この操作で、インストールされている全ての拡張機能の自動更新が停止します</li>
+<li>現時点（VS Code 1.33.1）では個別の拡張機能について自動更新をオフにすることはできないようです</li>
+<li>この設定でも更新のチェックは働きますので、機能拡張ビューで個別に手動更新をかけることはできます</li>
+</ul></li>
+<li>Rust (rls)拡張機能を0.5.4にダウングレードする
+
+<ul>
+<li>機能拡張ビューに切り替え（<code>Ctrl/Command</code>+<code>Shift</code>+<code>X</code>）、Rust (rls)を右クリックする</li>
+<li>「別のバージョンをインストール」を選び、<code>0.5.4</code>を選択する</li>
+</ul></li>
+</ol>
+
+<p><strong>参考</strong>：</p>
+
+<ul>
+<li><a href="https://code.visualstudio.com/docs/editor/extension-gallery#_extension-autoupdate">VS Code - Extension auto-update</a></li>
+<li><a href="https://code.visualstudio.com/updates/v1_30#_install-previous-versions">VS Code 1.30 Release Notes - Extensions: Install previous versions</a></li>
+</ul>
+
+<h3 id="修正版がリリースされたら">修正版がリリースされたら</h3>
+
+<p>0.6.2がリリースされたら、拡張機能の自動更新をオンに戻すといいでしょう。</p>
+
+<ol>
+<li><code>Ctrl/Command</code>+<code>Shift</code>+<code>p</code>でコマンドパレットを開き、<code>enable auto</code>と入力する</li>
+<li>表示された「Enable Auto Updating Extentions」を選択する</li>
+</ol>
+
+<p>これでRust (rls)拡張機能が最新版に更新されます。</p>
+
+<h2 id="vs-code内でターミナルを使う方法もある">VS Code内でターミナルを使う方法もある</h2>
+
+<p>本書に書き忘れてしまったのですが、「ターミナル」メニューから「新しいターミナル」を選ぶと、VS Code内でターミナルを開けます。
+VS Codeで開いているフォルダがカレントディレクトリとして設定されますので、その場で、<code>carge run</code>などを実行できます。</p>
+
+<p>覚えておくと便利です。</p>
 
   </section>
   <footer>
@@ -87,16 +215,37 @@
       <div class="c-pagination__ctrl">
         <div class="c-pagination__newer">
           
-          <a href="https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-rust-bicycle-book-toc/">Newer</a>
           
         </div>
         <div class="c-pagination__older">
           
+          <a href="https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-comming-soon/">Older</a>
           
         </div>
       </div>
     </nav>
     
+
+<section class="p-related">
+  <h3>See Also</h3>
+  <ul id="slider" class="p-related__list">
+    
+    <li class="p-related__item js-related__item">
+      <a href="/tatsuya6502/posts/2019-04-27-comming-soon/"
+        >
+        <span>Comming Soon：Rustバイナリ入りの極小Dockerイメージを作る</span>
+      </a>
+    </li>
+    
+    <li class="p-related__item js-related__item">
+      <a href="/tatsuya6502/posts/2019-04-13-rust-bicycle-book-toc/"
+        >
+        <span>書籍『実践Rust入門』の詳細な目次です</span>
+      </a>
+    </li>
+    
+  </ul>
+</section>
 
 
     

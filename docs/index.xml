@@ -6,11 +6,20 @@
     <description>Recent content on Oxidized Bookshelf</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <copyright>&amp;copy; 2019 Tatsuya Kawano</copyright>
-    <lastBuildDate>Sat, 27 Apr 2019 12:17:54 +0800</lastBuildDate>
+    <copyright>&amp;copy; 2019 Tatsuya Kawano (tatsuya6502)</copyright>
+    <lastBuildDate>Mon, 29 Apr 2019 11:15:00 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>VS Code Rust (rls)拡張機能でcargo runタスクが見つからない場合の対処法</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-29-vscode-rls/</link>
+      <pubDate>Mon, 29 Apr 2019 11:15:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-29-vscode-rls/</guid>
+      <description>まずは近況など 共著で出版した書籍『実践Rust入門』（以下 本書）ですが、2019年4月26日に電子版が発売されました。 また物理本（紙の本）の</description>
+    </item>
     
     <item>
       <title>Comming Soon：Rustバイナリ入りの極小Dockerイメージを作る</title>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Rust Tips on Oxidized Bookshelf</title>
-    <link>https://blog.rust-jp.rs/tatsuya6502/categories/rust-tips/</link>
-    <description>Recent content in Rust Tips on Oxidized Bookshelf</description>
+    <title>VS Code on Oxidized Bookshelf</title>
+    <link>https://blog.rust-jp.rs/tatsuya6502/tags/vs-code/</link>
+    <description>Recent content in VS Code on Oxidized Bookshelf</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019 Tatsuya Kawano (tatsuya6502)</copyright>
     <lastBuildDate>Mon, 29 Apr 2019 11:15:00 +0800</lastBuildDate>
     
-	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/categories/rust-tips/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/vs-code/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,15 +19,6 @@
       
       <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-29-vscode-rls/</guid>
       <description>まずは近況など 共著で出版した書籍『実践Rust入門』（以下 本書）ですが、2019年4月26日に電子版が発売されました。 また物理本（紙の本）の</description>
-    </item>
-    
-    <item>
-      <title>Comming Soon：Rustバイナリ入りの極小Dockerイメージを作る</title>
-      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-comming-soon/</link>
-      <pubDate>Sat, 27 Apr 2019 12:17:54 +0800</pubDate>
-      
-      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-comming-soon/</guid>
-      <description>書籍『実践Rust入門』の2-5-4項では、クロスコンパイルを応用した極小のDockerイメージを紹介しています。 書籍内で予告したとおり、そ</description>
     </item>
     
   </channel>
