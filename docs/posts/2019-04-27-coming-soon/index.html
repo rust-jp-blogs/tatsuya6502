@@ -29,7 +29,8 @@
   
   
   
-  <meta name="generator" content="Hugo 0.55.4" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.60.1" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  
   
   
   <script type="text/javascript" src="https://blog.rust-jp.rs/tatsuya6502/js/bundle.js"></script>
@@ -76,21 +77,14 @@
   <section id="js-article" class="p-article__body">
     <p>書籍『<a href="http://gihyo.jp/book/2019/978-4-297-10559-4">実践Rust入門</a>』の2-5-4項では、クロスコンパイルを応用した極小のDockerイメージを紹介しています。
 書籍内で予告したとおり、その具体的な作成手順を当ブログで紹介する予定です。<strong>数日中に公開できると思いますので、もう少しお待ちください</strong>。</p>
-
 <p><strong>実践Rust入門の該当部分</strong></p>
-
 <blockquote>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ docker images hello-sqlite
+<pre><code class="language-console" data-lang="console">$ docker images hello-sqlite
 REPOSITORY    TAG     IMAGE ID      CREATED        SIZE
 hello-sqlite  latest  0f60b9e23a91  5 minutes ago  1.95MB
 alpine        latest  196d12cf6ab1  2 months ago   4.41MB
-ubuntu        18.04   ea4c82dcd15a  4 weeks ago    85.8MB</code></pre></div>
-<p></br>
-　hello-sqliteはSQLiteサーバを組み込んだRustサンプルプログラムを実行するためのコンテナです。
-<code>x86_64-unknown-linux-musl</code>ターゲット向けにビルドしたバイナリを、<code>scratch</code>という空のDockerイメージに入れました。
-このバイナリにはSQLiteはもちろん、全てのRustバイナリが依存しているlibcなども埋め込まれています。
-シェルなどのLinuxコマンドがなくても実行できますので、そのサイズは1.95MBとなっており、Dockerイメージとしては極端に小さい部類に入るAlpine Linuxのイメージ（4.41MB）よりも小さくなっています。</p>
-
+ubuntu        18.04   ea4c82dcd15a  4 weeks ago    85.8MB
+</code></pre><!-- raw HTML omitted -->
 <p>　誌面の都合から具体的な作成手順は省略します。
 筆者らが管理するWebサイトにて他のターゲットと共に紹介していますので、興味があればそちらをご覧になってください。</p>
 </blockquote>
@@ -220,6 +214,15 @@ ubuntu        18.04   ea4c82dcd15a  4 weeks ago    85.8MB</code></pre></div>
   
     
   
+<script src="https://utteranc.es/client.js"
+        repo="rust-jp-blogs/tatsuya6502"
+        issue-term="url"
+        label="blog comments"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
 
 </body>
 </html>
