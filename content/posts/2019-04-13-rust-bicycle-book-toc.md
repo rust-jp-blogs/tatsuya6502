@@ -208,13 +208,13 @@ Rustコンパイラなどのツールチェインをインストールし、Visu
 
 - 5-1 スタック領域とヒープ領域
 - 5-2 標準ライブラリの主な型
-  - 5-2-1 Box（std::boxed::Box<T>）
-  - 5-2-2 ベクタ（std::vec::Vec<T>）
+  - 5-2-1 Box（std::boxed::Box&lt;T&gt;）
+  - 5-2-2 ベクタ（std::vec::Vec&lt;T&gt;）
   - 5-2-3 その他のコレクション型
   - 5-2-4 String（std::string::String）
   - 5-2-5 範囲（std::ops::Range）
-  - 5-2-6 オプション（std::option::Option<T>）
-  - 5-2-7 リザルト（std::result::Result<T, E>）
+  - 5-2-6 オプション（std::option::Option&lt;T&gt;）
+  - 5-2-7 リザルト（std::result::Result&lt;T, E&gt;）
 - 5-3 新しい型の定義と型エイリアス
   - 5-3-1 型エイリアス
   - 5-3-2 構造体（struct）
@@ -350,7 +350,7 @@ Rustにおけるオブジェクト指向の側面について学びます。
   - 8-6-6 std::marker::Sized
 - 8-7 演算子のオーバーロード
 - 8-8 トレイトのテクニック
-  - 8-8-1 StringとInto<String>
+  - 8-8-1 StringとInto&lt;String&gt;
   - 8-8-2 オプショナル引数
   - 8-8-3 パスネーム
   - 8-8-4 &strとstr
