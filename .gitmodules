@@ -1,0 +1,3 @@
+[submodule "themes/hugo_theme_pickles"]
+	path = themes/hugo_theme_pickles
+	url = git@github.com:rust-jp-blogs/hugo_theme_pickles.git
