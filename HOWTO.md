@@ -61,11 +61,12 @@ tags:
 ## 記事の公開
 
 1. publicリポジトリからmasterブランチをpullする
-2. `hugo`コマンドを実行してHTMLを生成する（`doc/`フォルダ配下が更新される）
-3. `doc/`フォルダ配下のファイルをmasterブランチへコミットする
-4. masterブランチをdraftリポジトリへpushする
-5. masterブランチをpublicリポジトリへpushする
-6. [サイト][the-blog]に記事が公開されたことを確認する
+2. `rm -rf doc`
+3. `hugo`コマンドを実行してHTMLを生成する（`doc/`フォルダへ出力される）
+4. `doc/`フォルダ配下のファイルをmasterブランチへコミットする
+5. masterブランチをdraftリポジトリへpushする
+6. masterブランチをpublicリポジトリへpushする
+7. [サイト][the-blog]に記事が公開されたことを確認する
 
 [the-blog]: https://blog.rust-jp.rs/tatsuya6502/
 
