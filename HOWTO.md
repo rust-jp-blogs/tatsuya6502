@@ -13,7 +13,7 @@
 
 [hugo]: https://gohugo.io/
 
-##　ドラフト記事の作成
+## ドラフト記事の作成
 
 1. ローカルにトピックブランチを作成する
 2. `hugo new posts/20YY-MM-my-post.md`
@@ -23,8 +23,7 @@
 
 **Front Matterの例**
 
-```markdown
----
+```
 title: "記事のタイトル"
 # summary: ""
 date: 2019-04-29T11:15:00+08:00
@@ -34,7 +33,6 @@ categories:
 - Rust Tips
 tags:
 - 実践Rust入門
----
 ```
 
 ## ドラフトの保存
