@@ -16,10 +16,11 @@
 ## ドラフト記事の作成
 
 1. ローカルにトピックブランチを作成する
-2. `hugo new posts/20YY-MM-my-post.md`
-3. `hugo server -D -F`
-4. [http://localhost:1313/](http://localhost:1313/) を開く
-5. 以下の例を参考にfront matterを修正する
+2. `git submodule update`
+3. `hugo new posts/20YY-MM-my-post.md`
+4. `hugo server -D -F`
+5. [http://localhost:1313/tatsuya6502/](http://localhost:1313/tatsuya6502/) を開く
+6. 以下の例を参考にfront matterを修正する
 
 **Front Matterの例**
 
