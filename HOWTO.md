@@ -51,7 +51,7 @@ tags:
 3. `hugo server`で内容を確認する
 4. トピックブランチへコミットする
 5. 必要ならトピックブランチをrebaseしたり、過去のコミットをsquashしたりする
-8. トピックブランチをdraftリポジトリへpushする
+8. （トピックブランチをdraftリポジトリへpushする）
 9. トピックブランチをpublicリポジトリへpushする
 10. GitHubサイトで[リポジトリ][public-repo]を開き、プルリクエストを作成する。
     - マージ元：トピックブランチ
@@ -61,9 +61,9 @@ tags:
 ## 記事の公開
 
 1. publicリポジトリからmasterブランチをpullする
-2. `rm -rf doc`
-3. `hugo`コマンドを実行してHTMLを生成する（`doc/`フォルダへ出力される）
-4. `doc/`フォルダ配下のファイルをmasterブランチへコミットする
+2. `rm -rf docs`
+3. `hugo`コマンドを実行してHTMLを生成する（`docs`フォルダへ出力される）
+4. `docs`フォルダ配下のファイルをmasterブランチへコミットする
 5. masterブランチをdraftリポジトリへpushする
 6. masterブランチをpublicリポジトリへpushする
 7. [サイト][the-blog]に記事が公開されたことを確認する
