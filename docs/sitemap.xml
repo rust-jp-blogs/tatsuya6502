@@ -4,27 +4,52 @@
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/categories/</loc>
-    <lastmod>2019-04-29T11:15:00+08:00</lastmod>
+    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/docker/</loc>
+    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/linux-musl/</loc>
+    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/</loc>
-    <lastmod>2019-04-29T11:15:00+08:00</lastmod>
+    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/posts/</loc>
-    <lastmod>2019-04-29T11:15:00+08:00</lastmod>
+    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/categories/rust-tips/</loc>
-    <lastmod>2019-04-29T11:15:00+08:00</lastmod>
+    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-small-docker-image/</loc>
+    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/tags/</loc>
-    <lastmod>2019-04-29T11:15:00+08:00</lastmod>
+    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/%E5%AE%9F%E8%B7%B5rust%E5%85%A5%E9%96%80/</loc>
+    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-statically-linked-binary/</loc>
+    <lastmod>2019-12-07T19:00:00+08:00</lastmod>
   </url>
   
   <url>
@@ -38,22 +63,7 @@
   </url>
   
   <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/%E5%AE%9F%E8%B7%B5rust%E5%85%A5%E9%96%80/</loc>
-    <lastmod>2019-04-29T11:15:00+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-coming-soon/</loc>
-    <lastmod>2019-04-27T12:17:54+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/docker/</loc>
-    <lastmod>2019-04-27T12:17:54+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/linux-musl/</loc>
     <lastmod>2019-04-27T12:17:54+08:00</lastmod>
   </url>
   

@@ -62,7 +62,7 @@ tags:
 
 1. publicリポジトリからmasterブランチをpullする
 2. `rm -rf docs`
-3. `hugo`コマンドを実行してHTMLを生成する（`docs`フォルダへ出力される）
+3. `hugo -F`コマンドを実行してHTMLを生成する（`docs`フォルダへ出力される）
 4. `docs`フォルダ配下のファイルをmasterブランチへコミットする
 5. masterブランチをdraftリポジトリへpushする
 6. masterブランチをpublicリポジトリへpushする

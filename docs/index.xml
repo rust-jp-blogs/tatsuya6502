@@ -7,10 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019 Tatsuya Kawano (tatsuya6502)</copyright>
-    <lastBuildDate>Mon, 29 Apr 2019 11:15:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 07 Dec 2019 19:15:00 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>RustのLinux muslターゲット （その2：極小Dockerイメージを実現）</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-small-docker-image/</link>
+      <pubDate>Sat, 07 Dec 2019 19:15:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-small-docker-image/</guid>
+      <description>これは Rustその3 Advent Calendar 2019 — Qiita の8日目の記事です。 2回シリーズの2つめの記事になります。 前回：Alpine Linuxでも実行できるHello</description>
+    </item>
+    
+    <item>
+      <title>RustのLinux muslターゲット （その1：Linux向けのポータブルなバイナリを作る）</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-statically-linked-binary/</link>
+      <pubDate>Sat, 07 Dec 2019 19:00:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-statically-linked-binary/</guid>
+      <description>これは Rustその3 Advent Calendar 2019 — Qiita の8日目の記事です。 Rustのx86_64-unknown-linux-muslターゲットを使って、libc（</description>
+    </item>
     
     <item>
       <title>VS Code Rust (rls)拡張機能でcargo runタスクが見つからない場合の対処法</title>
@@ -22,7 +40,7 @@
     </item>
     
     <item>
-      <title>Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る</title>
+      <title>Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る（予告編）</title>
       <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-coming-soon/</link>
       <pubDate>Sat, 27 Apr 2019 12:17:54 +0800</pubDate>
       

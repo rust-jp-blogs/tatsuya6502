@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る</title>
-  <meta property="og:title" content="Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る" />
-  <meta name="twitter:title" content="Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る" />
+  <title>Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る（予告編）</title>
+  <meta property="og:title" content="Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る（予告編）" />
+  <meta name="twitter:title" content="Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る（予告編）" />
   
 
   
@@ -56,7 +56,7 @@
 
 <article class="p-article">
   <header>
-    <h1>Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る</h1>
+    <h1>Coming Soon：Rustバイナリ入りの極小Dockerイメージを作る（予告編）</h1>
     <div>
       <div class="c-time">
         Posted on
@@ -76,7 +76,7 @@
   
   <section id="js-article" class="p-article__body">
     <p>書籍『<a href="http://gihyo.jp/book/2019/978-4-297-10559-4">実践Rust入門</a>』の2-5-4項では、クロスコンパイルを応用した極小のDockerイメージを紹介しています。
-書籍内で予告したとおり、その具体的な作成手順を当ブログで紹介する予定です。<strong>数日中に公開できると思いますので、もう少しお待ちください</strong>。</p>
+書籍内で予告したとおり、その具体的な作成手順を当ブログで紹介する予定です。</p>
 <p><strong>実践Rust入門の該当部分</strong></p>
 <blockquote>
 <pre><code class="language-console" data-lang="console">$ docker images hello-sqlite
@@ -84,10 +84,16 @@ REPOSITORY    TAG     IMAGE ID      CREATED        SIZE
 hello-sqlite  latest  0f60b9e23a91  5 minutes ago  1.95MB
 alpine        latest  196d12cf6ab1  2 months ago   4.41MB
 ubuntu        18.04   ea4c82dcd15a  4 weeks ago    85.8MB
-</code></pre><!-- raw HTML omitted -->
+</code></pre><p>　hello-sqliteはSQLiteサーバを組み込んだRustサンプルプログラムを実行するためのコンテナです。
+<code>x86_64-unknown-linux-musl</code>ターゲット向けにビルドしたバイナリを、<code>scratch</code>という空のDockerイメージに入れました。
+このバイナリにはSQLiteはもちろん、全てのRustバイナリが依存しているlibcなども埋め込まれています。
+シェルなどのLinuxコマンドがなくても実行できますので、そのサイズは1.95MBとなっており、Dockerイメージとしては極端に小さい部類に入るAlpine Linuxのイメージ（4.41MB）よりも小さくなっています。</p>
 <p>　誌面の都合から具体的な作成手順は省略します。
 筆者らが管理するWebサイトにて他のターゲットと共に紹介していますので、興味があればそちらをご覧になってください。</p>
 </blockquote>
+<h2 id="2019127">追記（2019年12月7日）</h2>
+<p>たいへん遅くなりましたが、<a href="../2019-12-statically-linked-binary/">記事を公開</a>しました。
+お待たせしてすみません！</p>
 
   </section>
   <footer>
