@@ -64,6 +64,11 @@ copyright = "&copy; 2019 Tatsuya Kawano (tatsuya6502)"
 #     url = "/about"
 #     weight = 3
 
+[[menu.main]]
+    name = "RSS"
+    url = "/index.xml"
+    weight = 4
+
 [related]
   # Only include matches with rank >= threshold. This is a normalized rank between 0 and 100.
   threshold = 80
