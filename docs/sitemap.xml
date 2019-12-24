@@ -4,7 +4,42 @@
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/categories/</loc>
-    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
+    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/</loc>
+    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/</loc>
+    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/rust-tips/</loc>
+    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-zero-cost-abstraction/</loc>
+    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/</loc>
+    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/%E3%82%BC%E3%83%AD%E3%82%B3%E3%82%B9%E3%83%88%E6%8A%BD%E8%B1%A1%E5%8C%96/</loc>
+    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/%E6%9C%80%E9%81%A9%E5%8C%96/</loc>
+    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
   </url>
   
   <url>
@@ -18,27 +53,7 @@
   </url>
   
   <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/</loc>
-    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/</loc>
-    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/rust-tips/</loc>
-    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-small-docker-image/</loc>
-    <lastmod>2019-12-07T19:15:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/</loc>
     <lastmod>2019-12-07T19:15:00+08:00</lastmod>
   </url>
   

@@ -29,7 +29,7 @@
   
   
   
-  <meta name="generator" content="Hugo 0.60.1" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.61.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
   
   
   
@@ -199,7 +199,7 @@ ubuntu        18.04   ea4c82dcd15a  <span style="color:#ae81ff">4</span> weeks a
 つまりRustの単一のバイナリファイルにこれら全てのライブラリが埋め込まれている状態になります。
 このようなバイナリならCPUアーキテクチャさえ一致すればどんなLinux環境でも実行できます。
 DEBやRPMなどのパッケージを使わず、単一のバイナリを渡すだけですみますので、気軽にバイナリを配布できます。</p>
-<h2 id="linuxmusl">*-linux-muslがデフォルトのターゲットではない理由</h2>
+<h2 id="-linux-musl">*-linux-muslがデフォルトのターゲットではない理由</h2>
 <p>バイナリの配布に便利な<code>*-linux-musl</code>ターゲットですが、なぜLinux環境ではそれをデフォルトにせず、<code>*-linux-gnu</code>ターゲットが使われるのでしょうか？</p>
 <p>それはmuslを使うとビルドが面倒になるからです。
 <code>*-linux-musl</code>ではRustバイナリが外部ライブラリに依存しているときは、それなりの準備が必要です。
@@ -352,10 +352,10 @@ Hello, world!
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>ただしLinuxカーネルのバージョンは2.6.18かそれ以降でなければなりません。2.6.18がリリースされたのは2006年ですので、カーネルのバージョンが問題になることはまずないでしょう<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#8617;</a></p>
+<p>ただしLinuxカーネルのバージョンは2.6.18かそれ以降でなければなりません。2.6.18がリリースされたのは2006年ですので、カーネルのバージョンが問題になることはまずないでしょう <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2" role="doc-endnote">
-<p>DockerイメージにはLinuxカーネルが含まれていないので、カーネル抜きのサイズになります。<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#8617;</a></p>
+<p>DockerイメージにはLinuxカーネルが含まれていないので、カーネル抜きのサイズになります。 <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>

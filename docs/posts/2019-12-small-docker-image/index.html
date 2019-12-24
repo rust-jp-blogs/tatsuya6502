@@ -29,7 +29,7 @@
   
   
   
-  <meta name="generator" content="Hugo 0.60.1" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.61.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
   
   
   
@@ -124,7 +124,7 @@ SQLiteはそれ単独でデータベースサーバとして実行すること�
 
     Ok(())
 }
-</code></pre></div><h2 id="rustmuslbuilder">rust-musl-builderで簡単ビルド</h2>
+</code></pre></div><h2 id="rust-musl-builder">rust-musl-builderで簡単ビルド</h2>
 <p>hello-sqliteをmuslターゲット向けにビルドしましょう。
 <a href="../2019-12-statically-linked-binary/#linuxmusl">前回説明した</a>ようにSQLiteのような外部ライブラリを使うときは、それなりの準備が必要です。
 なぜなら、外部ライブラリはglibcと動的リンクさせる代わりに、muslと静的リンクさせる必要があるからです。</p>
@@ -241,7 +241,7 @@ alpine        3.10    965ea09ff2eb  <span style="color:#ae81ff">6</span> weeks a
 $ docker images ubuntu:18.04
 REPOSITORY    TAG     IMAGE ID      CREATED        SIZE
 ubuntu        18.04   <span style="color:#ae81ff">775349758637</span>  <span style="color:#ae81ff">5</span> weeks ago    64.2MB
-</code></pre></div><h2 id="rustmuslbuilder1">rust-musl-builderにないライブラリを使うには？</h2>
+</code></pre></div><h2 id="rust-musl-builder-1">rust-musl-builderにないライブラリを使うには？</h2>
 <p>rust-musl-builderにはOpenSSLやlibpqなどWebアプリケーションに必要そうなライブラリがすでに入っています。
 しかしアプリケーションによっては、これ以外の外部ライブラリが必要になることも少なくないでしょう。
 そういうときはrust-musl-builderをベースにして、必要なライブラリを追加したイメージを作るのがお勧めです。</p>
@@ -262,6 +262,7 @@ ubuntu        18.04   <span style="color:#ae81ff">775349758637</span>  <span sty
       <div class="c-pagination__ctrl">
         <div class="c-pagination__newer">
           
+          <a href="https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-zero-cost-abstraction/">Newer</a>
           
         </div>
         <div class="c-pagination__older">

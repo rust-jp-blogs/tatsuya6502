@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  
+  <title>Rustのゼロコスト抽象化の効果をアセンブラで確認</title>
+  <meta property="og:title" content="Rustのゼロコスト抽象化の効果をアセンブラで確認" />
+  <meta name="twitter:title" content="Rustのゼロコスト抽象化の効果をアセンブラで確認" />
+  
+
+  
+  <meta name="description" content="プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502">
+  <meta property="og:description" content="プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502">
+  <meta name="twitter:description" content="プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502">
+  
+
+  <meta name="author" content="Tatsuya Kawano (tatsuya6502)"/>
+  <meta property="og:site_name" content="Oxidized Bookshelf" />
+  <meta property="og:url" content="https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-zero-cost-abstraction/" />
+
+  
+  <meta name="twitter:card" content="summary" />
+
+  
+
+  
+  <meta property="og:type" content="article" />
+  
+  
+  
+  <meta name="generator" content="Hugo 0.61.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  
+  
+  
+  <script type="text/javascript" src="https://blog.rust-jp.rs/tatsuya6502/js/bundle.js"></script>
+  
+
+</head>
+
+<body>
+  <a href="#main" class="skip-link p-screen-reader-text">Skip to content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;" aria-hidden="true"> <symbol id="icon-500px" viewBox="0 0 16 16"><g> <path d="M3.953 10.512a5.24 5.24 0 0 0 6.996 3.141c.625-.262 1.184-.641 1.666-1.122s.859-1.041 1.122-1.666c.272-.647.412-1.331.412-2.037s-.137-1.394-.412-2.037c-.262-.625-.641-1.184-1.122-1.666s-1.041-.859-1.666-1.122a5.226 5.226 0 0 0-2.037-.413c-.716 0-1.431.144-2.066.413-.509.216-1.372.769-1.875 1.291l-.003.003V.984h7.241c.262-.003.262-.372.262-.491 0-.122 0-.487-.266-.491H4.377a.343.343 0 0 0-.344.341v6.066c0 .197.244.338.472.384.444.094.544-.047.653-.197l.016-.019c.166-.247.681-.766.688-.772a4.262 4.262 0 0 1 3.037-1.25c1.147 0 2.222.444 3.028 1.25a4.245 4.245 0 0 1 1.256 3.019 4.236 4.236 0 0 1-1.25 3.019 4.336 4.336 0 0 1-3.047 1.25 4.136 4.136 0 0 1-2.159-.597l.003-3.688c0-.491.213-1.028.572-1.431a2.09 2.09 0 0 1 1.588-.716c.594 0 1.15.225 1.566.634.409.406.637.95.637 1.528a2.179 2.179 0 0 1-2.206 2.197c-.238 0-.672-.106-.691-.109-.25-.075-.356.272-.391.387-.134.441.069.528.109.541.397.125.659.147 1.003.147a3.173 3.173 0 0 0 3.169-3.169c0-1.734-1.422-3.144-3.166-3.144-.856 0-1.659.328-2.263.919-.575.566-.903 1.319-.903 2.069v.019c-.003.094-.003 2.306-.006 3.031l-.003-.003c-.328-.363-.653-.919-.869-1.488-.084-.222-.275-.184-.534-.103-.125.034-.469.141-.391.394zm3.722-.865c0 .106.097.2.156.253l.019.019c.1.097.194.147.281.147a.181.181 0 0 0 .131-.05c.044-.041.537-.544.588-.591l.553.55c.05.056.106.088.172.088.088 0 .184-.053.284-.156.238-.244.119-.375.063-.438l-.559-.559.584-.588c.128-.137.016-.284-.097-.397-.162-.162-.322-.206-.422-.112l-.581.581-.588-.588a.16.16 0 0 0-.113-.047c-.078 0-.172.053-.275.156-.181.181-.219.306-.125.406l.588.584-.584.584c-.053.05-.078.103-.075.156zm1.278-7.931c-.938 0-1.938.191-2.669.506a.207.207 0 0 0-.134.181.753.753 0 0 0 .069.337c.047.116.166.425.4.334a6.689 6.689 0 0 1 2.334-.444 6.35 6.35 0 0 1 2.469.497c.622.263 1.206.644 1.844 1.194a.22.22 0 0 0 .147.059c.125 0 .244-.122.347-.237.169-.191.287-.35.119-.509a6.858 6.858 0 0 0-2.1-1.356 7.326 7.326 0 0 0-2.825-.563zM14.006 13.3c-.113-.113-.209-.178-.294-.203s-.162-.006-.222.053l-.056.056a6.32 6.32 0 0 1-6.938 1.356 6.336 6.336 0 0 1-2.013-1.356 6.046 6.046 0 0 1-1.356-2.012c-.288-.713-.381-1.247-.413-1.422-.003-.016-.006-.028-.006-.037-.041-.206-.231-.222-.503-.178-.112.019-.459.072-.428.319v.006a7.261 7.261 0 0 0 2.04 3.994 7.266 7.266 0 0 0 10.288 0l.059-.059c.069-.084.134-.225-.159-.516z"/> </g></symbol> <symbol id="icon-codepen" viewBox="0 0 16 16"><g> <path d="M14.777 5.751l-7-4.667a.5.5 0 0 0-.555 0l-7 4.667a.501.501 0 0 0-.223.416v4.667c0 .167.084.323.223.416l7 4.667a.5.5 0 0 0 .554 0l7-4.667a.501.501 0 0 0 .223-.416V6.167a.501.501 0 0 0-.223-.416zM7.5 10.232L4.901 8.5 7.5 6.768 10.099 8.5 7.5 10.232zM8 5.899V2.434l5.599 3.732L11 7.898l-3-2zm-1 0l-3 2-2.599-1.732L7 2.435V5.9zM3.099 8.5L1 9.899V7.101L3.099 8.5zM4 9.101l3 2v3.465l-5.599-3.732L4 9.102zm4 2l3-2 2.599 1.732L8 14.565V11.1zM11.901 8.5L14 7.101v2.798L11.901 8.5z"/> </g></symbol> <symbol id="icon-dribbble" viewBox="0 0 16 16"><g> <path d="M8 16c-4.412 0-8-3.588-8-8s3.587-8 8-8c4.412 0 8 3.587 8 8s-3.588 8-8 8zm6.747-6.906c-.234-.075-2.116-.634-4.256-.291a29.7 29.7 0 0 1 1.328 4.872 6.845 6.845 0 0 0 2.928-4.581zM10.669 14.3c-.103-.6-.497-2.688-1.456-5.181-.016.006-.031.009-.044.016-3.856 1.344-5.241 4.016-5.362 4.266a6.807 6.807 0 0 0 6.863.9zm-7.747-1.722c.156-.266 2.031-3.369 5.553-4.509a7.04 7.04 0 0 1 .269-.081 24.04 24.04 0 0 0-.553-1.159c-3.409 1.022-6.722.978-7.022.975-.003.069-.003.138-.003.209 0 1.753.666 3.356 1.756 4.566zM1.313 6.609c.306.003 3.122.016 6.319-.831a43.092 43.092 0 0 0-2.534-3.953 6.854 6.854 0 0 0-3.784 4.784zM6.4 1.366a36.612 36.612 0 0 1 2.55 4c2.431-.909 3.459-2.294 3.581-2.469A6.799 6.799 0 0 0 6.4 1.366zm6.891 2.325c-.144.194-1.291 1.663-3.816 2.694.159.325.313.656.453.991.05.119.1.234.147.353 2.275-.284 4.534.172 4.759.219a6.816 6.816 0 0 0-1.544-4.256z"/> </g></symbol> <symbol id="icon-facebook" viewBox="0 0 16 16"><g> <path d="M9.5 3H12V0H9.5C7.57 0 6 1.57 6 3.5V5H4v3h2v8h3V8h2.5l.5-3H9V3.5c0-.271.229-.5.5-.5z"/> </g></symbol> <symbol id="icon-feed" viewBox="0 0 16 16"><g> <path d="M2.13 11.733c-1.175 0-2.13.958-2.13 2.126 0 1.174.955 2.122 2.13 2.122a2.126 2.126 0 0 0 2.133-2.122 2.133 2.133 0 0 0-2.133-2.126zM.002 5.436v3.067c1.997 0 3.874.781 5.288 2.196a7.45 7.45 0 0 1 2.192 5.302h3.08c0-5.825-4.739-10.564-10.56-10.564zM.006 0v3.068C7.128 3.068 12.924 8.87 12.924 16H16C16 7.18 8.824 0 .006 0z"/> </g></symbol> <symbol id="icon-flickr" viewBox="0 0 16 16"><g> <path d="M0 8.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0zm9 0a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/> </g></symbol> <symbol id="icon-github" viewBox="0 0 16 16"><g> <path d="M8 .198a8 8 0 0 0-2.529 15.591c.4.074.547-.174.547-.385 0-.191-.008-.821-.011-1.489-2.226.484-2.695-.944-2.695-.944-.364-.925-.888-1.171-.888-1.171-.726-.497.055-.486.055-.486.803.056 1.226.824 1.226.824.714 1.223 1.872.869 2.328.665.072-.517.279-.87.508-1.07-1.777-.202-3.645-.888-3.645-3.954 0-.873.313-1.587.824-2.147-.083-.202-.357-1.015.077-2.117 0 0 .672-.215 2.201.82A7.672 7.672 0 0 1 8 4.066c.68.003 1.365.092 2.004.269 1.527-1.035 2.198-.82 2.198-.82.435 1.102.162 1.916.079 2.117.513.56.823 1.274.823 2.147 0 3.073-1.872 3.749-3.653 3.947.287.248.543.735.543 1.481 0 1.07-.009 1.932-.009 2.195 0 .213.144.462.55.384A8 8 0 0 0 8.001.196z"/> </g></symbol> <symbol id="icon-gitlab" viewBox="0 0 28 28"><g> <path d="M1.625 11.031L14 26.89.437 17.046a1.092 1.092 0 0 1-.391-1.203l1.578-4.813zm7.219 0h10.313L14.001 26.89zM5.75 1.469l3.094 9.562H1.625l3.094-9.562a.548.548 0 0 1 1.031 0zm20.625 9.562l1.578 4.813a1.09 1.09 0 0 1-.391 1.203l-13.563 9.844 12.375-15.859zm0 0h-7.219l3.094-9.562a.548.548 0 0 1 1.031 0z"/> </g></symbol> <symbol id="icon-google-plus" viewBox="0 0 16 16"><g> <path d="M5.091 7.147v1.747h2.888c-.116.75-.872 2.197-2.888 2.197-1.737 0-3.156-1.441-3.156-3.216s1.419-3.216 3.156-3.216c.991 0 1.65.422 2.028.784L8.5 4.112c-.888-.828-2.037-1.331-3.409-1.331C2.275 2.784 0 5.059 0 7.875s2.275 5.091 5.091 5.091c2.937 0 4.888-2.066 4.888-4.975 0-.334-.037-.591-.081-.844H5.092zM16 7h-1.5V5.5H13V7h-1.5v1.5H13V10h1.5V8.5H16z"/> </g></symbol> <symbol id="icon-google" viewBox="0 0 16 16"><g> <path d="M8.159 6.856V9.6h4.537c-.184 1.178-1.372 3.45-4.537 3.45C5.428 13.05 3.2 10.788 3.2 8s2.228-5.05 4.959-5.05c1.553 0 2.594.663 3.188 1.234l2.172-2.091C12.125.787 10.319-.001 8.16-.001c-4.422 0-8 3.578-8 8s3.578 8 8 8c4.616 0 7.681-3.247 7.681-7.816 0-.525-.056-.925-.125-1.325L8.16 6.855z"/> </g></symbol> <symbol id="icon-instagram" viewBox="0 0 22 22"><g> <path d="M15.445 0H6.554A6.559 6.559 0 0 0 0 6.554v8.891A6.559 6.559 0 0 0 6.554 22h8.891a6.56 6.56 0 0 0 6.554-6.555V6.554A6.557 6.557 0 0 0 15.445 0zm4.342 15.445a4.343 4.343 0 0 1-4.342 4.342H6.554a4.341 4.341 0 0 1-4.341-4.342V6.554a4.34 4.34 0 0 1 4.341-4.341h8.891a4.342 4.342 0 0 1 4.341 4.341l.001 8.891z"/> <path d="M11 5.312A5.693 5.693 0 0 0 5.312 11 5.694 5.694 0 0 0 11 16.688 5.694 5.694 0 0 0 16.688 11 5.693 5.693 0 0 0 11 5.312zm0 9.163a3.475 3.475 0 1 1-.001-6.95 3.475 3.475 0 0 1 .001 6.95zm5.7-10.484a1.363 1.363 0 1 1-1.364 1.364c0-.752.51-1.364 1.364-1.364z"/> </g></symbol> <symbol id="icon-linkedin" viewBox="0 0 16 16"><g> <path d="M6 6h2.767v1.418h.04C9.192 6.727 10.134 6 11.539 6 14.46 6 15 7.818 15 10.183V15h-2.885v-4.27c0-1.018-.021-2.329-1.5-2.329-1.502 0-1.732 1.109-1.732 2.255V15H6V6zM1 6h3v9H1V6zM4 3.5a1.5 1.5 0 1 1-3.001-.001A1.5 1.5 0 0 1 4 3.5z"/> </g></symbol> <symbol id="icon-mail" viewBox="0 0 22 18"><g> <path fill="#000" d="M0 17.225V.776h22v16.447H0v.002zm3.011-1.815h15.978l-5.111-5.115L11 13.179l-2.877-2.883-5.112 5.114zm-1.216-1.275l5.077-5.09L1.795 3.98v10.155zm13.332-5.09l5.079 5.09V3.979l-5.079 5.066zm-4.126 1.588l8.022-8.027-16.045-.001 8.023 8.028z"/> </g></symbol> <symbol id="icon-npm" viewBox="0 0 16 16"><g> <path d="M0 0v16h16V0H0zm13 13h-2V5H8v8H3V3h10v10z"/> </g></symbol> <symbol id="icon-pinterest" viewBox="0 0 16 16"><g> <path d="M8 1.069a6.93 6.93 0 0 0-2.525 13.384c-.059-.547-.116-1.391.025-1.988.125-.541.813-3.444.813-3.444s-.206-.416-.206-1.028c0-.963.559-1.684 1.253-1.684.591 0 .878.444.878.975 0 .594-.378 1.484-.575 2.306-.166.691.344 1.253 1.025 1.253 1.231 0 2.178-1.3 2.178-3.175 0-1.659-1.194-2.819-2.894-2.819-1.972 0-3.128 1.478-3.128 3.009 0 .597.228 1.234.516 1.581.056.069.066.128.047.2a95.89 95.89 0 0 1-.194.787c-.031.128-.1.153-.231.094-.866-.403-1.406-1.669-1.406-2.684 0-2.188 1.587-4.194 4.578-4.194 2.403 0 4.272 1.712 4.272 4.003 0 2.388-1.506 4.313-3.597 4.313-.703 0-1.362-.366-1.588-.797 0 0-.347 1.322-.431 1.647-.156.603-.578 1.356-.862 1.816a6.93 6.93 0 0 0 8.984-6.622 6.931 6.931 0 0 0-6.931-6.934z"/> </g></symbol> <symbol id="icon-pushpin" viewBox="0 0 16 16"><g> <path d="M8.5 0L7 1.5 8.5 3 5 7H1.5l2.75 2.75L0 15.385V16h.615l5.635-4.25L9 14.5V11l4-3.5L14.5 9 16 7.5 8.5 0zM7 8.5l-1-1L9.5 4l1 1L7 8.5z"/> </g></symbol> <symbol id="icon-search" viewBox="0 0 16 16"><g> <path d="M15.504 13.616l-3.79-3.223c-.392-.353-.811-.514-1.149-.499a6 6 0 1 0-.672.672c-.016.338.146.757.499 1.149l3.223 3.79c.552.613 1.453.665 2.003.115s.498-1.452-.115-2.003zM6 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/> </g></symbol> <symbol id="icon-tumblr" viewBox="0 0 16 16"><g> <path d="M9.001 7v3.659c0 .928-.012 1.463.086 1.727.098.262.342.534.609.691.354.212.758.318 1.214.318.81 0 1.289-.107 2.09-.633v2.405a9.089 9.089 0 0 1-1.833.639A7.93 7.93 0 0 1 9.369 16a4.9 4.9 0 0 1-1.725-.276 4.195 4.195 0 0 1-1.438-.79c-.398-.343-.672-.706-.826-1.091s-.23-.944-.23-1.676V6.556H3.003V4.29c.628-.204 1.331-.497 1.778-.877a4.386 4.386 0 0 0 1.08-1.374C6.133 1.505 6.32.825 6.422 0h2.579v4H13v3H9.001z"/> </g></symbol> <symbol id="icon-twitter" viewBox="0 0 16 16"><g> <path d="M16 3.538a6.461 6.461 0 0 1-1.884.516 3.301 3.301 0 0 0 1.444-1.816 6.607 6.607 0 0 1-2.084.797 3.28 3.28 0 0 0-2.397-1.034 3.28 3.28 0 0 0-3.197 4.028 9.321 9.321 0 0 1-6.766-3.431 3.284 3.284 0 0 0 1.015 4.381A3.301 3.301 0 0 1 .643 6.57v.041A3.283 3.283 0 0 0 3.277 9.83a3.291 3.291 0 0 1-1.485.057 3.293 3.293 0 0 0 3.066 2.281 6.586 6.586 0 0 1-4.862 1.359 9.286 9.286 0 0 0 5.034 1.475c6.037 0 9.341-5.003 9.341-9.341 0-.144-.003-.284-.009-.425a6.59 6.59 0 0 0 1.637-1.697z"/> </g></symbol> <symbol id="icon-vimeo" viewBox="0 0 16 16"><g> <path d="M15.994 4.281c-.072 1.556-1.159 3.691-3.263 6.397-2.175 2.825-4.016 4.241-5.522 4.241-.931 0-1.722-.859-2.366-2.581-.431-1.578-.859-3.156-1.291-4.734-.478-1.722-.991-2.581-1.541-2.581-.119 0-.538.253-1.256.753l-.753-.969c.791-.694 1.569-1.388 2.334-2.081 1.053-.909 1.844-1.387 2.372-1.438 1.244-.119 2.013.731 2.3 2.553.309 1.966.525 3.188.647 3.666.359 1.631.753 2.447 1.184 2.447.334 0 .838-.528 1.509-1.588.669-1.056 1.028-1.862 1.078-2.416.097-.912-.262-1.372-1.078-1.372a2.98 2.98 0 0 0-1.184.263c.787-2.575 2.287-3.825 4.506-3.753 1.641.044 2.416 1.109 2.322 3.194z"/> </g></symbol> <symbol id="icon-wordpress" viewBox="0 0 16 16"><g> <path d="M2 8c0 2.313 1.38 4.312 3.382 5.259L2.52 5.622A5.693 5.693 0 0 0 2 8zm10.05-.295c0-.722-.266-1.222-.495-1.612-.304-.482-.589-.889-.589-1.371 0-.537.418-1.037 1.008-1.037.027 0 .052.003.078.005A6.064 6.064 0 0 0 8 2.156 6.036 6.036 0 0 0 2.987 4.79c.141.004.274.007.386.007.627 0 1.599-.074 1.599-.074.323-.018.361.444.038.482 0 0-.325.037-.687.055l2.185 6.33 1.313-3.835-.935-2.495a12.304 12.304 0 0 1-.629-.055c-.323-.019-.285-.5.038-.482 0 0 .991.074 1.58.074.627 0 1.599-.074 1.599-.074.323-.018.362.444.038.482 0 0-.326.037-.687.055l2.168 6.282.599-1.947c.259-.809.457-1.389.457-1.889zm-3.945.806l-1.8 5.095a6.148 6.148 0 0 0 3.687-.093.52.52 0 0 1-.043-.081L8.105 8.511zm5.16-3.315c.026.186.04.386.04.601 0 .593-.114 1.259-.456 2.093l-1.833 5.16c1.784-1.013 2.983-2.895 2.983-5.051a5.697 5.697 0 0 0-.735-2.803zM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z"/> </g></symbol> <symbol id="icon-youtube" viewBox="0 0 16 16"><g> <path d="M15.841 4.8s-.156-1.103-.637-1.587c-.609-.637-1.291-.641-1.603-.678-2.237-.163-5.597-.163-5.597-.163h-.006s-3.359 0-5.597.163c-.313.038-.994.041-1.603.678C.317 3.697.164 4.8.164 4.8S.005 6.094.005 7.391v1.213c0 1.294.159 2.591.159 2.591s.156 1.103.634 1.588c.609.637 1.409.616 1.766.684 1.281.122 5.441.159 5.441.159s3.363-.006 5.6-.166c.313-.037.994-.041 1.603-.678.481-.484.637-1.588.637-1.588s.159-1.294.159-2.591V7.39c-.003-1.294-.162-2.591-.162-2.591zm-9.494 5.275V5.578l4.322 2.256-4.322 2.241z"/> </g></symbol></svg>
+  <header class="l-header">
+    
+    <p class="c-title p-title"><a href="https://blog.rust-jp.rs/tatsuya6502/" class="p-title__link">Oxidized Bookshelf</a></p>
+    
+    
+    <p class="p-subtitle">
+      プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502
+    </p>
+    
+  </header>
+  <main id="main" class="l-main">
+
+
+<article class="p-article">
+  <header>
+    <h1>Rustのゼロコスト抽象化の効果をアセンブラで確認</h1>
+    <div>
+      <div class="c-time">
+        Posted on
+        <time datetime="2019-12-24T18:00:00&#43;08:00">
+          Dec 24, 2019
+        </time>
+      </div>
+      
+      <a href="https://blog.rust-jp.rs/tatsuya6502/tags/%E3%82%BC%E3%83%AD%E3%82%B3%E3%82%B9%E3%83%88%E6%8A%BD%E8%B1%A1%E5%8C%96" class="c-tag">ゼロコスト抽象化</a>
+      
+      <a href="https://blog.rust-jp.rs/tatsuya6502/tags/%E6%9C%80%E9%81%A9%E5%8C%96" class="c-tag">最適化</a>
+      
+    </div>
+  </header>
+  
+  <section id="js-article" class="p-article__body">
+    <p>これは <a href="https://qiita.com/advent-calendar/2019/rust3">Rust その3 Advent Calendar 2019</a> の24日目のエントリです。
+Rustのゼロコスト抽象化が期待どおりに働いていることを、コンパイラが出力した機械語（アセンブリコード）で確認します。</p>
+<h2 id="heading">ゼロコスト抽象化とは</h2>
+<p>ゼロコスト抽象化（zero-cost abstraction）とは、Rustが持つ抽象化のしくみが実行時の追加コストなしに動作することです。
+ここでいう追加コストとは、メモリ使用量の増加や実行速度の低下などの、いわゆるオーバーヘッドを指します。</p>
+<p>では抽象化とはなんでしょうか？ プログラミングにおける抽象化とは、共通な部分を抽出し、その詳細をブラックボックス化することです。
+これにより仕様変更に強く、再利用性の高いソフトウェアを開発できます。</p>
+<p>Rustが提供する抽象化のしくみには、たとえば以下のようなものがあります。</p>
+<ul>
+<li><strong>ポリモーフィズム</strong>：いくつかの型に共通する振る舞い（メソッド）を抽出し、トレイトとして定義する。その振る舞いをどう実現するかは個々の型の実装に委ねられ、メソッドを呼ぶ側では意識しなくてよい</li>
+<li><strong>高階関数</strong>：高階関数とはクロージャを引数にとったり、戻り値として返したりする関数やメソッドのこと。たとえばイテレータや<code>Option&lt;T&gt;</code>では、それらが包んでいる値を操作するために<code>map</code>や<code>filter</code>などのメソッドが定義されている。具体的な操作の内容はこれらのメソッドでは定義されておらず、引数にとるクロージャによって実現される</li>
+</ul>
+<p>これらのしくみはRustでプログラミングするうえで欠かせないものです。</p>
+<p>一般的なプログラミング言語では抽象化のしくみを使うと実行時のオーバーヘッドがかかることがよくあります。
+たとえば、ポリモーフィズムを実現するために使われる動的ディスパッチなどがそうです。
+（動的ディスパッチについては後ほど説明します）</p>
+<p>一方、Rustではこれらをできる限りコンパイル時に解決し、実行時にはゼロコストになるよう、言語自体や標準ライブラリが設計されています。
+システム資源の効率的な使用と制御が求められる、システムプログラミング言語ならではの特徴といえるでしょう。</p>
+<h2 id="heading-1">まずは机上で最適化の動作を理解する</h2>
+<p>Rustのゼロコスト抽象化と呼ばれる機能は、主に以下のものがあります。</p>
+<ul>
+<li>トレイトメソッドとクロージャ</li>
+<li>Future</li>
+</ul>
+<p>この記事では前者について見ていきます。
+ゼロコストなFutureについては、<a href="https://blog.rust-lang.org/2019/11/07/Async-await-stable.html#zero-cost-futures">こちらのRust Blog記事</a> を参照してください。</p>
+<p>以下のコードについて調べます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 変数nはi64型。100に束縛する
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
+
+<span style="color:#75715e">// 変数o1はOption&lt;&amp;i64&gt;型
+</span><span style="color:#75715e"></span><span style="color:#75715e">// nを指すポインタをSomeで包み、o1を束縛する
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> Some(<span style="color:#f92672">&amp;</span>n);
+
+<span style="color:#75715e">// 変数o2はOption&lt;i64&gt;型
+</span><span style="color:#75715e"></span><span style="color:#75715e">// o1がSomeなので、map()メソッドは変数nの値に456を加算してSomeで包む
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> o1.map(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>);
+</code></pre></div><p>このコードはκeenさんが2016年に書かれた以下の記事で紹介されていたものをベースにしています。</p>
+<ul>
+<li><a href="http://keens.github.io/blog/2016/03/01/rustnozerokosutochuushouka/">Rustのゼロコスト抽象化（2016-03-01） — κeenのHappy Hacking Blog</a></li>
+</ul>
+<p>短いコードですが<code>T</code>として参照型を持つ<code>Option&lt;T&gt;</code>型と、ジェネリックな高階関数の<code>map()</code>メソッドを使用しています。
+これらがコンパイル時にどう最適化されて、実行時のオーバーヘッドがなくなるのか調べます。</p>
+<p>κeenさんの記事とかぶりますが、まずはコンパイラの最適化の内容を机上で確認しましょう。</p>
+<h3 id="nullable">列挙型とnullableポインタ最適化</h3>
+<p><code>Option&lt;T&gt;</code>型から見ていきます。
+今回のコードですが、変数<code>o1</code>は<code>Option&lt;&amp;i64&gt;</code>型、<code>o2</code>は<code>Option&lt;i64&gt;</code>型です。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 再掲
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;                 <span style="color:#75715e">// nはi64型
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> Some(<span style="color:#f92672">&amp;</span>n);              <span style="color:#75715e">// o1はOption&lt;&amp;i64&gt;型
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> o1.map(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>);  <span style="color:#75715e">// o2はOption&lt;i64&gt;型
+</span></code></pre></div><p>標準ライブラリの<code>Option&lt;T&gt;</code>型は列挙型として定義されており、<code>None</code>と<code>Some</code>の2つの列挙子（バリアント）を持ちます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// https://github.com/rust-lang/rust/blob/master/src/libcore/option.rs
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">enum</span> Option<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+    None,
+    Some(T),
+}
+</code></pre></div><p>Rustの列挙型は実行時にバリアントを識別できるよう、ほとんどの場合でタグと呼ばれる通し番号が付与されます。
+タグの分だけ余分にメモリを使うわけですから、ゼロコストではありません。</p>
+<p>例として<code>o2</code>の型である<code>Option&lt;i64&gt;</code>のメモリ上の表現を見てみましょう。
+<code>Some(100)</code>のときは以下のようになります。</p>
+<p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/opt-i64-some.png" alt="Some(100)"></p>
+<p><code>None</code>のときは以下のようになります。</p>
+<p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/opt-i64-none.png" alt="None"></p>
+<p>タグを見ればバリアントがわかるわけです。
+（<code>1</code>なら<code>Some(i64)</code>、<code>0</code>なら<code>None</code>）</p>
+<p>タグが付与されていることは次のコードで確認できます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#75715e">// Option&lt;i64&gt;型が使用するメモリ上のバイト数を表示する
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{} bytes&#34;</span>, std::mem::size_of::<span style="color:#f92672">&lt;</span>Option<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i64</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span>());
+    <span style="color:#75715e">// =&gt; &#34;16 bytes&#34; と表示される。
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p><code>Option&lt;i64&gt;</code>のデータサイズは16バイトだそうです。
+<code>i64</code>型のデータサイズは8バイトですが、タグのためにさらに8バイト使っていることがわかります。</p>
+<p>しかし、この列挙型ですがタグが不要になることもあります。
+それは以下のすべての条件を満たすときです。</p>
+<ol>
+<li>バリアントを2つだけ持つ</li>
+<li>一方のバリアントはデータフィールドを持たない</li>
+<li>もう一方のバリアントはデータフィールドを持つが、そのデータの全ビットが0になることはない</li>
+</ol>
+<p>これを「nullableポインタ最適化」と呼びます。</p>
+<p><code>o2</code>の型の<code>Option&lt;i64&gt;</code>は1.と2.の条件は満たしますが、3.は満たしません。
+<code>i64</code>型は<code>0</code>になることがあるからです。
+つまりnullableポインタ最適化は適用できません。</p>
+<p>一方、<code>o1</code>の型の<code>Option&lt;&amp;i64&gt;</code>は3.も満たします。
+<code>&amp;i64</code>は必ず有効なアドレスを指しているので、その値は決して<code>0</code>（nullポインタ）にならないからです。
+nullableポインタ最適化を適用できます。</p>
+<p><code>Option&lt;&amp;i64&gt;</code>型のデータサイズを確認すると、期待どおりタグがなくなって、全体で8バイトになっていることが確認できます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#75715e">// Option&lt;&amp;i64&gt;型が使用するメモリ上のバイト数を表示する
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{} bytes&#34;</span>, std::mem::size_of::<span style="color:#f92672">&lt;</span>Option<span style="color:#f92672">&lt;</span><span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i64</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span>());
+    <span style="color:#75715e">// =&gt; &#34;8 bytes&#34; と表示される。
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>メモリ上の表現は<code>Some(&amp;100)</code>ならこうなります。</p>
+<p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/opt-ref-i64-some.png" alt="Some(&100)"></p>
+<p>また<code>None</code>ならこうです。</p>
+<p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/opt-ref-i64-none.png" alt="None"></p>
+<p><code>0</code>（nullポインタ）のときは<code>None</code>で、そうではなく、有効なアドレスが入っているときは、<code>Some</code>ということになります。
+このように列挙型では、特定の条件を満たす場合はメモリ上のオーバーヘッドなしにバリアントの識別が可能になっています。</p>
+<h3 id="optiontmap">Option&lt;T&gt;のmap()メソッド</h3>
+<p>次に<code>Option&lt;T&gt;</code>の<code>map()</code>メソッドを見てみましょう。
+以下のように定義されています。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// https://github.com/rust-lang/rust/blob/master/src/libcore/option.rs
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Option<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+
+    <span style="color:#75715e">#[</span><span style="color:#75715e">inline</span><span style="color:#75715e">]</span>
+    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">map</span><span style="color:#f92672">&lt;</span>U, F: FnOnce(T) -&gt; <span style="color:#a6e22e">U</span><span style="color:#f92672">&gt;</span>(self, f: <span style="color:#a6e22e">F</span>) -&gt; Option<span style="color:#f92672">&lt;</span>U<span style="color:#f92672">&gt;</span> {
+        <span style="color:#66d9ef">match</span> self {
+            Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some(f(x)),
+            None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
+        }
+    }
+
+}
+</code></pre></div><p><code>map()</code>メソッドは<code>F</code>型のクロージャを引数にとります。
+このクロージャは<code>FnOnce</code>トレイトを実装し、<code>T</code>型の値を<code>U</code>型の値へマッピング（変換）します。</p>
+<p><code>map()</code>メソッドには<code>#[inline]</code>アトリビュートがついていますので、コンパイル時の最適化により、呼び出し側のコードにこのコードが埋め込まれるはずです。</p>
+<p><strong>元のmap()メソッドを呼び出すコード</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;                 <span style="color:#75715e">// nはi64型
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> Some(<span style="color:#f92672">&amp;</span>n);              <span style="color:#75715e">// o1はOption&lt;&amp;i64&gt;型
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> o1.map(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>);  <span style="color:#75715e">// o2はOption&lt;i64&gt;型
+</span></code></pre></div><p><strong>最適化によってmap()メソッドの本体が埋め込まれたコード</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
+<span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> Some(<span style="color:#f92672">&amp;</span>n);
+
+<span style="color:#75715e">// map()メソッドをインライン化
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">match</span> o1 {
+    None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
+    Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some((<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>)(x)),
+}
+</code></pre></div><p>コンパイル時にこれと等価なコード（コンパイラの内部表現）が生成されることが期待できます。</p>
+<p>さらに、<code>o1</code>にnullableポインタ最適化を適用します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
+<span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>n;  <span style="color:#75715e">// o1の型がOption&lt;&amp;i64&gt;から&amp;i64へ変わった
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">//タグではなく、値がnullポインタかどうかでバリアントを識別する
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+    None
+} <span style="color:#66d9ef">else</span> {
+    Some((<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>)(o1))
+}
+</code></pre></div><p>実際にはsafe Rustで<code>o1</code>の値をnullポインタに設定することは許されないので、上のコードはコンパイルできません。
+ただ最適化の過程では、これと等価な内部表現が作られていると考えられます。</p>
+<h3 id="heading-2">トレイトとして実現されるクロージャ</h3>
+<p><code>o1</code>がシンプルな型になり、<code>map()</code>メソッドもインライン化されました。
+次はクロージャのところがどうなるか見てみましょう。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// クロージャを定義して引数o1に適用する
+</span><span style="color:#75715e"></span>(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>)(o1)
+</code></pre></div><p>クロージャは「無名関数」と自由変数を捕捉した「環境」で構成されます。
+コンパイラはクロージャの定義に出会うたびに、クロージャの環境を表現するための匿名型を生成します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// クロージャの環境となる匿名型
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">AnonymousType</span>;
+</code></pre></div><p>このクロージャはなにも捕捉しないので環境は空になっています。（データフィールドがありません）</p>
+<p>そしてクロージャの無名関数の部分はトレイトメソッドとして実装されます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// |x| *x + 456 のコンパイラ内部表現を擬似的なコードにすると
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// このFnOnce実装は&amp;i32型の値を引数にとり、
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">impl</span> FnOnce<span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">for</span> AnonymousType {
+    <span style="color:#75715e">// i32型の値を返す
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Output</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">i32</span>;
+
+    <span style="color:#75715e">// 無名関数の本体
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;rust-call&#34;</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">call_once</span>(self, args: (<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)) -&gt; <span style="color:#a6e22e">Self</span>::Output {
+        <span style="color:#f92672">*</span>args.<span style="color:#ae81ff">0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>
+    }
+}
+</code></pre></div><p>これを呼び出すと以下のようになります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
+<span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>n;
+<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+    None
+} <span style="color:#66d9ef">else</span> {
+    <span style="color:#75715e">// クロージャの環境を初期化する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> f: FnOnce<span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)<span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> AnonymousType;
+    <span style="color:#75715e">// クロージャを呼び出す
+</span><span style="color:#75715e"></span>    Some(f.call_once(o1))
+}
+</code></pre></div><p>変数<code>f</code>の値は単なる構造体なので、<code>o1</code>などのローカル変数と一緒にスタック領域にアロケートされます。
+Rustでは動的にアロケートするメモリ領域としてスタック領域とヒープ領域を使いますが、一般的な話として、スタック領域へのアロケートのほうがヒープ領域のアロケートよりも高速です。
+なお今回の<code>AnonymousType</code>はフィールドを持たないので、実行時にはなにもアロケートしません。</p>
+<h3 id="heading-3">トレイトメソッドのディスパッチ</h3>
+<p>次はトレイトメソッドの呼び出し<code>f.call_once(o1)</code>の実行時コストについて調べましょう。</p>
+<p>トレイトメソッドの呼び出しは、普通の関数の呼び出しと比べると複雑になります。
+なぜなら、そのトレイトメソッドを実装している型がいくつも存在している可能性があり、そのなかから正しいものを選ばないといけないからです。
+このような同種のものからひとつを選ぶ出すことを「ディスパッチ」と呼びます。</p>
+<p>Rustでは2種類のメソッドディスパッチ方式をサポートしています。</p>
+<ul>
+<li><strong>動的ディスパッチ</strong>：実行時にわかる情報から呼び指すメソッドの実体を選ぶ。柔軟だが実行時コストがかかる</li>
+<li><strong>静的ディスパッチ</strong>：コンパイル時に決まる型で呼び指すメソッドの実体を選ぶ。使える場面がやや限定されるが実行時コストはかからない</li>
+</ul>
+<p>結論から言うと、<code>Option&lt;T&gt;</code>の<code>map()</code>メソッドはクロージャのメソッドを静的ディスパッチします。
+ですからゼロコストになるのですが、そのありがたみは動的ディスパッチがわからないと実感できません。
+まずは動的ディスパッチについて詳しく説明しましょう。</p>
+<h4 id="heading-4">動的ディスパッチ</h4>
+<p>動的ディスパッチは実行時にわかる情報から呼び指すメソッドの実体を選びます。
+柔軟ですが実行時コストがかかる方法です。
+オブジェクト指向言語の多くはメソッドの呼び出しに動的ディスパッチを使用し、静的ディスパッチは行なえません。
+Rustでは前述のとおり動的ディスパッチと静的ディスパッチの両方に対応しており、状況に応じて使い分けられます。</p>
+<p>Rustで動的ディスパッチを行うときはトレイトオブジェクトを作成します。
+トレイトオブジェクトは同じトレイトを実装してる複数の型を統一的にあつかえるしくみです。
+たとえばひとつのベクタに複数の型の値を混ぜて格納したり、関数の戻り値型を条件に応じて変えたりしたいときに便利です。
+（もちろんそれらの型が同じトレイトを実装してなければなりません）</p>
+<p>トレイトオブジェクトの型は<code>&amp;dyn トレイト名</code>や<code>Box&lt;dyn トレイト名&gt;</code>のようになります。
+<code>&amp;</code>や<code>Box</code>といったポインタ経由でしか使えないことに注意が必要です。
+このポインタはfatポインタと呼ばれ、値を指す通常のポインタに加えて、vtableという内部データ構造へのポインタを持っています。
+vtableはメソッドの名前と実装コードのアドレスが対になった辞書で、vtableを検索することで呼び出そうとしているメソッドの実装を見つけられます。</p>
+<p><code>f.call_once(o1)</code>を動的ディスパッチで実行するときは、以下のような手順になるでしょう。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> f: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">dyn</span> FnOnce<span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)<span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>AnonymousType;
+<span style="color:#75715e">// vtableから対象のメソッドを見つける（擬似的なコード）
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> m: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">fn</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i64</span>) -&gt; <span style="color:#66d9ef">i64</span> <span style="color:#f92672">=</span> find_method(f, <span style="color:#e6db74">&#34;call_once&#34;</span>, (<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i64</span>,), <span style="color:#66d9ef">i64</span>);
+<span style="color:#75715e">// メソッドを呼び出す
+</span><span style="color:#75715e"></span>m(f, o1);
+</code></pre></div><p>動的ディスパッチではvtableのためにメモリを少し多く使用しますし、実行時間も<code>find_method()</code>の分だけ余分にかかることになります。</p>
+<h4 id="heading-5">静的ディスパッチ</h4>
+<p>静的ディスパッチは、コンパイル時に決まる型で、呼び出すメソッドの実体を選びます。
+使える場面がやや限定されますが実行時の追加コストはかかりません。</p>
+<p>Rustで静的ディスパッチを行うときはジェネリクスを使います。
+また関数の引数の型として<code>impl トレイト名</code>を指定したときも静的ディスパッチになります。
+（引数位置の<code>impl トレイト</code>はジェネリクスの糖衣構文です）</p>
+<p>先ほど<code>Option&lt;T&gt;</code>の<code>map()</code>がクロージャに対してジェネリックなメソッドとして実装されていることを見ました。
+このことから<code>map()</code>は静的ディスパッチを行うことがわかります。</p>
+<p>静的ディスパッチではコンパイル時にジェネリックな型を解決し、その型を当てはめた専用のメソッドを作ります。</p>
+<p><strong>Option&lt;T&gt;の元の実装</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Option<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+
+    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">map</span><span style="color:#f92672">&lt;</span>U, F: FnOnce(T) -&gt; <span style="color:#a6e22e">U</span><span style="color:#f92672">&gt;</span>(self, f: <span style="color:#a6e22e">F</span>) -&gt; Option<span style="color:#f92672">&lt;</span>U<span style="color:#f92672">&gt;</span> {
+        <span style="color:#66d9ef">match</span> self {
+            Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some(f(x)),
+            None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
+        }
+    }
+
+}
+</code></pre></div><p><strong>実際の型を当てはめた専用のメソッドを作る</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">map_i32_anonymous_type</span>(self: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">i32</span>, f: <span style="color:#a6e22e">AnonymousType</span>) -&gt; Option<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i32</span><span style="color:#f92672">&gt;</span> {
+    <span style="color:#66d9ef">match</span> self {
+        Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some(f(x)),
+        None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
+    }
+}
+</code></pre></div><p><code>f</code>の具体的な型が分かったので、どのトレイトメソッドを呼ぶのか自然に特定されます。</p>
+<p><strong>トレイトメソッドが特定された</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">map_i32_anonymous_type</span>(self: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">i32</span>, f: <span style="color:#a6e22e">AnonymousType</span>) -&gt; Option<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i32</span><span style="color:#f92672">&gt;</span> {
+    <span style="color:#66d9ef">match</span> self {
+        Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some(AnonymousType::call_once(f, x)),
+        None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
+    }
+}
+</code></pre></div><p>静的ディスパッチを私たちのコードに適用します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
+<span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>n;
+<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+    None
+} <span style="color:#66d9ef">else</span> {
+    <span style="color:#66d9ef">let</span> f <span style="color:#f92672">=</span> AnonymousType;
+    <span style="color:#75715e">// トレイトメソッドの呼び出しが、静的ディスパッチの働きで
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// ただの関数呼び出しに変わった
+</span><span style="color:#75715e"></span>    Some(AnonymousType::call_once(f, o1))
+}
+</code></pre></div><p>さらに今回のクロージャは一ヶ所からしか呼ばれておらず、また本体が十分に小さいので、インライン化が期待できます</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
+<span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>n;
+<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+    None
+} <span style="color:#66d9ef">else</span> {
+    <span style="color:#75715e">// AnonymousType::call_once()は一ヶ所からしか呼ばれず
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// また本体が十分小さいため、インライン化される（はず）
+</span><span style="color:#75715e"></span>    Some(<span style="color:#f92672">*</span>o1 <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>)
+}
+</code></pre></div><p>コンパイル時の最適化は以上になります。
+Rustの抽象化のしくみを使ったコードが、ゼロコスト抽象化に関連する最適化によって、実行時のオーバーヘッドが最小のコードへと変換されました。</p>
+<h2 id="heading-6">アセンブリコードで確認する</h2>
+<p>それではRustコンパイラが生成したアセンブリコードの内容を確認しましょう。</p>
+<h3 id="rust">Rustのバージョンなど</h3>
+<p>今回は以下のRustバージョンとターゲットを使用しました。</p>
+<ul>
+<li>Rust 1.40.0（2019年12月リリース）</li>
+<li>x86_64-unknown-linux-gnu</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ rustc -Vv
+rustc 1.40.0 <span style="color:#f92672">(</span>73528e339 2019-12-16<span style="color:#f92672">)</span>
+binary: rustc
+commit-hash: 73528e339aae0f17a15ffa49a8ac608f50c6cf14
+commit-date: 2019-12-16
+host: x86_64-unknown-linux-gnu
+release: 1.40.0
+LLVM version: 9.0
+</code></pre></div><p>試してはいませんが他のターゲット（macOS、Windows、ARM上のLinuxなど）でも同様の効果が得られるはずです。</p>
+<h3 id="heading-7">確認に使ったコード</h3>
+<p>元のコードそのままですと、入出力がないためコンパイラの最適化によって全体のコードが削除されてしまいます。
+（なにも仕事をしないアセンブリコードが生成される）</p>
+<p>そこで以下のような修正を施しました。</p>
+<ul>
+<li>必要なコードが削除されないよう、コマンドラインから入力をとり、計算結果をターミナルに出力する</li>
+<li>アセンブリのコードを見つけやすいように、何ヶ所かに<code>println!()</code>を挿入した</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;let n&#34;</span>);
+    <span style="color:#75715e">// 変数nはi64型。コマンドライン引数から受け取った数字に束縛する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> n: <span style="color:#66d9ef">i64</span> <span style="color:#f92672">=</span> std::env::args()
+        .nth(<span style="color:#ae81ff">1</span>)
+        <span style="color:#75715e">// コマンドライン引数（String型）をi64型に変換する
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 変換できないときは&#34;invalid number&#34;と表示して実行を打ち切る
+</span><span style="color:#75715e"></span>        .map(<span style="color:#f92672">|</span>s<span style="color:#f92672">|</span> s.parse().expect(<span style="color:#e6db74">&#34;invalid number&#34;</span>))
+        <span style="color:#75715e">// コマンドライン引数がなかったら&#34;missing argument&#34;と
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 表示して実行を打ち切る
+</span><span style="color:#75715e"></span>        .expect(<span style="color:#e6db74">&#34;missing argument&#34;</span>);
+
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;let o1&#34;</span>);
+    <span style="color:#75715e">// 変数o1はOption&lt;&amp;i64&gt;型
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// もしnが123ならo1はNoneに、さもなければSome(&amp;n)に束縛する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span> {
+        None
+    } <span style="color:#66d9ef">else</span> {
+        Some(<span style="color:#f92672">&amp;</span>n)
+    };
+
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;let o2&#34;</span>);
+    <span style="color:#75715e">// 変数o2はOption&lt;i64&gt;型
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// もしo1がNoneなら、Noneに束縛し
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// もしo1がSomeなら、xに456を加算してSomeで包んだものに束縛する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> o1.map(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>);
+
+    <span style="color:#75715e">// n, o1, o2の値を表示する
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;n: {:?}, o1: {:?}, o2: {:?}&#34;</span>, n, o1, o2);
+}
+</code></pre></div><p>コマンドライン引数として整数をひとつ取り<code>n</code>を束縛。
+もし<code>n</code>が<code>123</code>なら<code>o1</code>は<code>None</code>に、それ以外なら<code>Some(&amp;n)</code>に束縛します。</p>
+<p>コードが少し長くなりましたが本質は変わっていません。</p>
+<p><strong>実行結果</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 引数として123を与える（o1はNoneになる）</span>
+$ cargo run --release -- <span style="color:#ae81ff">123</span>
+let n
+let o1
+let o2
+n: 123, o1: None, o2: None
+
+<span style="color:#75715e"># 引数として100を与える（o1はSome(&amp;n)になる）</span>
+$ cargo run --release -- <span style="color:#ae81ff">100</span>
+let n
+let o1
+let o2
+n: 100, o1: Some<span style="color:#f92672">(</span>100<span style="color:#f92672">)</span>, o2: Some<span style="color:#f92672">(</span>556<span style="color:#f92672">)</span>
+</code></pre></div><h3 id="heading-8">アセンブリコードを生成する</h3>
+<p>このコードをコンパイルして、最適化後のアセンブリコードを生成しましょう。
+以下のように<code>cargo rustc</code>コマンドを実行します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cargo rustc --release -- --emit asm -C <span style="color:#e6db74">&#39;llvm-args=-x86-asm-syntax=intel&#39;</span>
+</code></pre></div><ul>
+<li><code>--release</code>フラグでゼロコスト抽象化などの最適化を行う</li>
+<li><code>--emit asm</code>フラグでアセンブリコードの入ったファイルを生成する</li>
+<li><code>-C 'llvm-args=...'</code>フラグでx86アセンブリコードの文法としてIntel形式を指定する。（デフォルトはAT&amp;T形式）</li>
+</ul>
+<p>x86アセンブリコードの文法にはIntel形式を指定しました。
+Intel形式は一般的なプログラム言語に慣れた人には、ポインタによるメモリアドレス指定などが直感的でわかりやすいと思います。
+デフォルトの文法であるAT&amp;T形式は、コンパクトなコードになるので読み慣れた人にはいいかもしれませんが、少し癖があります。</p>
+<p>アセンブリファイルは<code>target/release/deps</code>ディレクトリ配下に出力されます。
+拡張子は<code>.s</code>です。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ exa -l target/release/deps/*.s
+.rw-r--r--@ 25k tatsuya <span style="color:#ae81ff">21</span> Dec 14:35 target/release/deps/optmap-4ee5145a2c1fa529.s
+</code></pre></div><!-- raw HTML omitted -->
+<p><a href="https://github.com/XAMPPRocky/tokei">tokei</a>というRust製のCLOCツール（コード行数を数えるツール）でアセンブリコードの行数を数えてみました。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tokei target/release/deps/*.s
+------------------------------------------------------------------
+ Language      Files     Lines      Code     Comments      Blanks
+------------------------------------------------------------------
+ Assembly          <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">884</span>       <span style="color:#ae81ff">850</span>          <span style="color:#ae81ff">0</span>           <span style="color:#ae81ff">34</span>
+------------------------------------------------------------------
+ Total             <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">884</span>       <span style="color:#ae81ff">850</span>          <span style="color:#ae81ff">0</span>           <span style="color:#ae81ff">34</span>
+------------------------------------------------------------------
+</code></pre></div><p>入出力があるのでCode部分が850行と長くなっていますが、今回はその中の20行くらいを見るだけですみます。</p>
+<h3 id="heading-9">レジスタとスタック領域の使われかた</h3>
+<p>Rustではローカル変数はスタック領域に置かれます。
+生成されたアセンブリコードを筆者が事前に読んで、<code>main()</code>関数のローカル変数<code>n</code>, <code>o1</code>, <code>o2</code>がスタック領域のどこに置かれるか調べておきました。</p>
+<p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/asm-step0.png" alt="最初の状態"></p>
+<p>図の右側がスタック領域です。
+図の左側にはCPU内にあるレジスタのなかから、今回に関係するものだけを描きました。
+レジスタはメモリよりもはるかに高速に動作する一時記憶域で、CPUが持つ多くの命令はレジスタに入ったデータを対象にしています。</p>
+<p><code>RAX</code>と<code>RCX</code>は汎用レジスタで、いずれも64ビットです。</p>
+<ul>
+<li><code>RAX</code>（アキュムレータ）は四則演算の第1引数などに暗黙的に使われたりする</li>
+<li><code>RCX</code>（カウントレジスタ）はループのカウントなどにも暗黙的に使われるが、今回は単なるデータの一時置き場になっている</li>
+</ul>
+<p><code>RAX</code>と<code>RCX</code>は32ビットのレジスタとして使うこともできて、そのときは順に<code>EAX</code>、<code>ECX</code>と呼ばれます。
+これから見るアセンブリコードにも、<code>RAX</code>（64ビット）と<code>EAX</code>（32ビット）の両方が出てきますが、同じレジスタを指しています。</p>
+<p>ちなみに<code>RAX</code>と<code>RCX</code>は16ビットや8ビットのレジスタとしても使えるのですが、今回読む部分には出てこないため、図では省略しています。</p>
+<p><code>RBP</code>と<code>RSP</code>はポインタレジスタです。
+いずれも64ビットで、値としてメモリ上のアドレスを保持します。</p>
+<ul>
+<li><code>RBP</code>は汎用ポインタのひとつで、今回は変数<code>o1</code>（ポインタ型の<code>&amp;i64</code>）として使われている。32ビットの<code>EBP</code>として使うことも可能</li>
+<li><code>RSP</code>（スタックポインタ）はスタック領域の先頭アドレスを保持する</li>
+</ul>
+<p>Rustで関数を呼び出したり関数からリターンしたりすると<code>RSP</code>の値が増減します。</p>
+<p><code>main()</code>関数のローカル変数<code>n</code>, <code>o1</code>, <code>o2</code>がスタック上に置かれる位置は、<code>RSP</code>からの相対アドレス（<code>[rsp + 64]</code>など）で示されます。</p>
+<h3 id="x86">x86アセンブラのごく基本的なこと</h3>
+<p>ごく簡単にですがアセンブリコードの読み方を説明します。
+以下のアセンブリコードはポインタである<code>o1</code>に、<code>&amp;n</code>をセットするためのものです。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nasm" data-lang="nasm">	<span style="color:#a6e22e">lea</span>	   rbp, [rsp <span style="color:#f92672">+</span> <span style="color:#ae81ff">64</span>]			  <span style="color:#75715e">; BPレジスタにnの番地をセットし</span>
+	<span style="color:#a6e22e">mov</span>	   <span style="color:#66d9ef">qword</span> ptr [rsp <span style="color:#f92672">+</span> <span style="color:#ae81ff">56</span>], rbp  <span style="color:#75715e">; o1にも同じ番地を格納する</span>
+</code></pre></div><p>左端の<code>lea</code>や<code>mov</code>はCPUに対する命令です。
+そのあとにカンマで区切られて操作対象のレジスタなどが与えられます。
+これらの操作対象をオペランドと呼び、左から順に第1オペランド、第2オペランドと呼びます。</p>
+<p><code>lea</code>は実行アドレスロード命令で、第1オペランドで指定したレジスタに、第2オペランドのアドレッシングで生成された値（アドレス）をセットします。
+上の<code>lea</code>の行をRust風に書くと<code>rbp = rsp + 64</code>になります。</p>
+<p><code>mov</code>は転送命令で第2オペランドの値を第1オペランドにコピーします。
+上の例では第1オペランドが<code>qword ptr [rsp + 56]</code>となっていますが、<code>[rsp + 56]</code>はアドレス、<code>qward ptr</code>は転送するサイズの指定で、x86系CPUの4ワードポインタである64ビットポインタを表します。</p>
+<p>セミコロンから行末まではコメントです。
+これ以降は命令の説明を省略しますので、筆者が書いたコメントを読んでください。</p>
+<h2 id="nullable-1">nullableポインタ最適化の効果を確認</h2>
+<p>列挙型のnullableポインタ最適化が働いていることを確認しましょう。
+以下のコードのコンパイル結果を調べます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span> {
+    None
+} <span style="color:#66d9ef">else</span> {
+    Some(<span style="color:#f92672">&amp;</span>n)
+};
+</code></pre></div><p><code>o1</code>は<code>Option&lt;&amp;i64&gt;</code>型ですので、nullableポインタ最適化によって<code>i64</code>へのポインタになり、<code>None</code>や<code>Some</code>を識別するためのタグがなくなるはずです。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 最適化後の擬似的なコード。NoneやSomeがなくなるはず
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o1: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">i64</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span> {
+    null
+} <span style="color:#66d9ef">else</span> {
+    <span style="color:#f92672">&amp;</span>n
+};
+</code></pre></div><p>アセンブリコード内を<code>123</code>で探すと、以下のコード片が見つかります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nasm" data-lang="nasm">    <span style="color:#a6e22e">cmp</span>    <span style="color:#66d9ef">qword</span> ptr [rsp <span style="color:#f92672">+</span> <span style="color:#ae81ff">64</span>], <span style="color:#ae81ff">123</span>  <span style="color:#75715e">; n != 123なら</span>
+	<span style="color:#a6e22e">jne</span>	   .LBB12_19				  <span style="color:#75715e">; 　　LBB12_19へジャンプする</span>
+	<span style="color:#a6e22e">mov</span>	   <span style="color:#66d9ef">qword</span> ptr [rsp <span style="color:#f92672">+</span> <span style="color:#ae81ff">56</span>], <span style="color:#ae81ff">0</span>	  <span style="color:#75715e">; o1に0（nullポインタ）を格納し</span>
+	<span style="color:#a6e22e">xor</span>	   ebp, ebp					  <span style="color:#75715e">; 　　BPレジスタも0にする</span>
+	<span style="color:#a6e22e">jmp</span>	   .LBB12_26				  <span style="color:#75715e">; LBB12_26へジャンプする</span>
+.LBB12_19:							  <span style="color:#75715e">; n != 123なので</span>
+	<span style="color:#a6e22e">lea</span>	   rbp, [rsp <span style="color:#f92672">+</span> <span style="color:#ae81ff">64</span>]			  <span style="color:#75715e">; 　　BPレジスタにnの番地をセットし</span>
+	<span style="color:#a6e22e">mov</span>	   <span style="color:#66d9ef">qword</span> ptr [rsp <span style="color:#f92672">+</span> <span style="color:#ae81ff">56</span>], rbp  <span style="color:#75715e">; 　　o1にも同じ番地を格納する</span>
+.LBB12_26:
+</code></pre></div><p><code>n</code>として<code>100</code>を与えたときについて考えます。
+<code>n != 123</code>のときはラベル<code>.LBB12_19</code>以降の命令が実行されます。
+そこでは<code>RBP</code>レジスタに<code>n</code>が置かれている番地をセットし、さらに<code>o1</code>にも同じ番地をセットしています。</p>
+<p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/asm-some-step1.png" alt="o1をSomeに設定"></p>
+<p><code>n</code>として<code>123</code>を与えたときはそれよりも前の命令が実行されます。
+<code>o1</code>にnullポインタを意味する<code>0</code>をセットし、<code>RBP</code>レジスタも<code>0</code>にクリアしています。</p>
+<p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/asm-none-step1.png" alt="o1をNoneに設定"></p>
+<p>この部分は期待どおりにコンパイルされたことが確認できました。</p>
+<h2 id="map">map()メソッドのインライン化とクロージャの静的ディスパッチ</h2>
+<p><code>Option&lt;T&gt;</code>の<code>map()</code>メソッドに関連する部分を確認しましょう。
+元のコードはこうなっていました。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> o1.map(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>);
+</code></pre></div><p>クロージャは匿名型とトレイト実装へと展開されますので、最適化前は以下のコードに等しい内部表現になるはずです。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 最適化なしで展開したコード
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// クロージャの環境を表す匿名型
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">AnonymousType</span>;
+
+<span style="color:#66d9ef">impl</span> FnOnce<span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">for</span> AnonymousType {
+    <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Output</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">i32</span>;
+
+    <span style="color:#75715e">// クロージャの無名関数の実装
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;rust-call&#34;</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">call_once</span>(self, args: (<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)) -&gt; <span style="color:#a6e22e">Self</span>::Output {
+        <span style="color:#f92672">*</span>args.<span style="color:#ae81ff">0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>
+    }
+}
+
+<span style="color:#75715e">//
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+    None
+} <span style="color:#66d9ef">else</span> {
+    <span style="color:#66d9ef">let</span> f: FnOnce<span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)<span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> AnonymousType;
+    Some(f.call_once(o1))
+}
+</code></pre></div><p>そしてこのコードは静的ディスパッチによって以下のように変換され、</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 静的ディスパッチを行う
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">AnonymousType</span>;
+
+<span style="color:#66d9ef">impl</span> FnOnce<span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">for</span> AnonymousType {
+    <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Output</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">i32</span>;
+
+    <span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;rust-call&#34;</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">call_once</span>(self, args: (<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)) -&gt; <span style="color:#a6e22e">Self</span>::Output {
+        <span style="color:#f92672">*</span>args.<span style="color:#ae81ff">0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>
+    }
+}
+
+<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+    None
+} <span style="color:#66d9ef">else</span> {
+    <span style="color:#66d9ef">let</span> f <span style="color:#f92672">=</span> AnonymousType;
+    <span style="color:#75715e">// ただの関数呼び出しになった
+</span><span style="color:#75715e"></span>    Some(AnonymousType::call_once(<span style="color:#f92672">&amp;</span>f, o1))
+}
+</code></pre></div><p>インライン化によって<code>AnonymousType</code>自体が消滅し、最終的にはこうなるはずです。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 最適化後の擬似的なコード
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+    None
+} <span style="color:#66d9ef">else</span> {
+    Some(<span style="color:#f92672">*</span>o1 <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>)
+}
+</code></pre></div><p>アセンブリコード内を<code>456</code>で探すと、以下のコード片が見つかります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nasm" data-lang="nasm">	<span style="color:#a6e22e">test</span>	rbp, rbp                  <span style="color:#75715e">; BPレジスタが0（nullポインタ）かテストし</span>
+	<span style="color:#a6e22e">je</span>	.LBB12_27                     <span style="color:#75715e">; 　　0ならLBB12_27へジャンプする</span>
+	<span style="color:#a6e22e">mov</span>	eax, <span style="color:#ae81ff">456</span>                      <span style="color:#75715e">; AXレジスタを456にする</span>
+	<span style="color:#a6e22e">add</span>	rax, <span style="color:#66d9ef">qword</span> ptr [rbp]          <span style="color:#75715e">; BPレジスタが指すnの値をAXレジスタに加算する</span>
+	<span style="color:#a6e22e">mov</span>	ecx, <span style="color:#ae81ff">1</span>                        <span style="color:#75715e">; CXレジスタを1にする（後でo2のタグをSomeにするため）</span>
+	<span style="color:#a6e22e">jmp</span>	.LBB12_29                     <span style="color:#75715e">; LBB12_29へジャンプする</span>
+.LBB12_27:
+	<span style="color:#a6e22e">xor</span>	ecx, ecx                      <span style="color:#75715e">; CXレジスタを0にする（後でo2のタグをNoneにするため）</span>
+.LBB12_29:
+	<span style="color:#a6e22e">mov</span>	<span style="color:#66d9ef">qword</span> ptr [rsp <span style="color:#f92672">+</span> <span style="color:#ae81ff">72</span>], rcx     <span style="color:#75715e">; CXレジスタの値をo2のタグにセットする</span>
+	<span style="color:#a6e22e">mov</span>	<span style="color:#66d9ef">qword</span> ptr [rsp <span style="color:#f92672">+</span> <span style="color:#ae81ff">80</span>], rax     <span style="color:#75715e">; AXレジスタの値をo2の値の部分にセットする</span>
+</code></pre></div><p><code>o1</code>が<code>Some(&amp;100)</code>のときについて考えます。
+<code>Some</code>のときは前半の命令が実行されます。
+そこでは<code>RAX</code>レジスタを<code>456</code>にして、<code>RBP</code>レジスタが指す<code>n</code>の値を<code>RAX</code>に加算しています。
+結果は<code>RAX</code>レジスタに入ります。
+また<code>RCX</code>レジスタには<code>Some</code>を表すタグとして<code>1</code>をセットしています。
+（<code>o2</code>は<code>Option&lt;i64&gt;</code>型なのでタグを持ちます）</p>
+<p>そのあと、ラベル<code>.LBB12_29</code>以降が実行され、<code>RCX</code>レジスタの値が<code>o2</code>のタグへ、<code>RAX</code>レジスタの値が<code>o2</code>の<code>Some</code>の値部分へコピーされます。</p>
+<p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/asm-some-step2.png" alt="o1がSomeのとき"></p>
+<p><code>o1</code>が<code>None</code>のときはラベル<code>.LBB12_27</code>以降が実行されます。
+そこではまず<code>RCX</code>レジスタをクリアして<code>None</code>を表す<code>0</code>にしています。
+そのあとは<code>Some</code>のときと同様に、ラベル<code>.LBB12_29</code>以降が実行され、<code>RCX</code>レジスタの値が<code>o2</code>のタグへ、<code>RAX</code>レジスタの値が<code>o2</code>の<code>Some</code>の値部分へコピーされます。</p>
+<p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/asm-none-step2.png" alt="o1がNoneのとき"></p>
+<p>なお<code>None</code>のときの<code>RAX</code>レジスタですが、これらの命令の直前の命令群で<code>println!(&quot;let o2&quot;)</code>を実行するための値がセットされているので、<code>o2</code>の<code>Some</code>の値は無意味なものになってしまいます。
+とはいえ<code>None</code>のときは、そこにどんな値が入っていても読み出されることはないので問題ありません。</p>
+<p>この部分も期待どおりにコンパイルされたことが確認できました。</p>
+<h2 id="heading-10">まとめ</h2>
+<p>高階関数とトレイトによるポリモーフィズムを使ったRustコードをコンパイルすると、手書きしたのと同じくらいシンプルで無駄のないアセンブリコードが生成されました。</p>
+<ul>
+<li>Rustでは抽象化のしくみがゼロコストになるよう、言語自体や標準ライブラリが注意深く設計されている</li>
+<li>ここで言うゼロコストはオーバーヘッドがないという意味。メモリ使用量の増加や実行速度の低下が起きないことを表す</li>
+<li>ゼロコスト抽象化の例として、クロージャの実装とトレイトメソッドの静的ディスパッチを確認した</li>
+<li>また列挙型のnullableポインタ最適化についても確認した</li>
+<li>Rustのゼロコスト抽象化、すごい！</li>
+</ul>
+<h2 id="heading-11">参考にした記事</h2>
+<ul>
+<li><a href="http://keens.github.io/blog/2016/03/01/rustnozerokosutochuushouka/">Rustのゼロコスト抽象化（2016-03-01） — κeenのHappy Hacking Blog</a></li>
+<li><a href="https://mizunashi-mana.github.io/blog/posts/2019/06/rust-generics-inside/">Rust のジェネリック関数はどうコンパイルされるのか（2019-06） — 続くといいな日記</a></li>
+<li><a href="https://blog.rust-lang.org/2015/05/11/traits.html">Abstruction without overhead: traits in Rust (2015-05-11) — Rust Blog</a></li>
+</ul>
+
+  </section>
+  <footer>
+    
+    <nav class="p-pagination c-pagination">
+      <div class="c-pagination__ctrl">
+        <div class="c-pagination__newer">
+          
+          
+        </div>
+        <div class="c-pagination__older">
+          
+          <a href="https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-small-docker-image/">Older</a>
+          
+        </div>
+      </div>
+    </nav>
+    
+
+
+    
+<aside class="p-author">
+  
+  
+  <div class="p-author__body">
+    
+    <p class="c-title p-author__name ">Tatsuya Kawano (tatsuya6502)</p>
+    
+    
+    <p>Erlang/OTPやRustで分散DBを開発してます。最近、Rustの本を書きました。上海在住</p>
+    
+    
+  </div>
+  
+</aside>
+
+
+  </footer>
+</article>
+  </main>
+  
+<nav class="l-nav p-menu">
+  <ul class="p-menu__lists">
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tatsuya6502/categories">Categories</a>
+      </li>
+      
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tatsuya6502/tags">Tags</a>
+      </li>
+      
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tatsuya6502/index.xml">RSS</a>
+      </li>
+      
+    
+  </ul>
+</nav>
+
+
+  <footer class="l-footer">
+    
+<ul class="c-links">
+  
+  
+  
+  
+  
+  <li class="c-links__item">
+    <a href="https://github.com/tatsuya6502" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>github</title>
+        <use xlink:href="#icon-github"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  <li class="c-links__item">
+    <a href="https://gitlab.com/tatsuya6502" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>gitlab</title>
+        <use xlink:href="#icon-gitlab"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+
+    <p class="p-copyright">
+      
+        &copy; 2019 Tatsuya Kawano (tatsuya6502)
+      
+    </p>
+  </footer>
+
+  
+    
+  
+<script src="https://utteranc.es/client.js"
+        repo="rust-jp-blogs/tatsuya6502"
+        issue-term="url"
+        label="blog comments"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+</body>
+</html>
+

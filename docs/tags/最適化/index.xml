@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>最適化 on Oxidized Bookshelf</title>
+    <link>https://blog.rust-jp.rs/tatsuya6502/tags/%E6%9C%80%E9%81%A9%E5%8C%96/</link>
+    <description>Recent content in 最適化 on Oxidized Bookshelf</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <copyright>&amp;copy; 2019 Tatsuya Kawano (tatsuya6502)</copyright>
+    <lastBuildDate>Tue, 24 Dec 2019 18:00:00 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/%E6%9C%80%E9%81%A9%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Rustのゼロコスト抽象化の効果をアセンブラで確認</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-zero-cost-abstraction/</link>
+      <pubDate>Tue, 24 Dec 2019 18:00:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-zero-cost-abstraction/</guid>
+      <description>これは Rust その3 Advent Calendar 2019 の24日目のエントリです。 Rustのゼロコスト抽象化が期待どおりに働いていることを、コンパイラが出力した機械語（アセンブ</description>
+    </item>
+    
+  </channel>
+</rss>
