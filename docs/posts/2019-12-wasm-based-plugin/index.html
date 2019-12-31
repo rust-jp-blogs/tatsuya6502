@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  
+  <title>Rust meets Lucet：ネイティブアプリでwasm形式の動的リンクプラグインを実行する</title>
+  <meta property="og:title" content="Rust meets Lucet：ネイティブアプリでwasm形式の動的リンクプラグインを実行する" />
+  <meta name="twitter:title" content="Rust meets Lucet：ネイティブアプリでwasm形式の動的リンクプラグインを実行する" />
+  
+
+  
+  <meta name="description" content="プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502">
+  <meta property="og:description" content="プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502">
+  <meta name="twitter:description" content="プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502">
+  
+
+  <meta name="author" content="Tatsuya Kawano (tatsuya6502)"/>
+  <meta property="og:site_name" content="Oxidized Bookshelf" />
+  <meta property="og:url" content="https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-wasm-based-plugin/" />
+
+  
+  <meta name="twitter:card" content="summary" />
+
+  
+
+  
+  <meta property="og:type" content="article" />
+  
+  
+  
+  <meta name="generator" content="Hugo 0.61.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  
+  
+  
+  <script type="text/javascript" src="https://blog.rust-jp.rs/tatsuya6502/js/bundle.js"></script>
+  
+
+</head>
+
+<body>
+  <a href="#main" class="skip-link p-screen-reader-text">Skip to content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;" aria-hidden="true"> <symbol id="icon-500px" viewBox="0 0 16 16"><g> <path d="M3.953 10.512a5.24 5.24 0 0 0 6.996 3.141c.625-.262 1.184-.641 1.666-1.122s.859-1.041 1.122-1.666c.272-.647.412-1.331.412-2.037s-.137-1.394-.412-2.037c-.262-.625-.641-1.184-1.122-1.666s-1.041-.859-1.666-1.122a5.226 5.226 0 0 0-2.037-.413c-.716 0-1.431.144-2.066.413-.509.216-1.372.769-1.875 1.291l-.003.003V.984h7.241c.262-.003.262-.372.262-.491 0-.122 0-.487-.266-.491H4.377a.343.343 0 0 0-.344.341v6.066c0 .197.244.338.472.384.444.094.544-.047.653-.197l.016-.019c.166-.247.681-.766.688-.772a4.262 4.262 0 0 1 3.037-1.25c1.147 0 2.222.444 3.028 1.25a4.245 4.245 0 0 1 1.256 3.019 4.236 4.236 0 0 1-1.25 3.019 4.336 4.336 0 0 1-3.047 1.25 4.136 4.136 0 0 1-2.159-.597l.003-3.688c0-.491.213-1.028.572-1.431a2.09 2.09 0 0 1 1.588-.716c.594 0 1.15.225 1.566.634.409.406.637.95.637 1.528a2.179 2.179 0 0 1-2.206 2.197c-.238 0-.672-.106-.691-.109-.25-.075-.356.272-.391.387-.134.441.069.528.109.541.397.125.659.147 1.003.147a3.173 3.173 0 0 0 3.169-3.169c0-1.734-1.422-3.144-3.166-3.144-.856 0-1.659.328-2.263.919-.575.566-.903 1.319-.903 2.069v.019c-.003.094-.003 2.306-.006 3.031l-.003-.003c-.328-.363-.653-.919-.869-1.488-.084-.222-.275-.184-.534-.103-.125.034-.469.141-.391.394zm3.722-.865c0 .106.097.2.156.253l.019.019c.1.097.194.147.281.147a.181.181 0 0 0 .131-.05c.044-.041.537-.544.588-.591l.553.55c.05.056.106.088.172.088.088 0 .184-.053.284-.156.238-.244.119-.375.063-.438l-.559-.559.584-.588c.128-.137.016-.284-.097-.397-.162-.162-.322-.206-.422-.112l-.581.581-.588-.588a.16.16 0 0 0-.113-.047c-.078 0-.172.053-.275.156-.181.181-.219.306-.125.406l.588.584-.584.584c-.053.05-.078.103-.075.156zm1.278-7.931c-.938 0-1.938.191-2.669.506a.207.207 0 0 0-.134.181.753.753 0 0 0 .069.337c.047.116.166.425.4.334a6.689 6.689 0 0 1 2.334-.444 6.35 6.35 0 0 1 2.469.497c.622.263 1.206.644 1.844 1.194a.22.22 0 0 0 .147.059c.125 0 .244-.122.347-.237.169-.191.287-.35.119-.509a6.858 6.858 0 0 0-2.1-1.356 7.326 7.326 0 0 0-2.825-.563zM14.006 13.3c-.113-.113-.209-.178-.294-.203s-.162-.006-.222.053l-.056.056a6.32 6.32 0 0 1-6.938 1.356 6.336 6.336 0 0 1-2.013-1.356 6.046 6.046 0 0 1-1.356-2.012c-.288-.713-.381-1.247-.413-1.422-.003-.016-.006-.028-.006-.037-.041-.206-.231-.222-.503-.178-.112.019-.459.072-.428.319v.006a7.261 7.261 0 0 0 2.04 3.994 7.266 7.266 0 0 0 10.288 0l.059-.059c.069-.084.134-.225-.159-.516z"/> </g></symbol> <symbol id="icon-codepen" viewBox="0 0 16 16"><g> <path d="M14.777 5.751l-7-4.667a.5.5 0 0 0-.555 0l-7 4.667a.501.501 0 0 0-.223.416v4.667c0 .167.084.323.223.416l7 4.667a.5.5 0 0 0 .554 0l7-4.667a.501.501 0 0 0 .223-.416V6.167a.501.501 0 0 0-.223-.416zM7.5 10.232L4.901 8.5 7.5 6.768 10.099 8.5 7.5 10.232zM8 5.899V2.434l5.599 3.732L11 7.898l-3-2zm-1 0l-3 2-2.599-1.732L7 2.435V5.9zM3.099 8.5L1 9.899V7.101L3.099 8.5zM4 9.101l3 2v3.465l-5.599-3.732L4 9.102zm4 2l3-2 2.599 1.732L8 14.565V11.1zM11.901 8.5L14 7.101v2.798L11.901 8.5z"/> </g></symbol> <symbol id="icon-dribbble" viewBox="0 0 16 16"><g> <path d="M8 16c-4.412 0-8-3.588-8-8s3.587-8 8-8c4.412 0 8 3.587 8 8s-3.588 8-8 8zm6.747-6.906c-.234-.075-2.116-.634-4.256-.291a29.7 29.7 0 0 1 1.328 4.872 6.845 6.845 0 0 0 2.928-4.581zM10.669 14.3c-.103-.6-.497-2.688-1.456-5.181-.016.006-.031.009-.044.016-3.856 1.344-5.241 4.016-5.362 4.266a6.807 6.807 0 0 0 6.863.9zm-7.747-1.722c.156-.266 2.031-3.369 5.553-4.509a7.04 7.04 0 0 1 .269-.081 24.04 24.04 0 0 0-.553-1.159c-3.409 1.022-6.722.978-7.022.975-.003.069-.003.138-.003.209 0 1.753.666 3.356 1.756 4.566zM1.313 6.609c.306.003 3.122.016 6.319-.831a43.092 43.092 0 0 0-2.534-3.953 6.854 6.854 0 0 0-3.784 4.784zM6.4 1.366a36.612 36.612 0 0 1 2.55 4c2.431-.909 3.459-2.294 3.581-2.469A6.799 6.799 0 0 0 6.4 1.366zm6.891 2.325c-.144.194-1.291 1.663-3.816 2.694.159.325.313.656.453.991.05.119.1.234.147.353 2.275-.284 4.534.172 4.759.219a6.816 6.816 0 0 0-1.544-4.256z"/> </g></symbol> <symbol id="icon-facebook" viewBox="0 0 16 16"><g> <path d="M9.5 3H12V0H9.5C7.57 0 6 1.57 6 3.5V5H4v3h2v8h3V8h2.5l.5-3H9V3.5c0-.271.229-.5.5-.5z"/> </g></symbol> <symbol id="icon-feed" viewBox="0 0 16 16"><g> <path d="M2.13 11.733c-1.175 0-2.13.958-2.13 2.126 0 1.174.955 2.122 2.13 2.122a2.126 2.126 0 0 0 2.133-2.122 2.133 2.133 0 0 0-2.133-2.126zM.002 5.436v3.067c1.997 0 3.874.781 5.288 2.196a7.45 7.45 0 0 1 2.192 5.302h3.08c0-5.825-4.739-10.564-10.56-10.564zM.006 0v3.068C7.128 3.068 12.924 8.87 12.924 16H16C16 7.18 8.824 0 .006 0z"/> </g></symbol> <symbol id="icon-flickr" viewBox="0 0 16 16"><g> <path d="M0 8.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0zm9 0a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/> </g></symbol> <symbol id="icon-github" viewBox="0 0 16 16"><g> <path d="M8 .198a8 8 0 0 0-2.529 15.591c.4.074.547-.174.547-.385 0-.191-.008-.821-.011-1.489-2.226.484-2.695-.944-2.695-.944-.364-.925-.888-1.171-.888-1.171-.726-.497.055-.486.055-.486.803.056 1.226.824 1.226.824.714 1.223 1.872.869 2.328.665.072-.517.279-.87.508-1.07-1.777-.202-3.645-.888-3.645-3.954 0-.873.313-1.587.824-2.147-.083-.202-.357-1.015.077-2.117 0 0 .672-.215 2.201.82A7.672 7.672 0 0 1 8 4.066c.68.003 1.365.092 2.004.269 1.527-1.035 2.198-.82 2.198-.82.435 1.102.162 1.916.079 2.117.513.56.823 1.274.823 2.147 0 3.073-1.872 3.749-3.653 3.947.287.248.543.735.543 1.481 0 1.07-.009 1.932-.009 2.195 0 .213.144.462.55.384A8 8 0 0 0 8.001.196z"/> </g></symbol> <symbol id="icon-gitlab" viewBox="0 0 28 28"><g> <path d="M1.625 11.031L14 26.89.437 17.046a1.092 1.092 0 0 1-.391-1.203l1.578-4.813zm7.219 0h10.313L14.001 26.89zM5.75 1.469l3.094 9.562H1.625l3.094-9.562a.548.548 0 0 1 1.031 0zm20.625 9.562l1.578 4.813a1.09 1.09 0 0 1-.391 1.203l-13.563 9.844 12.375-15.859zm0 0h-7.219l3.094-9.562a.548.548 0 0 1 1.031 0z"/> </g></symbol> <symbol id="icon-google-plus" viewBox="0 0 16 16"><g> <path d="M5.091 7.147v1.747h2.888c-.116.75-.872 2.197-2.888 2.197-1.737 0-3.156-1.441-3.156-3.216s1.419-3.216 3.156-3.216c.991 0 1.65.422 2.028.784L8.5 4.112c-.888-.828-2.037-1.331-3.409-1.331C2.275 2.784 0 5.059 0 7.875s2.275 5.091 5.091 5.091c2.937 0 4.888-2.066 4.888-4.975 0-.334-.037-.591-.081-.844H5.092zM16 7h-1.5V5.5H13V7h-1.5v1.5H13V10h1.5V8.5H16z"/> </g></symbol> <symbol id="icon-google" viewBox="0 0 16 16"><g> <path d="M8.159 6.856V9.6h4.537c-.184 1.178-1.372 3.45-4.537 3.45C5.428 13.05 3.2 10.788 3.2 8s2.228-5.05 4.959-5.05c1.553 0 2.594.663 3.188 1.234l2.172-2.091C12.125.787 10.319-.001 8.16-.001c-4.422 0-8 3.578-8 8s3.578 8 8 8c4.616 0 7.681-3.247 7.681-7.816 0-.525-.056-.925-.125-1.325L8.16 6.855z"/> </g></symbol> <symbol id="icon-instagram" viewBox="0 0 22 22"><g> <path d="M15.445 0H6.554A6.559 6.559 0 0 0 0 6.554v8.891A6.559 6.559 0 0 0 6.554 22h8.891a6.56 6.56 0 0 0 6.554-6.555V6.554A6.557 6.557 0 0 0 15.445 0zm4.342 15.445a4.343 4.343 0 0 1-4.342 4.342H6.554a4.341 4.341 0 0 1-4.341-4.342V6.554a4.34 4.34 0 0 1 4.341-4.341h8.891a4.342 4.342 0 0 1 4.341 4.341l.001 8.891z"/> <path d="M11 5.312A5.693 5.693 0 0 0 5.312 11 5.694 5.694 0 0 0 11 16.688 5.694 5.694 0 0 0 16.688 11 5.693 5.693 0 0 0 11 5.312zm0 9.163a3.475 3.475 0 1 1-.001-6.95 3.475 3.475 0 0 1 .001 6.95zm5.7-10.484a1.363 1.363 0 1 1-1.364 1.364c0-.752.51-1.364 1.364-1.364z"/> </g></symbol> <symbol id="icon-linkedin" viewBox="0 0 16 16"><g> <path d="M6 6h2.767v1.418h.04C9.192 6.727 10.134 6 11.539 6 14.46 6 15 7.818 15 10.183V15h-2.885v-4.27c0-1.018-.021-2.329-1.5-2.329-1.502 0-1.732 1.109-1.732 2.255V15H6V6zM1 6h3v9H1V6zM4 3.5a1.5 1.5 0 1 1-3.001-.001A1.5 1.5 0 0 1 4 3.5z"/> </g></symbol> <symbol id="icon-mail" viewBox="0 0 22 18"><g> <path fill="#000" d="M0 17.225V.776h22v16.447H0v.002zm3.011-1.815h15.978l-5.111-5.115L11 13.179l-2.877-2.883-5.112 5.114zm-1.216-1.275l5.077-5.09L1.795 3.98v10.155zm13.332-5.09l5.079 5.09V3.979l-5.079 5.066zm-4.126 1.588l8.022-8.027-16.045-.001 8.023 8.028z"/> </g></symbol> <symbol id="icon-npm" viewBox="0 0 16 16"><g> <path d="M0 0v16h16V0H0zm13 13h-2V5H8v8H3V3h10v10z"/> </g></symbol> <symbol id="icon-pinterest" viewBox="0 0 16 16"><g> <path d="M8 1.069a6.93 6.93 0 0 0-2.525 13.384c-.059-.547-.116-1.391.025-1.988.125-.541.813-3.444.813-3.444s-.206-.416-.206-1.028c0-.963.559-1.684 1.253-1.684.591 0 .878.444.878.975 0 .594-.378 1.484-.575 2.306-.166.691.344 1.253 1.025 1.253 1.231 0 2.178-1.3 2.178-3.175 0-1.659-1.194-2.819-2.894-2.819-1.972 0-3.128 1.478-3.128 3.009 0 .597.228 1.234.516 1.581.056.069.066.128.047.2a95.89 95.89 0 0 1-.194.787c-.031.128-.1.153-.231.094-.866-.403-1.406-1.669-1.406-2.684 0-2.188 1.587-4.194 4.578-4.194 2.403 0 4.272 1.712 4.272 4.003 0 2.388-1.506 4.313-3.597 4.313-.703 0-1.362-.366-1.588-.797 0 0-.347 1.322-.431 1.647-.156.603-.578 1.356-.862 1.816a6.93 6.93 0 0 0 8.984-6.622 6.931 6.931 0 0 0-6.931-6.934z"/> </g></symbol> <symbol id="icon-pushpin" viewBox="0 0 16 16"><g> <path d="M8.5 0L7 1.5 8.5 3 5 7H1.5l2.75 2.75L0 15.385V16h.615l5.635-4.25L9 14.5V11l4-3.5L14.5 9 16 7.5 8.5 0zM7 8.5l-1-1L9.5 4l1 1L7 8.5z"/> </g></symbol> <symbol id="icon-search" viewBox="0 0 16 16"><g> <path d="M15.504 13.616l-3.79-3.223c-.392-.353-.811-.514-1.149-.499a6 6 0 1 0-.672.672c-.016.338.146.757.499 1.149l3.223 3.79c.552.613 1.453.665 2.003.115s.498-1.452-.115-2.003zM6 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/> </g></symbol> <symbol id="icon-tumblr" viewBox="0 0 16 16"><g> <path d="M9.001 7v3.659c0 .928-.012 1.463.086 1.727.098.262.342.534.609.691.354.212.758.318 1.214.318.81 0 1.289-.107 2.09-.633v2.405a9.089 9.089 0 0 1-1.833.639A7.93 7.93 0 0 1 9.369 16a4.9 4.9 0 0 1-1.725-.276 4.195 4.195 0 0 1-1.438-.79c-.398-.343-.672-.706-.826-1.091s-.23-.944-.23-1.676V6.556H3.003V4.29c.628-.204 1.331-.497 1.778-.877a4.386 4.386 0 0 0 1.08-1.374C6.133 1.505 6.32.825 6.422 0h2.579v4H13v3H9.001z"/> </g></symbol> <symbol id="icon-twitter" viewBox="0 0 16 16"><g> <path d="M16 3.538a6.461 6.461 0 0 1-1.884.516 3.301 3.301 0 0 0 1.444-1.816 6.607 6.607 0 0 1-2.084.797 3.28 3.28 0 0 0-2.397-1.034 3.28 3.28 0 0 0-3.197 4.028 9.321 9.321 0 0 1-6.766-3.431 3.284 3.284 0 0 0 1.015 4.381A3.301 3.301 0 0 1 .643 6.57v.041A3.283 3.283 0 0 0 3.277 9.83a3.291 3.291 0 0 1-1.485.057 3.293 3.293 0 0 0 3.066 2.281 6.586 6.586 0 0 1-4.862 1.359 9.286 9.286 0 0 0 5.034 1.475c6.037 0 9.341-5.003 9.341-9.341 0-.144-.003-.284-.009-.425a6.59 6.59 0 0 0 1.637-1.697z"/> </g></symbol> <symbol id="icon-vimeo" viewBox="0 0 16 16"><g> <path d="M15.994 4.281c-.072 1.556-1.159 3.691-3.263 6.397-2.175 2.825-4.016 4.241-5.522 4.241-.931 0-1.722-.859-2.366-2.581-.431-1.578-.859-3.156-1.291-4.734-.478-1.722-.991-2.581-1.541-2.581-.119 0-.538.253-1.256.753l-.753-.969c.791-.694 1.569-1.388 2.334-2.081 1.053-.909 1.844-1.387 2.372-1.438 1.244-.119 2.013.731 2.3 2.553.309 1.966.525 3.188.647 3.666.359 1.631.753 2.447 1.184 2.447.334 0 .838-.528 1.509-1.588.669-1.056 1.028-1.862 1.078-2.416.097-.912-.262-1.372-1.078-1.372a2.98 2.98 0 0 0-1.184.263c.787-2.575 2.287-3.825 4.506-3.753 1.641.044 2.416 1.109 2.322 3.194z"/> </g></symbol> <symbol id="icon-wordpress" viewBox="0 0 16 16"><g> <path d="M2 8c0 2.313 1.38 4.312 3.382 5.259L2.52 5.622A5.693 5.693 0 0 0 2 8zm10.05-.295c0-.722-.266-1.222-.495-1.612-.304-.482-.589-.889-.589-1.371 0-.537.418-1.037 1.008-1.037.027 0 .052.003.078.005A6.064 6.064 0 0 0 8 2.156 6.036 6.036 0 0 0 2.987 4.79c.141.004.274.007.386.007.627 0 1.599-.074 1.599-.074.323-.018.361.444.038.482 0 0-.325.037-.687.055l2.185 6.33 1.313-3.835-.935-2.495a12.304 12.304 0 0 1-.629-.055c-.323-.019-.285-.5.038-.482 0 0 .991.074 1.58.074.627 0 1.599-.074 1.599-.074.323-.018.362.444.038.482 0 0-.326.037-.687.055l2.168 6.282.599-1.947c.259-.809.457-1.389.457-1.889zm-3.945.806l-1.8 5.095a6.148 6.148 0 0 0 3.687-.093.52.52 0 0 1-.043-.081L8.105 8.511zm5.16-3.315c.026.186.04.386.04.601 0 .593-.114 1.259-.456 2.093l-1.833 5.16c1.784-1.013 2.983-2.895 2.983-5.051a5.697 5.697 0 0 0-.735-2.803zM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z"/> </g></symbol> <symbol id="icon-youtube" viewBox="0 0 16 16"><g> <path d="M15.841 4.8s-.156-1.103-.637-1.587c-.609-.637-1.291-.641-1.603-.678-2.237-.163-5.597-.163-5.597-.163h-.006s-3.359 0-5.597.163c-.313.038-.994.041-1.603.678C.317 3.697.164 4.8.164 4.8S.005 6.094.005 7.391v1.213c0 1.294.159 2.591.159 2.591s.156 1.103.634 1.588c.609.637 1.409.616 1.766.684 1.281.122 5.441.159 5.441.159s3.363-.006 5.6-.166c.313-.037.994-.041 1.603-.678.481-.484.637-1.588.637-1.588s.159-1.294.159-2.591V7.39c-.003-1.294-.162-2.591-.162-2.591zm-9.494 5.275V5.578l4.322 2.256-4.322 2.241z"/> </g></symbol></svg>
+  <header class="l-header">
+    
+    <p class="c-title p-title"><a href="https://blog.rust-jp.rs/tatsuya6502/" class="p-title__link">Oxidized Bookshelf</a></p>
+    
+    
+    <p class="p-subtitle">
+      プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502
+    </p>
+    
+  </header>
+  <main id="main" class="l-main">
+
+
+<article class="p-article">
+  <header>
+    <h1>Rust meets Lucet：ネイティブアプリでwasm形式の動的リンクプラグインを実行する</h1>
+    <div>
+      <div class="c-time">
+        Posted on
+        <time datetime="2019-12-31T12:05:00&#43;08:00">
+          Dec 31, 2019
+        </time>
+      </div>
+      
+      <a href="https://blog.rust-jp.rs/tatsuya6502/tags/webassembly" class="c-tag">WebAssembly</a>
+      
+      <a href="https://blog.rust-jp.rs/tatsuya6502/tags/wasi" class="c-tag">WASI</a>
+      
+      <a href="https://blog.rust-jp.rs/tatsuya6502/tags/lucet" class="c-tag">Lucet</a>
+      
+    </div>
+  </header>
+  
+  <section id="js-article" class="p-article__body">
+    <h2 id="heading">はじめに</h2>
+<p>これは<a href="https://qiita.com/advent-calendar/2019/wasm">WebAssembly Advent Calendar 2019</a>の8日目のエントリです。
+（空いていたので飛び入り参加です）　12月28日にコードを書き始めて、大晦日に記事公開となりました。</p>
+<p>この記事ではRust製アプリにwasm形式のプラグインを動的にリンクして実行する方法を紹介します。
+WebAssemblyのランタイム環境にはFastlyが開発したLucetを用います。
+これによりWebブラウザを通さず、Rustアプリ上で直接WebAssemblyコードが実行できます。
+WebAssemblyコードはLucetのコンパイラで事前にネイティブコードにコンパイルしますので、Rustで書かれたコードに近い速度で実行できます<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
+<p>プラグインにwasm形式を採用すると、特定の言語に縛られずにプラグインを開発できるというメリットがあります。
+またファイルアクセスなどの制限のかかったサンドボックス内でプラグインを実行しますので、ある程度の安全性を確保できます。
+なおWebAssemblyのシステムインターフェースとしてWASIを使いますので、許可されたプラグインならファイルアクセスなども可能になります。</p>
+<p>サンプルコードのプラグイン側は一方をRustで、もう一方をCで実装しました。アプリ本体はRustで実装しましたが、Lucetのランタイムはホスト側のAPIとしてRust APIだけでなくC APIも備えていますので、C++やPythonなどC FFIが使用できる言語なら同じようなしくみが構築できると思います。</p>
+<h2 id="heading-1">元記事について</h2>
+<p>この記事は、dalanceさんとubnt_intrepidさんが以下の記事で提案されていたRustのプラグインシステムを参考にして書きました。</p>
+<ul>
+<li><a href="https://qiita.com/dalance/items/1593b56ad3744c469643">Rustで動的ロードによるプラグインシステムを作る</a>（dalanceさん、2019-12-24）</li>
+<li><a href="https://qiita.com/ubnt_intrepid/items/6c223eecb97d6f0285f0">Rustの（FFIまわりの安全性を考慮した）プラグインシステム</a>（ubnt_intrepidさん、2019-12-25）</li>
+</ul>
+<p>元記事ではRustで書かれたアプリから、Rustで書かれた共有ライブラリをプラグインとしてロードして実行しています。
+この記事はそれらのプラグイン部分をwasmに置き換えたものになります。</p>
+<p>筆者はLucetが公開されたときから、WebAssembly自体とLucetを試してみたいと思っていました。
+しかしプラグインシステムのようなものが必要になる機会もなく、気がついたら公開から1年余りが過ぎていました。
+この記事を書くきっかけを提供してくださったお二人に感謝します。</p>
+<p>なお筆者にとってはこれが初めてのWebAssemblyプログラミングになりますので、間違いなどあるかもしれません。
+（特にゲストメモリあたり）　もしなにかお気づきの点があれば、コメント欄などでお知らせください。</p>
+<h2 id="heading-2">サンプルプロジェクト</h2>
+<p>リポジトリはこちらになります。</p>
+<ul>
+<li><a href="https://gitlab.com/tatsuya6502-rust-mokumoku/rust-wasm-plugin-example">https://gitlab.com/tatsuya6502-rust-mokumoku/rust-wasm-plugin-example</a></li>
+</ul>
+<p>元記事と同様、電卓プログラムに演算子をプラグインで追加するといった感じのサンプルプログラムです。
+アプリ本体とプラグインを2つ含んだCargoワークスペースになっています。</p>
+<ul>
+<li><strong>calc</strong>：電卓プログラムの本体
+<ul>
+<li>Rust + Lucetで実装したLinux x86_64ネイティブアプリ</li>
+</ul>
+</li>
+<li><strong>calc-plugin-add</strong>：足し算を行うプラグイン
+<ul>
+<li>Rustで実装。Rustコンパイラでwasm形式へコンパイル後、Lucetコンパイラでx86_64ネイティブコードを含んだ共有ライブラリ（so）へ変換する</li>
+</ul>
+</li>
+<li><strong>calc-plugin-mul</strong>：掛け算を行うプラグイン
+<ul>
+<li>Cで実装。clangでwasm形式へコンパイル後、Lucetコンパイラでx86_64ネイティブコードを含んだ共有ライブラリ（so）へ変換する</li>
+</ul>
+</li>
+</ul>
+<p>実際にプラグインを使っている様子は<code>calc/src/main.rs</code>にあります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> calc::PluginManager;
+<span style="color:#66d9ef">use</span> std::path::PathBuf;
+
+<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() -&gt; <span style="color:#a6e22e">anyhow</span>::Result<span style="color:#f92672">&lt;</span>()<span style="color:#f92672">&gt;</span> {
+    <span style="color:#75715e">// プラグインマネージャのインスタンスを作成する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> pm <span style="color:#f92672">=</span> PluginManager::default();
+    <span style="color:#75715e">// プラグインマネージャをとおして2つのプラグインをロードする
+</span><span style="color:#75715e"></span>    pm.load(PathBuf::from(<span style="color:#e6db74">&#34;../target/wasm32-wasi/release/calc_plugin_add.so&#34;</span>))<span style="color:#f92672">?</span>;
+    pm.load(PathBuf::from(<span style="color:#e6db74">&#34;../target/wasm32-wasi/release/calc_plugin_mul.so&#34;</span>))<span style="color:#f92672">?</span>;
+
+    <span style="color:#75715e">// それぞれのプラグインを使用する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> plugin <span style="color:#66d9ef">in</span> pm.plugins() {
+        println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;Plugin: {}&#34;</span>, plugin.name()<span style="color:#f92672">?</span>);
+        println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;Calc: 1 {} 2 = {}&#34;</span>, plugin.operator()<span style="color:#f92672">?</span>, plugin.calc(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>)<span style="color:#f92672">?</span>);
+    }
+
+    Ok(())
+}
+</code></pre></div><p>プラグインマネージャのインスタンスを作成し、2つのプラグインをロードします。
+続けて各プラグインの<code>calc</code>で計算しています。</p>
+<p>実行すると以下のようになります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Plugin: add
+Calc: <span style="color:#ae81ff">1</span> + 2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+Plugin: mul
+Calc: <span style="color:#ae81ff">1</span> * 2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+</code></pre></div><p>元記事と同じ実行結果になります。</p>
+<h2 id="webassembly">プラグインシステムにWebAssemblyを使うメリット</h2>
+<p>WebAssemblyはWebブラウザ上でネイティブコードに近い実行速度で高速に実行できるバイナリフォーマットとして誕生しました。
+現在ではLucetのようなランタイムが現れ、Webブラウザ外の環境でも実行できるようになっています。
+またそのようなブラウザ外の環境で、メモリ、スレッド、ファイル、ネットワークなどを安全に使うためのインターフェースとしてWASI（ワズィと発音）という標準規格の策定も進められています。</p>
+<p>アプリケーションのプラグインとしてwasm形式の動的ロードライブラリを使うことで、以下のようなメリットがあります。</p>
+<ul>
+<li>言語非依存
+<ul>
+<li>プラグインをさまざまな言語で開発できる</li>
+<li>C、C++、Rust、Go、AssemblyScriptなどからwasmを生成できる</li>
+</ul>
+</li>
+<li>クロスプラットフォーム
+<ul>
+<li>wasmファイルはCPU非依存の命令で構成されている。ランタイム環境で実行されるときになって初めてネイティブコードにコンパイルされる</li>
+<li>プラグインを提供する側は単一のwasmファイルを用意するだけでよい。ユーザはそれを好きな環境に持っていってネイティブコードへコンパイル、実行できる</li>
+<li>ただしLucetは現状ではx86_64系のLinuxと、実験的にmacOSをサポートしているのみ。将来はARMなどもサポートしていく予定</li>
+</ul>
+</li>
+<li>セキュリティ
+<ul>
+<li>使用メモリの上限やファイルアクセスの制限などのあるサンドボックス内で実行されるので、他人が開発したプラグインでも、比較的安全に実行できる</li>
+</ul>
+</li>
+</ul>
+<h2 id="lucet">Lucetとは</h2>
+<p><a href="https://github.com/bytecodealliance/lucet/">Lucet</a>はWebブラウザ外で使えるWebAssembly実行環境で、コンパイラなどのツールチェインとランタイムで構成されます。
+CDNプロバイダとして知られるFastlyがオープンソースで公開し、現在は<a href="https://bytecodealliance.org/">Bytecode Alliance</a>傘下のプロジェクトになっています。</p>
+<p>Lucetには以下のような特徴があります。</p>
+<h3 id="heading-3">事前コンパイル方式</h3>
+<p>Lucetでは<code>lucetc</code>という最適化コンパイラで、wasmをネイティブコードにAOTコンパイル（事前コンパイル）します。
+この方式ではコンパイルにかかる時間は長くなりますが、コンパイル済みのコードが最初から高速に実行できます。
+同じコードを繰り返し使うプラグイン的な用途に適しているといえるでしょう。</p>
+<p>一方、Webブラウザではダウンロードしたwasmを即実行しなければならないため、AOTとJITコンパイルを組み合わせるのが普通です。
+たとえば、まず最適化をほとんどしない高速コンパイラでAOTコンパイルし、その後、最適化コンパイラによるJITコンパイルで実行中のコードを最適化されたものに差し替えていきます。
+この方式はコードの1回限りの実行には適していますが、同じコードを繰り返し使う用途には無駄が多くなります。</p>
+<h3 id="heading-4">インスタンスの柔軟な設定</h3>
+<p>Lucetでは動的ロードしたwasmライブラリをインスタンス化する際に柔軟な設定ができます。</p>
+<ul>
+<li>使用するリソースの上限を設定
+<ul>
+<li>現状はメモリの上限と、WASI使用時のファイルアクセスの可否が指定できる
+<ul>
+<li>CPUの使用量などは制限できない</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>コンテキストと呼ばれるしくみで機能拡張できる
+<ul>
+<li>素のWebAssemblyか、WASIありかを選択できる</li>
+<li>Lucet Hostcallsのコンテキストを作成すると、コンテキストで定義されたホスト側の関数をプラグインから呼ぶこともできる
+<ul>
+<li>詳しくは見ていないが非同期実行もできるみたい</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>メモリ領域はインスタンスごとに独立したものを与えることもできるし、ひとつの領域を複数のインスタンスで共有させることもできる
+<ul>
+<li>ホスト側からはすべてのゲスト用メモリ領域にアクセスできる</li>
+</ul>
+</li>
+</ul>
+<h3 id="rust">Rust以外の言語でもランタイムを使用できる</h3>
+<p>ランタイムのホスト側のAPIはRust APIに加えてC APIが用意されています。
+そのため、C FFIをサポートするさまざまな言語から利用できます。
+なおランタイム自体はRustで書かれています。</p>
+<p>Lucetの特徴は以上になります。</p>
+<p>余談ですが、Lucetが生まれた背景についてはPublickeyの独占インタビュー記事が面白かったです。</p>
+<ul>
+<li><a href="https://www.publickey1.jp/blog/19/fastly_ctowebassemblylucet.html">Fastly CTOに聞く、同社がWebAssembly実行環境の「Lucet」をエッジコンピューティング環境として開発している理由とは？</a>（Publickey、2019-05-14）</li>
+</ul>
+<p>同記事によると、Lucetという名前は、バイキングがロープや組ひもなどを作るために使った道具に由来しているそうです。</p>
+<h2 id="heading-5">環境のセットアップ</h2>
+<p>コードの内容を説明する前に、サンプルコードのビルドと実行に必要な環境のセットアップ方法を説明します。</p>
+<h3 id="linux-x86-64docker">Linux x86_64とDocker</h3>
+<p>Lucetを使用するには現状ではx86_64上のLinuxが必要です。
+（macOSも実験的にサポートしているようです）　筆者はFedora 31を使用しました。</p>
+<p>またLucetのツールチェインを簡単にセットアップするためにDockerも必要です。</p>
+<h3 id="rust-1">Rust</h3>
+<p>Rustはstable版を使います。
+筆者は最新のRust 1.40.0を使用しました。</p>
+<p>ターゲットを追加するので、<a href="https://rustup.rs"><code>rustup</code></a>でインストールするのがお勧めです。
+stable版がインストールできたら、<code>wasm32-wasi</code>ターゲットを追加します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ rustup target add wasm32-wasi
+</code></pre></div><p>またx86_64環境向けのリンカが必要です。<code>sudo apt install gcc binutils</code>（Ubuntuの場合）などでインストールしてください。</p>
+<h3 id="lucet-1">Lucetツールチェイン</h3>
+<p>Lucetのツールチェイン（AOTコンパイラなど）はDockerイメージ内に構築されます。
+以下のようにしてセットアップします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Lucetリポジトリをクローンする</span>
+$ git clone https://github.com/bytecodealliance/lucet.git
+$ cd lucet
+
+<span style="color:#75715e"># このあとcalcアプリ本体で使用するLucetランタイムのバージョンと</span>
+<span style="color:#75715e"># 同じ名前のタグをチェックアウトする</span>
+$ git checkout 0.4.1
+
+<span style="color:#75715e"># 開発環境のセットアップスクリプトを読み込む</span>
+<span style="color:#75715e"># 初回の読み込みでは、ツールチェインを含んだDockerイメージがビルドされる</span>
+$ source ./devenv_setenv.sh
+
+<span style="color:#75715e"># 以下のDockerイメージが作られる</span>
+$ docker images | grep lucet
+lucet          latest      9576e750e3de     <span style="color:#ae81ff">1</span> hours ago    3.7GB
+lucet-dev      latest      dd5c8b1b4661     <span style="color:#ae81ff">1</span> hours ago    3.51GB
+</code></pre></div><h2 id="heading-6">コードの解説</h2>
+<p>ここからはコードの内容を解説していきます。</p>
+<p>さきほどクローンした<code>lucet</code>ディレクトリの下にサンプルコードを置きます。
+というのは、LucetのDockerベースのツールチェインがアクセスできるのは<code>lucet</code>ディレクトリ配下のファイルに限定されているからです。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pwd
+lucet
+
+<span style="color:#75715e"># サンプルリポジトリをクローンする</span>
+$ git clone https://gitlab.com/tatsuya6502-rust-mokumoku/rust-wasm-plugin-example.git
+</code></pre></div><p>なおサンプルコードをCargoワークスペースにはしたものの、コンポーネントごとにコンパイルのターゲットが異なったりするため、<code>cargo build</code>で全体を一括してビルドすることができません。
+今回は<code>calc</code>、<code>calc-plugin-*</code>のそれぞれに対してコマンドを叩いてコンパイルします。</p>
+<h3 id="api">プラグインのAPI</h3>
+<p>元記事では各プラグインが提供する機能（API）を<code>Plugin</code>トレイトとして定義していました。</p>
+<p><strong>元記事より引用</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">trait</span> Plugin {
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">name</span>(<span style="color:#f92672">&amp;</span>self) -&gt; String;
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">operator</span>(<span style="color:#f92672">&amp;</span>self) -&gt; String;
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">calc</span>(<span style="color:#f92672">&amp;</span>self, a: <span style="color:#66d9ef">u32</span>, b: <span style="color:#66d9ef">u32</span>) -&gt; <span style="color:#66d9ef">u32</span>;
+}
+</code></pre></div><p>電卓として必要なのは<code>calc</code>だけですが、表示用に<code>String</code>を返すメソッドも用意されています。</p>
+<p>WebAssemblyで実現する場合は好きな言語で書ける反面、APIも複数の言語で通用する形式で定義しなければなりません。
+このようなケースでは、APIをインターフェース記述言語（IDL）という専用の言語で記述し、それを元に実装言語向けのスタブコードを生成するのが一般的です。
+LucetにもIDLがあるのですが、今回は使用しませんでした。
+というのは現状で生成できるのはCのコードだけなので、Rustで実装するときにには、あまり役に立ちそうもなかったからです。IDLはまた別の機会に試してみようと思います。</p>
+<p>というわけで今回はスタブなどを自動生成せず、手でコードを書いていきます。
+このやり方ですと、もし関数のシグネチャ（名前と引数）を間違えたり、関数自体を定義し忘れたりしても、コンパイルエラーにはなってくれません。
+実行時のエラーになります。
+ちょっと不便ですが今回のように小規模なAPIなら大きな問題にはならないでしょう。</p>
+<h3 id="calcrust">calc関数の実装（Rust版）</h3>
+<p>まずは実際に計算を行う<code>calc</code>関数を実装します。Rust版のcalc-plugin-addでは以下のようになります。</p>
+<p><strong>calc-plugin-add/lib.rs</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">#[</span><span style="color:#75715e">no_mangle</span><span style="color:#75715e">]</span>
+<span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;C&#34;</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">calc</span>(a: <span style="color:#66d9ef">u32</span>, b: <span style="color:#66d9ef">u32</span>) -&gt; <span style="color:#66d9ef">u32</span> {
+    a <span style="color:#f92672">+</span> b
+}
+</code></pre></div><p>FFI（外部関数インターフェース）を通じて呼び出せるように<code>#[no_mangle]</code>と<code>extern &quot;C&quot;</code>が必要ですが、それ以外は特に難しい事はありません。</p>
+<p>Rust版プラグインの<code>Cargo.toml</code>も作成します。</p>
+<p><strong>calc-plugin-add/Cargo.toml</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">package</span>]
+<span style="color:#a6e22e">name</span> = <span style="color:#e6db74">&#34;calc-plugin-add&#34;</span>
+...
+<span style="color:#a6e22e">edition</span> = <span style="color:#e6db74">&#34;2018&#34;</span>
+
+[<span style="color:#a6e22e">lib</span>]
+<span style="color:#a6e22e">path</span> = <span style="color:#e6db74">&#34;lib.rs&#34;</span>
+<span style="color:#a6e22e">crate</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">type</span> = [<span style="color:#e6db74">&#34;cdylib&#34;</span>]
+</code></pre></div><p>クレートタイプは<code>cdylib</code>にします。</p>
+<p>またコンパイルターゲットはwasm32-wasiになります。
+<code>.cargo/config</code>を作成してデフォルトのターゲットを変更します。</p>
+<p><strong>calc-plugin-add/.cargo/config</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">build</span>]
+<span style="color:#a6e22e">target</span> = <span style="color:#e6db74">&#34;wasm32-wasi&#34;</span>
+</code></pre></div><h3 id="calcc">calc関数の実装（C版）</h3>
+<p>C版のcalc-plugin-mulは以下のようになります。</p>
+<p><strong>calc-plugin-add/c-src/calc_plugin_mul.c</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;stdint.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+uint32_t <span style="color:#a6e22e">calc</span>(uint32_t a, uint32_t b)
+{
+    <span style="color:#66d9ef">return</span> a <span style="color:#f92672">*</span> b;
+}
+</code></pre></div><p>こちらはごく普通のCプログラムですね。</p>
+<h3 id="cargo">ホスト側のCargoパッケージの設定</h3>
+<p>プラグイン側に並行して本体側の実装も見ていきます。
+calcパッケージの<code>Cargo.toml</code>の依存クレートは以下のようになっています。</p>
+<p><strong>calc/Cargo.toml</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">dependencies</span>]
+<span style="color:#a6e22e">anyhow</span> = <span style="color:#e6db74">&#34;1&#34;</span>
+<span style="color:#a6e22e">lucet</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">runtime</span> = <span style="color:#e6db74">&#34;0.4&#34;</span>
+<span style="color:#a6e22e">wasi</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">common</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">lucet</span> = <span style="color:#e6db74">&#34;0.3&#34;</span>
+</code></pre></div><p>元記事にならってエラー処理用のanyhowクレートを使用します。</p>
+<p>lucet-runtimeがWebAssemblyランタイムです。</p>
+<p>このランタイムのバージョンと、Lucetツールチェインのバージョンが合っていないと、せっかく作成した共有ライブラリがバージョン不一致のエラーでロードできなくなるので注意してください。
+筆者はそれで理由でツールチェインのDockerイメージを再構築することになってしまいました。
+この記事の最初の方の手順に従って、lucetリポジトリのタグをチェックアウトしていれば大丈夫です。
+（<code>git checkout 0.4.1</code>）</p>
+<p>wasi-common-lucetはWASIのサポートをランタイムに追加するためのものです。</p>
+<p>実は実装し始めたときはWASIなしの素のWebAsseblyで書いていたのですが、それだとデバッグが難しく、諦めてWASIを追加しました。
+ランタイムのメモリ制限の設定値を勘違いしていてRustプラグインがヒープアロケーションでpanicを起こしていたのですが、WASIなしだと標準出力と標準エラー出力がないのでpanic時のメッセージ（out of memoryエラー）が出力されず、辛かったです。</p>
+<p>ホスト側（calcパッケージ）のRustコンパイラには追加のパラメータが必要です。
+<code>.cargo/config</code>ファイルを追加して以下の内容を書きました。</p>
+<p><strong>calc/.cargo/config</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">build</span>]
+<span style="color:#a6e22e">rustflags</span> = [<span style="color:#e6db74">&#34;-C&#34;</span>, <span style="color:#e6db74">&#34;link-args=-rdynamic&#34;</span>]
+</code></pre></div><p>実はこれと同じ内容が親ディレクトリである<code>lucet</code>リポジトリの<code>.cargo/config</code>にも書かれていて、Cargoはそれを探し出して読んでいるようです。
+ですから、いまのディレクトリ構成ですと、ここで指定しなくても大丈夫かもしれません。
+しかし将来、calcを<code>lucet</code>ディレクトリの外でビルドすることもあるかもしれないので、念のためここにも書いておきます。</p>
+<h3 id="pluginmanager">PluginManager</h3>
+<p>ロードした個々のプラグインを表す<code>Plugin</code>と、それらを管理する<code>PluginManager</code>を実装します。
+まずは構造体の定義です。</p>
+<p><strong>calc/src/lib.rs</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> lucet_runtime::{DlModule, InstanceHandle, Limits, MmapRegion, Region};
+<span style="color:#66d9ef">use</span> std::{ffi::CStr, path::Path};
+<span style="color:#66d9ef">use</span> wasi_common_lucet::WasiCtxBuilder;
+
+<span style="color:#75715e">// Pluginは個々のプラグインに対応する
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Plugin</span> {
+    <span style="color:#75715e">// Lucetランタイムにロードされたプラグインのインスタンスへのハンドル
+</span><span style="color:#75715e"></span>    instance: <span style="color:#a6e22e">InstanceHandle</span>,
+}
+
+<span style="color:#75715e">// PluginManagerは全てのPluginを管理する
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">PluginManager</span> {
+    plugins: Vec<span style="color:#f92672">&lt;</span>Plugin<span style="color:#f92672">&gt;</span>,
+}
+</code></pre></div><p><code>Plugin</code>はLucetランタイムにロードされたプラグインのインスタンスへのハンドルを持ちます。
+<code>PluginManager</code>はロードした<code>Plugin</code>を保持する<code>Vec</code>を持ちます。</p>
+<p><code>PluginManager</code>の実装は以下のとおりです。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">impl</span> Default <span style="color:#66d9ef">for</span> PluginManager {
+    <span style="color:#75715e">// PluginManagerを作成する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">default</span>() -&gt; <span style="color:#a6e22e">Self</span> {
+        Self::init();
+        Self {
+            plugins: Vec::default(),
+        }
+    }
+}
+
+<span style="color:#66d9ef">impl</span> PluginManager {
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">init</span>() {
+        <span style="color:#75715e">// ランタイムとWASI関連の機能を動作させるためのおまじない
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// これらがないと--releaseモードでビルドした時にリンクエラーになるみたい
+</span><span style="color:#75715e"></span>        lucet_runtime::lucet_internal_ensure_linked();
+        wasi_common_lucet::export_wasi_funcs();
+    }
+
+    <span style="color:#75715e">// プラグインをロードして、ゲストメモリ領域（Region）と共にインスタンス化する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">load</span><span style="color:#f92672">&lt;</span>P: AsRef<span style="color:#f92672">&lt;</span>Path<span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self, path: <span style="color:#a6e22e">P</span>) -&gt; <span style="color:#a6e22e">anyhow</span>::Result<span style="color:#f92672">&lt;</span>()<span style="color:#f92672">&gt;</span> {
+        <span style="color:#75715e">// プラグインのインスタンスごとのメモリ制限（Limits）を定義する
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Rustで書かれたプラグインは初期メモリの割り当て量がheap_memory_sizeの
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// デフォルト制限（1MB）を超えてしまうので、その値を増やしておく
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// なおheapと呼ばれているが、Rustでいうヒープ領域とは意味が異なる
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// ここではゲストが読み書き可能かつ動的に拡張可能なメモリ領域という意味になる
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// その中をどう使うかはプラグインに任されており、RustやCだとヒープ領域に
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 加えてスタック領域としても使っているらしい
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Rustで書かれたプラグインはスタック領域のために1MB超必要らしい
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// WebAssemblyのメモリは1ページあたり64KBなので17ページ必要（1.06MB）
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// これに加えてヒープ領域として最低1ページ必要。余裕をみて2ページまで
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 使えるようにする
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> mem_pages <span style="color:#f92672">=</span> <span style="color:#ae81ff">17</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>;
+        <span style="color:#66d9ef">let</span> limits <span style="color:#f92672">=</span> Limits {
+            heap_memory_size: <span style="color:#a6e22e">mem_pages</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">64</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">1024</span>,
+            ..Limits::default()
+        };
+
+        <span style="color:#75715e">// LucetのDlModule（動的リンクモジュール）でwasmの共有ライブラリ（so）を
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// ロードする
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> module <span style="color:#f92672">=</span> DlModule::load(path).map_err(anyhow::Error::msg)<span style="color:#f92672">?</span>;
+        <span style="color:#75715e">// LucetのMmapRegionでプラグインが使用するゲストメモリを作成する
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 作成時の引数として、上で作成したLimits（メモリ制限設定）を与える
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> region <span style="color:#f92672">=</span> MmapRegion::create(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>limits).map_err(anyhow::Error::msg)<span style="color:#f92672">?</span>;
+        <span style="color:#75715e">// ゲストメモリに紐づくプラグインのインスタンスを作成する
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> instance <span style="color:#f92672">=</span> region.new_instance(module).map_err(anyhow::Error::msg)<span style="color:#f92672">?</span>;
+
+        <span style="color:#75715e">// インスタンスにWASIコンテキストを追加する
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// これによりプラグインがpanicしたときにpanicのメッセージが表示される
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// ようになる（デバッグに便利）
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> wasi_ctx <span style="color:#f92672">=</span> WasiCtxBuilder::new()
+            <span style="color:#75715e">// ホストの標準入出力を継承させる
+</span><span style="color:#75715e"></span>            .and_then(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> x.inherit_stdio())
+            .and_then(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> x.build())
+            .map_err(anyhow::Error::msg)<span style="color:#f92672">?</span>;
+        instance.insert_embed_ctx(wasi_ctx);
+
+        <span style="color:#75715e">// インスタンスへのハンドルをPluginの値にセットして、plugins Vecに格納する
+</span><span style="color:#75715e"></span>        self.plugins.push(Plugin { instance });
+        Ok(())
+    }
+
+    <span style="color:#75715e">// 管理しているすべてのPluginを返す
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">plugins</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> [Plugin] {
+        <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self.plugins
+    }
+}
+</code></pre></div><p><code>init</code>関数で呼んでいるLucetの2つの関数ですが、これらについてのドキュメントがないので、なにをするためのものかはわかりません。
+恐らく動的リンクモジュールのリンクエラーを防ぐためのものだと想像しています。
+動的リンクモジュールから使われる予定の関数が、ビルド時の最適化で削除されないようにする効果があるようです。</p>
+<p>特に1つ目の<code>lucet_runtime::lucet_internal_ensure_linked()</code>関数はコード例にも載っていません。
+しかしこれがないと本体側を<code>--release</code>モードでビルドした際、実行時にプラグインの動的リンクに失敗します。
+この関数がクローズ済みのpull request（Lucetランタイムのバージョン0.5向け）の修正後のコードで呼ばれていることを見つけて、ここに追加したところその問題が解決しました。
+Lucetランタイムのバージョン0.5以降では1つ目の関数はランタイム内部で呼ばれるので不要になるようです。</p>
+<p>プラグインをロードする<code>load</code>関数では最初に<code>lucet_runtime::Limits</code>というプラグインのインスタンスに課す制限を定義しています。
+現状では設定できるのはメモリ関連の上限値だけのようです。</p>
+<p>このなかの<code>heap_memory_size</code>の設定値を変更します。
+デフォルトの1MBでは、Rustで書いたプラグインをインスタンス化するときに制限値オーバーでエラーになってしまうためです。</p>
+<p>なお、ここではヒープと呼ばれていますが、このWebAssemblyのヒープはRustでいうヒープ領域を表すわけではありません。
+ゲストが読み書き可能かつ動的に拡張可能なメモリ領域という意味になります。
+そのゲストメモリの中をどう使うかはプラグインに任されており、RustやCだとヒープ領域に加えてスタック領域としても使っているようです。</p>
+<p>WebAssemblyのゲストメモリのページサイズは64KBです。
+Rustのプラグインはスタック領域として1MB超割り当てるようなので、17ページ（1.06MB）の使用を許可したら動きました。
+これに加えてヒープ領域も必要です。
+今回はヒープ領域は文字列を格納するくらいにしか使わないので1ページで十分ですが、余裕をみて2ページまで許可しましょう。
+<code>heap_memory_size</code>は合計で19ページ分の1.19MBに設定しました。</p>
+<p>Lucetの<code>DlModule::load</code>関数でwasmの共有ライブラリを読み込みます。
+そして<code>MmapRegion::create</code>関数でゲストメモリを作成します。
+<code>create</code>の引数に先ほど定義した<code>Limits</code>を与えます。</p>
+<p><code>MmapRegion</code>の<code>new_instance</code>メソッドで、そのゲストメモリに紐づくプラグインのインスタンスを作成します。
+<code>new_instance</code>メソッドはインスタンスへのハンドル（<code>InstanceHandle</code>）を返すので、それを<code>Plugin</code>構造体に格納します。</p>
+<p>Lucetの関数やメソッドの呼び出し後、<code>?</code>演算子の前に<code>map_err(anyhow::Error::msg)</code>を付けました。
+Lucetのエラー型は<code>std::error::Error</code>トレイトを実装していないので、<code>?</code>演算子で<code>anyhow</code>のエラー型に暗黙的に変換できません。
+<code>map_err()</code>で明示的に変換しています。</p>
+<h3 id="plugincalc">Plugin側のcalcメソッドの実装</h3>
+<p><code>Plugin</code>に<code>calc</code>メソッドを実装します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">impl</span> Plugin {
+    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">calc</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self, a: <span style="color:#66d9ef">u32</span>, b: <span style="color:#66d9ef">u32</span>) -&gt; <span style="color:#a6e22e">anyhow</span>::Result<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u32</span><span style="color:#f92672">&gt;</span> {
+        Ok(self
+            .instance
+            .run(<span style="color:#e6db74">&#34;calc&#34;</span>, <span style="color:#f92672">&amp;</span>[a.into(), b.into()])
+            .map_err(anyhow::Error::msg)<span style="color:#f92672">?</span>
+            .unwrap_returned()
+            .into())
+    }
+}
+</code></pre></div><p>このように、WebAssemblyの関数は<code>self.instance</code>が束縛された<code>InstanceHandle</code>の<code>run</code>メソッドで実行します。</p>
+<p><code>run</code>メソッドの戻り値は<code>lucet_runtime::RunResult</code>です。
+これは<code>enum</code>として定義されており、バリアントとして戻り値を示す<code>Returned(UntypedRetVal)</code>とコルーチンのyieldを示す<code>Yielded(YieldedVal)</code>を持ちます。
+後者はLucetのhostcallの使用時に現れることがあるようです。
+今回は<code>Returned</code>バリアントしか使わないので、<code>unwrap_returned</code>メソッドでアンラップしてます。</p>
+<p>なお<code>unwrap_returned</code>メソッドは値が<code>Yielded</code>バリアントだったときはpanicするので注意が必要です。
+ホスト側をもっと堅牢にしたければ、<code>Result&lt;UntypedRetVal, Error&gt;</code>を返す<code>returned</code>メソッドを使用してください。</p>
+<p>最後に<code>UntypedRetVal</code>の<code>into</code>メソッドで、値を<code>u32</code>型に変換しています。</p>
+<h3 id="stringrust">Stringを返す関数（Rust版）</h3>
+<p><strong>元記事より引用（再掲）</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">trait</span> Plugin {
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">name</span>(<span style="color:#f92672">&amp;</span>self) -&gt; String;
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">operator</span>(<span style="color:#f92672">&amp;</span>self) -&gt; String;
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">calc</span>(<span style="color:#f92672">&amp;</span>self, a: <span style="color:#66d9ef">u32</span>, b: <span style="color:#66d9ef">u32</span>) -&gt; <span style="color:#66d9ef">u32</span>;
+}
+</code></pre></div><p><code>name</code>関数と<code>operator</code>関数を実装します。</p>
+<p>WebAssemblyで<code>String</code>を返すのは少し面倒です。
+なぜならWebAssemblyの組み込み型には<code>String</code>のような複合型がないからです。
+そのため関数の引数として受け取ったり、戻り値として返すことができません。</p>
+<p>Rustのwasm-bindgenは<code>String</code>などの複合型を簡単に扱えるようにJavaScriptコードを自動生成してくれます。
+しかしLucetではFFIの相手がJavaScriptではないので、wasm-bindgenは使えません。
+複合型の扱いは自分で実装することになります。</p>
+<p>プラグインのインスタンスが使用するメモリ（ゲストメモリ）は、本体側（ホスト側）からでもアクセスできます。
+プラグイン側の関数がゲストメモリのどこに文字列を格納したのか、そのアドレスを返せば、ホスト側でその文字列にアクセスできます。
+文字列データのメモリ上のフォーマットは自由に決められますが、プラグインをRust以外の言語で実装することを考慮して、FFIで一般的に使われているC形式のヌル終端文字列を使うことにします。</p>
+<p>Rust版のcalc-plugin-add側の実装はこうなります。</p>
+<p><strong>calc-plugin-add/lib.rs</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::{ffi::CString, os::raw::c_char};
+
+<span style="color:#75715e">#[</span><span style="color:#75715e">no_mangle</span><span style="color:#75715e">]</span>
+<span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;C&#34;</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">name</span>() -&gt; <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> c_char {
+    str_to_char_ptr(<span style="color:#e6db74">&#34;add&#34;</span>)
+}
+
+<span style="color:#75715e">#[</span><span style="color:#75715e">no_mangle</span><span style="color:#75715e">]</span>
+<span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;C&#34;</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">operator</span>() -&gt; <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> c_char {
+    str_to_char_ptr(<span style="color:#e6db74">&#34;+&#34;</span>)
+}
+
+<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">str_to_char_ptr</span>(s: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">str</span>) -&gt; <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> c_char {
+    <span style="color:#75715e">// 文字列リテラルからCStringを作成する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> s <span style="color:#f92672">=</span> CString::new(s).expect(<span style="color:#e6db74">&#34;Can&#39;t create a CString&#34;</span>);
+    <span style="color:#75715e">// ヌル終端文字列への可変の生ポインタを得る
+</span><span style="color:#75715e"></span>    s.into_raw()
+}
+</code></pre></div><p><code>str_to_char_ptr</code>はプライベート（非公開）の関数です。
+この関数はまず文字列リテラルから<code>CString</code>を作成します。
+これによりゲストメモリのヒープ領域にヌル終端文字列が作られます。
+次に<code>into_raw()</code>でヌル終端文字列の先頭アドレスへの可変の生ポインタ（<code>*mut c_char</code>）を取得しています。</p>
+<p><code>into_raw()</code>を呼んだことで<code>CString</code>の所有権が追跡されなくなり、<code>str_to_char_ptr</code>関数からリターンしたあともヌル終端文字列がゲストメモリ上に残ります。</p>
+<p>ホスト側では<code>name</code>関数や<code>operator</code>関数が返した文字列の先頭アドレスを使ってゲストメモリ上のヌル終端文字列にアクセスし、その内容から自分のメモリ上に<code>String</code>を作成します。</p>
+<p>（言葉ではわかりにくいので、後日、図を追加しようと思います）</p>
+<p>ホスト側のコードは以下のようになります。
+文字列の取り出しは<code>transfer_string</code>関数が行います。</p>
+<p><strong>calc/src/lib.rs</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">impl</span> Plugin {
+    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">name</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; <span style="color:#a6e22e">anyhow</span>::Result<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> {
+        <span style="color:#66d9ef">let</span> val <span style="color:#f92672">=</span> self
+            .instance
+            .run(<span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#f92672">&amp;</span>[])
+            .map_err(anyhow::Error::msg)<span style="color:#f92672">?</span>
+            .unwrap_returned();
+        self.transfer_string(val)
+    }
+
+   <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">operator</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; <span style="color:#a6e22e">anyhow</span>::Result<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> {
+        <span style="color:#75715e">// プラグインのoperator関数を呼び出す
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> val <span style="color:#f92672">=</span> self
+            .instance
+            .run(<span style="color:#e6db74">&#34;operator&#34;</span>, <span style="color:#f92672">&amp;</span>[])
+            .map_err(anyhow::Error::msg)<span style="color:#f92672">?</span>
+            .unwrap_returned();
+        <span style="color:#75715e">// 戻り値（ヌル終端文字列のアドレス）を起点にして文字列を取り出す
+</span><span style="color:#75715e"></span>        self.transfer_string(val)
+    }
+
+    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">calc</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self, a: <span style="color:#66d9ef">u32</span>, b: <span style="color:#66d9ef">u32</span>) -&gt; <span style="color:#a6e22e">anyhow</span>::Result<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u32</span><span style="color:#f92672">&gt;</span> {
+        <span style="color:#75715e">// 既出のため内容は省略
+</span><span style="color:#75715e"></span>    }
+
+    <span style="color:#75715e">// ヌル終端文字列のアドレスを起点にして文字列を取り出す
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">transfer_string</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self, val: <span style="color:#a6e22e">lucet_runtime</span>::UntypedRetVal) -&gt; <span style="color:#a6e22e">anyhow</span>::Result<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> {
+        <span style="color:#75715e">// ゲストメモリは&amp;[u8]型
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> heap <span style="color:#f92672">=</span> self.instance.heap();
+        <span style="color:#75715e">// ヌル終端文字の先頭のアドレス（メモリ領域上のオフセット）を取得
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> start <span style="color:#f92672">=</span> val.as_u32() <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">usize</span>;
+        <span style="color:#75715e">// ヌル文字（0u8）を見つける
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> end <span style="color:#f92672">=</span> start;
+        <span style="color:#66d9ef">while</span> heap[end] <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> {
+            end <span style="color:#f92672">+</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+        }
+        <span style="color:#75715e">// CStrを作成する（この時点ではまだデータは参照されるだけで、コピーされていない）
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> c_str <span style="color:#f92672">=</span> CStr::from_bytes_with_nul(<span style="color:#f92672">&amp;</span>heap[start..<span style="color:#f92672">=</span>end])<span style="color:#f92672">?</span>;
+        <span style="color:#75715e">// CStrからStringを作成する（ここでデータがコピーされる）
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> s <span style="color:#f92672">=</span> String::from(c_str.to_string_lossy());
+        <span style="color:#75715e">// ゲストメモリ上のCStringはもう不要なので、プラグイン側のrelease_string関数を
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 呼んで開放する
+</span><span style="color:#75715e"></span>        self.instance
+            .run(<span style="color:#e6db74">&#34;release_string&#34;</span>, <span style="color:#f92672">&amp;</span>[start.into()])
+            .map_err(anyhow::Error::msg)<span style="color:#f92672">?</span>;
+        Ok(s)
+    }
+}
+</code></pre></div><p>本体側のヒープに<code>String</code>を作成したあとは、ゲスト側のヌル終端文字列は不要になります。
+プラグインの<code>release_string</code>関数を呼び出す事で削除します。</p>
+<p>calc-plugin-addの<code>release_string</code>関数の実装は以下のとおりです。</p>
+<p><strong>calc-plugin-add/lib.rs</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">#[</span><span style="color:#75715e">no_mangle</span><span style="color:#75715e">]</span>
+<span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">unsafe</span> <span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;C&#34;</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">release_string</span>(ptr: <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> c_char) {
+    <span style="color:#75715e">// ヌル終端文字列への生ポインタから、CStringを再構築する
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// これにより所有権が再び追跡されるようになる
+</span><span style="color:#75715e"></span>    CString::from_raw(ptr);
+
+} <span style="color:#75715e">// CStringがスコープを抜けるので、使用していたヒープ領域（ゲストメモリ）が解放される
+</span></code></pre></div><h3 id="stringc">Stringを返す関数（C版）</h3>
+<p>C版のcalc-plugin-mulでは<code>String</code>を返す関数は以下のようになります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;stdbool.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// ヒープ割り当てに成功したかチェックする関数
+</span><span style="color:#75715e"></span><span style="color:#75715e">// Lucetのテスト用のコードから拝借した
+</span><span style="color:#75715e"></span><span style="color:#75715e">// https://github.com/bytecodealliance/lucet/blob/master/lucet-runtime/lucet-runtime-tests/guests/entrypoint/use_allocator.c
+</span><span style="color:#75715e"></span><span style="color:#75715e">//
+</span><span style="color:#75715e"></span><span style="color:#75715e">// 失敗時はWebAssemblyのunreachable命令を実行する（結果として関数の実行がアボートされる）
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">assert</span>(<span style="color:#66d9ef">bool</span> v)
+{
+    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>v) {
+        __builtin_unreachable();
+    }
+}
+
+<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> <span style="color:#a6e22e">name</span>()
+{
+    <span style="color:#66d9ef">char</span> str0[] <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">mul</span><span style="color:#e6db74">&#34;</span>;
+    <span style="color:#75715e">// ゲストメモリ上のヒープ領域に文字列用のスペースを確保する
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>str <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>) malloc(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>) <span style="color:#f92672">*</span> strlen(str0) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+    assert(str);
+    <span style="color:#75715e">// スペースが確保できたら文字列リテラルからバイト列をコピーする
+</span><span style="color:#75715e"></span>    strcpy(str, str0);
+    <span style="color:#66d9ef">return</span> str;
+}
+
+<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> <span style="color:#a6e22e">operator</span>()
+{
+    <span style="color:#66d9ef">char</span> str0[] <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">*</span><span style="color:#e6db74">&#34;</span>;
+    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>str <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>) malloc(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">char</span>) <span style="color:#f92672">*</span> strlen(str0) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+    assert(str);
+    strcpy(str, str0);
+    <span style="color:#66d9ef">return</span> str;
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">release_string</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>str)
+{
+    <span style="color:#75715e">// ゲストメモリ上のヒープ領域にある文字列用のスペースを開放する
+</span><span style="color:#75715e"></span>    free(str);
+}
+</code></pre></div><p>筆者はCの万年初心者なので、これが模範的なコードなのかはあまり自身がありません。</p>
+<p>コードの解説は以上になります。</p>
+<h2 id="heading-7">サンプルコードのビルドと実行</h2>
+<p>サンプルコードをビルドしていきましょう。
+まず<code>lucet</code>ディレクトリに移動してLucetツールチェインを使えるようにします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pwd
+lucet
+
+<span style="color:#75715e"># ツールチェインを使えるようにする</span>
+<span style="color:#75715e"># バックグランドでDockerコンテナが起動し、シェルのaliasが設定される</span>
+$ source ./devenv_setenv.sh
+
+<span style="color:#75715e"># サンプルプログラムのディレクトリへ移動する</span>
+$ cd rust-wasm-plugin-example
+$ pwd
+lucet/rust-wasm-plugin-example
+</code></pre></div><h3 id="calc">calcのビルド</h3>
+<p>まずはcalc（Rustアプリ本体）のビルドです。
+ターゲットはx86_64-unknown-linux-gnuです。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ <span style="color:#f92672">(</span>cd calc <span style="color:#f92672">&amp;&amp;</span> cargo build --release<span style="color:#f92672">)</span>
+$ ls -lh target/release/calc
+-rwxr-xr-x. <span style="color:#ae81ff">2</span> tatsuya tatsuya 7.3M ... target/release/calc
+</code></pre></div><h3 id="calc-plugin-add">calc-plugin-addのビルド</h3>
+<p>次にcalc-plugin-addをビルドします。
+このプラグインはRustで書かれており、Rustコンパイラでwasmファイルへとコンパイルします。
+ターゲットはwasm32-wasiで、<code>calc-plugin-add/.cargo/config</code>で指定してあります。</p>
+<p>なお上位の<code>lucet</code>ディレクトリにも<code>.cargo/config</code>ファイルがあって、それのせいでビルドエラーになってしまいます。
+そのファイルをいったん削除してからビルドします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># lucetディレクトリ配下のCargo設定ファイルをいったん削除する</span>
+$ rm ../cargo/config
+
+<span style="color:#75715e"># Rustコンパイラでプラグインをビルドしてwasmファイルを作成する</span>
+$ <span style="color:#f92672">(</span>cd calc-plugin-add <span style="color:#f92672">&amp;&amp;</span> cargo build --release<span style="color:#f92672">)</span>
+$ ls -lh target/wasm32-wasi/release/calc_plugin_add.wasm
+-rwxr-xr-x. <span style="color:#ae81ff">2</span> tatsuya tatsuya 1.8M ... target/wasm32-wasi/release/calc_plugin_add.wasm
+
+<span style="color:#75715e"># Cargo設定ファイルを復元する</span>
+$ <span style="color:#f92672">(</span>cd .. <span style="color:#f92672">&amp;&amp;</span> git restore .cargo/config<span style="color:#f92672">)</span>
+</code></pre></div><h3 id="calc-plugin-mul">calc-plugin-mulのビルド</h3>
+<p>calc-plugin-mulをビルドします。
+このプラグインはCで書かれており、clangでwasmファイルへとコンパイルします。
+Lucetのツールチェイン（Dockerコンテナ上）にある<code>wasm32-wasi-clang</code>コンパイラを使います。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># wasm対応版のclangでプラグインをビルドしてwasmファイルを作成する</span>
+$ wasm32-wasi-clang -Ofast -nostartfiles -Wl,--no-entry,--export-all <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>      -o target/wasm32-wasi/calc_plugin_mul.wasm <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>      calc-plugin-mul/c-src/calc_plugin_mul.c
+
+$ ls -lh target/wasm32-wasi/release/calc_plugin_mul.wasm
+-rwxr-xr-x. <span style="color:#ae81ff">1</span> root root 16K ... target/wasm32-wasi/release/calc_plugin_mul.wasm
+</code></pre></div><h3 id="wasmaot">wasmファイルをAOTコンパイル</h3>
+<p>Lucetの最適化コンパイラでWebAssemblyをネイティブコードへコンパイルします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ <span style="color:#f92672">(</span>cd target/wasm32-wasi/release <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>   lucetc-wasi -o calc_plugin_add.so calc_plugin_add.wasm<span style="color:#f92672">)</span>
+
+$ <span style="color:#f92672">(</span>cd target/wasm32-wasi/release <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>   lucetc-wasi -o calc_plugin_mul.so calc_plugin_mul.wasm<span style="color:#f92672">)</span>
+
+$ ls -lh target/wasm32-wasi/release/*.so
+-rwxr-xr-x. <span style="color:#ae81ff">1</span> root root 246K ... target/wasm32-wasi/release/calc_plugin_add.so
+-rwxr-xr-x. <span style="color:#ae81ff">1</span> root root  63K ... target/wasm32-wasi/release/calc_plugin_mul.so
+</code></pre></div><p>共有ライブラリ（soファイル）ができました。</p>
+<h3 id="docker">Dockerコンテナの停止</h3>
+<p>必須ではありませんがツールチェインの入ったDockerコンテナを停止します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd ..
+$ pwd
+lucet
+
+$ ./devenv_stop.sh
+Stopping container
+lucet
+Removing container
+lucet
+</code></pre></div><h3 id="heading-8">実行</h3>
+<p>それでは実行しましょう。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pwd
+lucet/rust-wasm-plugin-example
+
+$ <span style="color:#f92672">(</span>cd calc <span style="color:#f92672">&amp;&amp;</span> cargo run --release<span style="color:#f92672">)</span>
+Plugin: add
+Calc: <span style="color:#ae81ff">1</span> + 2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+Plugin: mul
+Calc: <span style="color:#ae81ff">1</span> * 2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+</code></pre></div><p>うまく動作しているようです。</p>
+<h2 id="heading-9">まとめ</h2>
+<ul>
+<li>Lucetを使うとRustなどで書かれたアプリケーション上でWebAssemblyコードを実行できる</li>
+<li>プラグインとしてwasm形式を採用することで以下のようなメリットがある
+<ul>
+<li>言語非依存：プラグインをさまざまな言語で開発できる</li>
+<li>クロスプラットフォーム：プラグインの作者はwasmファイルを提供するだけでよい。プラグインのユーザはそれをさまざまな環境でネイティブコードにコンパイルして実行できる</li>
+<li>セキュリティ：プラグインがサンドボックス内で実行されるので、他人が開発したプラグインでも、比較的安全に実行できる</li>
+</ul>
+</li>
+<li>Lucetのエコシステム
+<ul>
+<li>現状では<code>String</code>などの複合型の扱いが面倒
+<ul>
+<li>Lucetを対象としたライブラリの充実に期待（複数言語に対応したデータのシリアライズなど）</li>
+</ul>
+</li>
+<li>IDLはいまのところCのコード生成のみ（今度、試してみたい）</li>
+</ul>
+</li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>ただし、現状ではWebAssemblyからSIMD命令などを直接使えないので、コンパイラの性能にもよりますが、Rustコンパイラで直接ネイティブコードを作成した場合よりは遅くなりそうです。また現状ではWebAssemblyコードはシングルスレッドで実行されます。 <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+  </section>
+  <footer>
+    
+    <nav class="p-pagination c-pagination">
+      <div class="c-pagination__ctrl">
+        <div class="c-pagination__newer">
+          
+          
+        </div>
+        <div class="c-pagination__older">
+          
+          <a href="https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-zero-cost-abstraction/">Older</a>
+          
+        </div>
+      </div>
+    </nav>
+    
+
+
+    
+<aside class="p-author">
+  
+  
+  <div class="p-author__body">
+    
+    <p class="c-title p-author__name ">Tatsuya Kawano (tatsuya6502)</p>
+    
+    
+    <p>Erlang/OTPやRustで分散DBを開発してます。最近、Rustの本を書きました。上海在住</p>
+    
+    
+  </div>
+  
+</aside>
+
+
+  </footer>
+</article>
+  </main>
+  
+<nav class="l-nav p-menu">
+  <ul class="p-menu__lists">
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tatsuya6502/categories">Categories</a>
+      </li>
+      
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tatsuya6502/tags">Tags</a>
+      </li>
+      
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tatsuya6502/index.xml">RSS</a>
+      </li>
+      
+    
+  </ul>
+</nav>
+
+
+  <footer class="l-footer">
+    
+<ul class="c-links">
+  
+  
+  
+  
+  
+  <li class="c-links__item">
+    <a href="https://github.com/tatsuya6502" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>github</title>
+        <use xlink:href="#icon-github"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  <li class="c-links__item">
+    <a href="https://gitlab.com/tatsuya6502" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>gitlab</title>
+        <use xlink:href="#icon-gitlab"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+
+    <p class="p-copyright">
+      
+        &copy; 2019 Tatsuya Kawano (tatsuya6502)
+      
+    </p>
+  </footer>
+
+  
+    
+  
+<script src="https://utteranc.es/client.js"
+        repo="rust-jp-blogs/tatsuya6502"
+        issue-term="url"
+        label="blog comments"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+</body>
+</html>
+

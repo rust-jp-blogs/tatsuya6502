@@ -4,31 +4,56 @@
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/categories/</loc>
-    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/lucet/</loc>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/</loc>
-    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/posts/</loc>
-    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-wasm-based-plugin/</loc>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/categories/rust-tips/</loc>
-    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-zero-cost-abstraction/</loc>
-    <lastmod>2019-12-24T18:00:00+08:00</lastmod>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/tags/</loc>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/wasi/</loc>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/webassembly/</loc>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/webassembly/</loc>
+    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-zero-cost-abstraction/</loc>
     <lastmod>2019-12-24T18:00:00+08:00</lastmod>
   </url>
   

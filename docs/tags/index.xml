@@ -7,10 +7,37 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019 Tatsuya Kawano (tatsuya6502)</copyright>
-    <lastBuildDate>Tue, 24 Dec 2019 18:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 31 Dec 2019 12:05:00 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Lucet</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/tags/lucet/</link>
+      <pubDate>Tue, 31 Dec 2019 12:05:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/tags/lucet/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>WASI</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/tags/wasi/</link>
+      <pubDate>Tue, 31 Dec 2019 12:05:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/tags/wasi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>WebAssembly</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/tags/webassembly/</link>
+      <pubDate>Tue, 31 Dec 2019 12:05:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/tags/webassembly/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>ゼロコスト抽象化</title>
