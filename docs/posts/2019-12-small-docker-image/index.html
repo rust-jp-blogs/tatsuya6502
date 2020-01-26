@@ -29,7 +29,7 @@
   
   
   
-  <meta name="generator" content="Hugo 0.61.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.62.2" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
   
   
   
@@ -81,7 +81,7 @@
 <li>前回：<a href="../2019-12-statically-linked-binary/">Alpine Linuxでも実行できるHello Worldバイナリを作成する</a></li>
 <li><strong>今回</strong>：SQLite 3と静的リンクしたバイナリを作成し、Dockerイメージに収める</li>
 </ul>
-<h2 id="sqlite-3">SQLite 3と静的リンクさせる</h2>
+<h2 id="sqlite-3と静的リンクさせる">SQLite 3と静的リンクさせる</h2>
 <p>今回はRustのアプリケーションをSQLite 3ライブラリと静的リンクさせます。
 SQLiteはCで書かれた軽量コンパクトなリレーショナルデータベース管理システム（RDBMS）で、主に小規模システムやデスクトップアプリのデータストアとして利用されています。
 SQLiteはそれ単独でデータベースサーバとして実行することもできますが、今回はライブラリとしてRustアプリ内に埋め込んで使います。</p>
@@ -124,7 +124,7 @@ SQLiteはそれ単独でデータベースサーバとして実行すること�
 
     Ok(())
 }
-</code></pre></div><h2 id="rust-musl-builder">rust-musl-builderで簡単ビルド</h2>
+</code></pre></div><h2 id="rust-musl-builderで簡単ビルド">rust-musl-builderで簡単ビルド</h2>
 <p>hello-sqliteをmuslターゲット向けにビルドしましょう。
 <a href="../2019-12-statically-linked-binary/#linuxmusl">前回説明した</a>ようにSQLiteのような外部ライブラリを使うときは、それなりの準備が必要です。
 なぜなら、外部ライブラリはglibcと動的リンクさせる代わりに、muslと静的リンクさせる必要があるからです。</p>
@@ -156,7 +156,7 @@ $ rust-musl-builder cargo build --release
 $ ls -lh target/x86_64-unknown-linux-musl/release
 -rwxr-xr-x  <span style="color:#ae81ff">2</span> tatsuya  staff   4.1M Dec  <span style="color:#ae81ff">7</span> 16:19 hello-sqlite
 -rw-r--r--  <span style="color:#ae81ff">1</span> tatsuya  staff    97B Dec  <span style="color:#ae81ff">7</span> 16:19 hello-sqlite.d
-</code></pre></div><h2 id="docker">極小のDockerイメージを作成</h2>
+</code></pre></div><h2 id="極小のdockerイメージを作成">極小のDockerイメージを作成</h2>
 <p>hello-sqliteバイナリの入ったDockerイメージを作成しましょう。</p>
 <p>まず<code>.dockerignore</code>ファイルを作成して、あとで<code>docker build</code>コマンドを実行する際に不要なファイルが処理されないようにします。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ echo <span style="color:#e6db74">&#39;target&#39;</span> &gt; .dockerignore
@@ -241,12 +241,12 @@ alpine        3.10    965ea09ff2eb  <span style="color:#ae81ff">6</span> weeks a
 $ docker images ubuntu:18.04
 REPOSITORY    TAG     IMAGE ID      CREATED        SIZE
 ubuntu        18.04   <span style="color:#ae81ff">775349758637</span>  <span style="color:#ae81ff">5</span> weeks ago    64.2MB
-</code></pre></div><h2 id="rust-musl-builder-1">rust-musl-builderにないライブラリを使うには？</h2>
+</code></pre></div><h2 id="rust-musl-builderにないライブラリを使うには">rust-musl-builderにないライブラリを使うには？</h2>
 <p>rust-musl-builderにはOpenSSLやlibpqなどWebアプリケーションに必要そうなライブラリがすでに入っています。
 しかしアプリケーションによっては、これ以外の外部ライブラリが必要になることも少なくないでしょう。
 そういうときはrust-musl-builderをベースにして、必要なライブラリを追加したイメージを作るのがお勧めです。</p>
 <p>具体的なやり方については、rust-musl-builderリポジトリのadding-a-libraryの例（<a href="https://github.com/emk/rust-musl-builder/blob/master/examples/adding-a-library/Dockerfile">Dockerfile</a>）を見てください。</p>
-<h2 id="heading">前回と今回のまとめ</h2>
+<h2 id="前回と今回のまとめ">前回と今回のまとめ</h2>
 <ul>
 <li>Rustの<code>x86_64-unknown-linux-musl</code>ターゲットを使うと、libcを含む外部ライブラリに静的リンクしたバイナリが作成できる</li>
 <li>ekidd/rust-musl-builderなどのDockerイメージを活用すれば、準備に時間をかけることなくmuslビルドが始められる</li>

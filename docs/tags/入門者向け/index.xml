@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>入門者向け on Oxidized Bookshelf</title>
+    <link>https://blog.rust-jp.rs/tatsuya6502/tags/%E5%85%A5%E9%96%80%E8%80%85%E5%90%91%E3%81%91/</link>
+    <description>Recent content in 入門者向け on Oxidized Bookshelf</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <copyright>&amp;copy; 2019 Tatsuya Kawano (tatsuya6502)</copyright>
+    <lastBuildDate>Sun, 26 Jan 2020 10:00:00 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/%E5%85%A5%E9%96%80%E8%80%85%E5%90%91%E3%81%91/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>シェルスクリプトマガジンにRust入門記事を寄稿しました</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2020-01-shellmag-vol-64/</link>
+      <pubDate>Sun, 26 Jan 2020 10:00:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2020-01-shellmag-vol-64/</guid>
+      <description>はじめに シェルスクリプトマガジン Vol.64（2020年1月25日発売） にRust入門記事を寄稿しました。 どんな内容か紹介します。 ↑ シェルス</description>
+    </item>
+    
+    <item>
+      <title>書籍『実践Rust入門』の詳細な目次です</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-rust-bicycle-book-toc/</link>
+      <pubDate>Tue, 23 Apr 2019 12:20:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-13-rust-bicycle-book-toc/</guid>
+      <description>2019年5月8日発売予定の『実践Rust入門』（以下 本書）の目次を公開します。 購入前の参考にしてください。 実は本書は私が想像していたのより</description>
+    </item>
+    
+  </channel>
+</rss>

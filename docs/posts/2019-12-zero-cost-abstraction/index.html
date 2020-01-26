@@ -29,7 +29,7 @@
   
   
   
-  <meta name="generator" content="Hugo 0.61.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.62.2" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
   
   
   
@@ -75,7 +75,7 @@
   <section id="js-article" class="p-article__body">
     <p>これは <a href="https://qiita.com/advent-calendar/2019/rust3">Rust その3 Advent Calendar 2019</a> の24日目のエントリです。
 Rustのゼロコスト抽象化が期待どおりに働いていることを、コンパイラが出力した機械語（アセンブリコード）で確認します。</p>
-<h2 id="heading">ゼロコスト抽象化とは</h2>
+<h2 id="ゼロコスト抽象化とは">ゼロコスト抽象化とは</h2>
 <p>ゼロコスト抽象化（zero-cost abstraction）とは、Rustが持つ抽象化のしくみが実行時の追加コストなしに動作することです。
 ここでいう追加コストとは、メモリ使用量の増加や実行速度の低下などの、いわゆるオーバーヘッドを指します。</p>
 <p>では抽象化とはなんでしょうか？ プログラミングにおける抽象化とは、共通な部分を抽出し、その詳細をブラックボックス化することです。
@@ -91,7 +91,7 @@ Rustのゼロコスト抽象化が期待どおりに働いていることを、�
 （動的ディスパッチについては後ほど説明します）</p>
 <p>一方、Rustではこれらをできる限りコンパイル時に解決し、実行時にはゼロコストになるよう、言語自体や標準ライブラリが設計されています。
 システム資源の効率的な使用と制御が求められる、システムプログラミング言語ならではの特徴といえるでしょう。</p>
-<h2 id="heading-1">まずは机上で最適化の動作を理解する</h2>
+<h2 id="まずは机上で最適化の動作を理解する">まずは机上で最適化の動作を理解する</h2>
 <p>Rustのゼロコスト抽象化と呼ばれる機能は、主に以下のものがあります。</p>
 <ul>
 <li>トレイトメソッドとクロージャ</li>
@@ -117,7 +117,7 @@ Rustのゼロコスト抽象化が期待どおりに働いていることを、�
 <p>短いコードですが<code>T</code>として参照型を持つ<code>Option&lt;T&gt;</code>型と、ジェネリックな高階関数の<code>map()</code>メソッドを使用しています。
 これらがコンパイル時にどう最適化されて、実行時のオーバーヘッドがなくなるのか調べます。</p>
 <p>κeenさんの記事とかぶりますが、まずはコンパイラの最適化の内容を机上で確認しましょう。</p>
-<h3 id="nullable">列挙型とnullableポインタ最適化</h3>
+<h3 id="列挙型とnullableポインタ最適化">列挙型とnullableポインタ最適化</h3>
 <p><code>Option&lt;T&gt;</code>型から見ていきます。
 今回のコードですが、変数<code>o1</code>は<code>Option&lt;&amp;i64&gt;</code>型、<code>o2</code>は<code>Option&lt;i64&gt;</code>型です。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 再掲
@@ -173,7 +173,7 @@ nullableポインタ最適化を適用できます。</p>
 <p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/opt-ref-i64-none.png" alt="None"></p>
 <p><code>0</code>（nullポインタ）のときは<code>None</code>で、そうではなく、有効なアドレスが入っているときは、<code>Some</code>ということになります。
 このように列挙型では、特定の条件を満たす場合はメモリ上のオーバーヘッドなしにバリアントの識別が可能になっています。</p>
-<h3 id="optiontmap">Option&lt;T&gt;のmap()メソッド</h3>
+<h3 id="optiontのmapメソッド">Option&lt;T&gt;のmap()メソッド</h3>
 <p>次に<code>Option&lt;T&gt;</code>の<code>map()</code>メソッドを見てみましょう。
 以下のように定義されています。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// https://github.com/rust-lang/rust/blob/master/src/libcore/option.rs
@@ -217,7 +217,7 @@ nullableポインタ最適化を適用できます。</p>
 }
 </code></pre></div><p>実際にはsafe Rustで<code>o1</code>の値をnullポインタに設定することは許されないので、上のコードはコンパイルできません。
 ただ最適化の過程では、これと等価な内部表現が作られていると考えられます。</p>
-<h3 id="heading-2">トレイトとして実現されるクロージャ</h3>
+<h3 id="トレイトとして実現されるクロージャ">トレイトとして実現されるクロージャ</h3>
 <p><code>o1</code>がシンプルな型になり、<code>map()</code>メソッドもインライン化されました。
 次はクロージャのところがどうなるか見てみましょう。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// クロージャを定義して引数o1に適用する
@@ -254,7 +254,7 @@ nullableポインタ最適化を適用できます。</p>
 </code></pre></div><p>変数<code>f</code>の値は単なる構造体なので、<code>o1</code>などのローカル変数と一緒にスタック領域にアロケートされます。
 Rustでは動的にアロケートするメモリ領域としてスタック領域とヒープ領域を使いますが、一般的な話として、スタック領域へのアロケートのほうがヒープ領域のアロケートよりも高速です。
 なお今回の<code>AnonymousType</code>はフィールドを持たないので、実行時にはなにもアロケートしません。</p>
-<h3 id="heading-3">トレイトメソッドのディスパッチ</h3>
+<h3 id="トレイトメソッドのディスパッチ">トレイトメソッドのディスパッチ</h3>
 <p>次はトレイトメソッドの呼び出し<code>f.call_once(o1)</code>の実行時コストについて調べましょう。</p>
 <p>トレイトメソッドの呼び出しは、普通の関数の呼び出しと比べると複雑になります。
 なぜなら、そのトレイトメソッドを実装している型がいくつも存在している可能性があり、そのなかから正しいものを選ばないといけないからです。
@@ -267,7 +267,7 @@ Rustでは動的にアロケートするメモリ領域としてスタック領�
 <p>結論から言うと、<code>Option&lt;T&gt;</code>の<code>map()</code>メソッドはクロージャのメソッドを静的ディスパッチします。
 ですからゼロコストになるのですが、そのありがたみは動的ディスパッチがわからないと実感できません。
 まずは動的ディスパッチについて詳しく説明しましょう。</p>
-<h4 id="heading-4">動的ディスパッチ</h4>
+<h4 id="動的ディスパッチ">動的ディスパッチ</h4>
 <p>動的ディスパッチは実行時にわかる情報から呼び指すメソッドの実体を選びます。
 柔軟ですが実行時コストがかかる方法です。
 オブジェクト指向言語の多くはメソッドの呼び出しに動的ディスパッチを使用し、静的ディスパッチは行なえません。
@@ -287,7 +287,7 @@ vtableはメソッドの名前と実装コードのアドレスが対になっ�
 <span style="color:#75715e">// メソッドを呼び出す
 </span><span style="color:#75715e"></span>m(f, o1);
 </code></pre></div><p>動的ディスパッチではvtableのためにメモリを少し多く使用しますし、実行時間も<code>find_method()</code>の分だけ余分にかかることになります。</p>
-<h4 id="heading-5">静的ディスパッチ</h4>
+<h4 id="静的ディスパッチ">静的ディスパッチ</h4>
 <p>静的ディスパッチは、コンパイル時に決まる型で、呼び出すメソッドの実体を選びます。
 使える場面がやや限定されますが実行時の追加コストはかかりません。</p>
 <p>Rustで静的ディスパッチを行うときはジェネリクスを使います。
@@ -345,9 +345,9 @@ vtableはメソッドの名前と実装コードのアドレスが対になっ�
 }
 </code></pre></div><p>コンパイル時の最適化は以上になります。
 Rustの抽象化のしくみを使ったコードが、ゼロコスト抽象化に関連する最適化によって、実行時のオーバーヘッドが最小のコードへと変換されました。</p>
-<h2 id="heading-6">アセンブリコードで確認する</h2>
+<h2 id="アセンブリコードで確認する">アセンブリコードで確認する</h2>
 <p>それではRustコンパイラが生成したアセンブリコードの内容を確認しましょう。</p>
-<h3 id="rust">Rustのバージョンなど</h3>
+<h3 id="rustのバージョンなど">Rustのバージョンなど</h3>
 <p>今回は以下のRustバージョンとターゲットを使用しました。</p>
 <ul>
 <li>Rust 1.40.0（2019年12月リリース）</li>
@@ -362,7 +362,7 @@ host: x86_64-unknown-linux-gnu
 release: 1.40.0
 LLVM version: 9.0
 </code></pre></div><p>試してはいませんが他のターゲット（macOS、Windows、ARM上のLinuxなど）でも同様の効果が得られるはずです。</p>
-<h3 id="heading-7">確認に使ったコード</h3>
+<h3 id="確認に使ったコード">確認に使ったコード</h3>
 <p>元のコードそのままですと、入出力がないためコンパイラの最適化によって全体のコードが削除されてしまいます。
 （なにも仕事をしないアセンブリコードが生成される）</p>
 <p>そこで以下のような修正を施しました。</p>
@@ -417,7 +417,7 @@ let n
 let o1
 let o2
 n: 100, o1: Some<span style="color:#f92672">(</span>100<span style="color:#f92672">)</span>, o2: Some<span style="color:#f92672">(</span>556<span style="color:#f92672">)</span>
-</code></pre></div><h3 id="heading-8">アセンブリコードを生成する</h3>
+</code></pre></div><h3 id="アセンブリコードを生成する">アセンブリコードを生成する</h3>
 <p>このコードをコンパイルして、最適化後のアセンブリコードを生成しましょう。
 以下のように<code>cargo rustc</code>コマンドを実行します。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cargo rustc --release -- --emit asm -C <span style="color:#e6db74">&#39;llvm-args=-x86-asm-syntax=intel&#39;</span>
@@ -444,7 +444,7 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
  Total             <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">884</span>       <span style="color:#ae81ff">850</span>          <span style="color:#ae81ff">0</span>           <span style="color:#ae81ff">34</span>
 ------------------------------------------------------------------
 </code></pre></div><p>入出力があるのでCode部分が850行と長くなっていますが、今回はその中の20行くらいを見るだけですみます。</p>
-<h3 id="heading-9">レジスタとスタック領域の使われかた</h3>
+<h3 id="レジスタとスタック領域の使われかた">レジスタとスタック領域の使われかた</h3>
 <p>Rustではローカル変数はスタック領域に置かれます。
 生成されたアセンブリコードを筆者が事前に読んで、<code>main()</code>関数のローカル変数<code>n</code>, <code>o1</code>, <code>o2</code>がスタック領域のどこに置かれるか調べておきました。</p>
 <p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/asm-step0.png" alt="最初の状態"></p>
@@ -467,7 +467,7 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
 </ul>
 <p>Rustで関数を呼び出したり関数からリターンしたりすると<code>RSP</code>の値が増減します。</p>
 <p><code>main()</code>関数のローカル変数<code>n</code>, <code>o1</code>, <code>o2</code>がスタック上に置かれる位置は、<code>RSP</code>からの相対アドレス（<code>[rsp + 64]</code>など）で示されます。</p>
-<h3 id="x86">x86アセンブラのごく基本的なこと</h3>
+<h3 id="x86アセンブラのごく基本的なこと">x86アセンブラのごく基本的なこと</h3>
 <p>ごく簡単にですがアセンブリコードの読み方を説明します。
 以下のアセンブリコードはポインタである<code>o1</code>に、<code>&amp;n</code>をセットするためのものです。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nasm" data-lang="nasm">	<span style="color:#a6e22e">lea</span>	   rbp, [rsp <span style="color:#f92672">+</span> <span style="color:#ae81ff">64</span>]			  <span style="color:#75715e">; BPレジスタにnの番地をセットし</span>
@@ -481,7 +481,7 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
 上の例では第1オペランドが<code>qword ptr [rsp + 56]</code>となっていますが、<code>[rsp + 56]</code>はアドレス、<code>qward ptr</code>は転送するサイズの指定で、x86系CPUの4ワードポインタである64ビットポインタを表します。</p>
 <p>セミコロンから行末まではコメントです。
 これ以降は命令の説明を省略しますので、筆者が書いたコメントを読んでください。</p>
-<h2 id="nullable-1">nullableポインタ最適化の効果を確認</h2>
+<h2 id="nullableポインタ最適化の効果を確認">nullableポインタ最適化の効果を確認</h2>
 <p>列挙型のnullableポインタ最適化が働いていることを確認しましょう。
 以下のコードのコンパイル結果を調べます。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span> {
@@ -514,7 +514,7 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
 <code>o1</code>にnullポインタを意味する<code>0</code>をセットし、<code>RBP</code>レジスタも<code>0</code>にクリアしています。</p>
 <p><img src="/tatsuya6502/images/2019-12-zero-cost-abstraction/asm-none-step1.png" alt="o1をNoneに設定"></p>
 <p>この部分は期待どおりにコンパイルされたことが確認できました。</p>
-<h2 id="map">map()メソッドのインライン化とクロージャの静的ディスパッチ</h2>
+<h2 id="mapメソッドのインライン化とクロージャの静的ディスパッチ">map()メソッドのインライン化とクロージャの静的ディスパッチ</h2>
 <p><code>Option&lt;T&gt;</code>の<code>map()</code>メソッドに関連する部分を確認しましょう。
 元のコードはこうなっていました。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> o1.map(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>);
@@ -594,7 +594,7 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
 <p>なお<code>None</code>のときの<code>RAX</code>レジスタですが、これらの命令の直前の命令群で<code>println!(&quot;let o2&quot;)</code>を実行するための値がセットされているので、<code>o2</code>の<code>Some</code>の値は無意味なものになってしまいます。
 とはいえ<code>None</code>のときは、そこにどんな値が入っていても読み出されることはないので問題ありません。</p>
 <p>この部分も期待どおりにコンパイルされたことが確認できました。</p>
-<h2 id="heading-10">まとめ</h2>
+<h2 id="まとめ">まとめ</h2>
 <p>高階関数とトレイトによるポリモーフィズムを使ったRustコードをコンパイルすると、手書きしたのと同じくらいシンプルで無駄のないアセンブリコードが生成されました。</p>
 <ul>
 <li>Rustでは抽象化のしくみがゼロコストになるよう、言語自体や標準ライブラリが注意深く設計されている</li>
@@ -603,7 +603,7 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
 <li>また列挙型のnullableポインタ最適化についても確認した</li>
 <li>Rustのゼロコスト抽象化、すごい！</li>
 </ul>
-<h2 id="heading-11">参考にした記事</h2>
+<h2 id="参考にした記事">参考にした記事</h2>
 <ul>
 <li><a href="http://keens.github.io/blog/2016/03/01/rustnozerokosutochuushouka/">Rustのゼロコスト抽象化（2016-03-01） — κeenのHappy Hacking Blog</a></li>
 <li><a href="https://mizunashi-mana.github.io/blog/posts/2019/06/rust-generics-inside/">Rust のジェネリック関数はどうコンパイルされるのか（2019-06） — 続くといいな日記</a></li>

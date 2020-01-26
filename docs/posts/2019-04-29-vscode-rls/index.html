@@ -29,7 +29,7 @@
   
   
   
-  <meta name="generator" content="Hugo 0.61.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.62.2" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
   
   
   
@@ -73,14 +73,14 @@
   </header>
   
   <section id="js-article" class="p-article__body">
-    <h2 id="2019126">アップデート情報（2019年12月6日）</h2>
+    <h2 id="アップデート情報2019年12月6日">アップデート情報（2019年12月6日）</h2>
 <p>本記事で紹介した「VS Code Rust (rls)」拡張機能の不具合ですが、2019年9月4日にバージョン0.6.2がリリースされて解決しました。
 念のため確認したところ、それ以降の全てのバージョン（以下）は問題ありませんでした。</p>
 <ul>
 <li>0.6.2、0.6.3、0.7.0</li>
 </ul>
 <p>もしまだ問題のあるバージョン（0.6.0と0.6.1）を使っているなら、拡張機能を最新版にアップデートしてください。</p>
-<h2 id="heading">まずは近況など</h2>
+<h2 id="まずは近況など">まずは近況など</h2>
 <p>共著で出版した書籍『実践Rust入門』（以下 本書）ですが、2019年4月26日に電子版が発売されました。
 また物理本（紙の本）の発売日は10連休明けの5月8日ですが、東京都内の一部の大手書店では先行販売しているようです。</p>
 <p>電子版の販売サイトへは <a href="http://gihyo.jp/book/2019/978-4-297-10559-4">本書の書籍情報ページ</a>（gihyo.jp）からリンクされています。
@@ -88,7 +88,7 @@ Gihyo Digital Publising（EPUB/PDFフォーマット）、Amazon Kindle、楽天
 <p>物理本の先行販売については、共著者である <a href="https://twitter.com/blackenedgold/status/1120501628858249217">κeenさんのツィート</a> を参照してください。</p>
 <p>Twitterなどでは、早くも本書を入手し、連休を活用してRustに入門・再入門されている方が観測できます。
 内容については概ね好評のようで、私もホッと胸をなでおろすと同時に、Rustの普及に少しでも役立っているのかなと、共著者の一人として喜びを感じています。</p>
-<h2 id="rust-rls-">本題：Rust (rls) プラグイン最新版の不具合について</h2>
+<h2 id="本題rust-rls-プラグイン最新版の不具合について">本題：Rust (rls) プラグイン最新版の不具合について</h2>
 <p>前置きが長くなりました。
 本題に入りましょう。</p>
 <p>本書の2章では開発環境のセットアップと称して、Visual Studio Code（VS Code）のインストール手順や、ごく基本的な使いかたを紹介しています。</p>
@@ -99,7 +99,7 @@ Gihyo Digital Publising（EPUB/PDFフォーマット）、Amazon Kindle、楽天
 <li>Rust (rls)拡張機能 0.5.3</li>
 </ul>
 <p>&hellip;</p>
-<h4 id="2-3-5">2-3-5　基本的な使い方</h4>
+<h4 id="2-3-5基本的な使い方">2-3-5　基本的な使い方</h4>
 <p>&hellip;</p>
 <p>また<code>Ctrl</code>+<code>Shift</code>+<code>p</code>でコマンドパレットを開き、<code>run</code>と入力してから<code>Tasks: Run Tasks</code>を選びます。
 <code>cargo run</code>や<code>cargo test</code>などが表示されますので<code>cargo run</code>を選んでみてください。</p>
@@ -117,7 +117,7 @@ Gihyo Digital Publising（EPUB/PDFフォーマット）、Amazon Kindle、楽天
 <li>rust-lang/rls-vscode: <a href="https://github.com/rust-lang/rls-vscode/issues/557">#557 VS tasks not present on install version 0.6.0</a></li>
 </ul>
 <p>経緯をまとめると、以下のようになります。</p>
-<h3 id="heading-1">経緯</h3>
+<h3 id="経緯">経緯</h3>
 <ol>
 <li>Rust (rls) 拡張機能 0.6.0で行ったリファクタリングの結果、タスク機能が動作しなくなってしまった</li>
 <li>リリース後 issue #557 で報告があり、タスク機能が動作するように修正</li>
@@ -136,10 +136,10 @@ Gihyo Digital Publising（EPUB/PDFフォーマット）、Amazon Kindle、楽天
 <li>次回のポイントリリース（0.6.2）からは元通り使えるようになる予定</li>
 </ul>
 <p>次のバージョン（0.6.2）では<code>cargo run</code>タスクが復活するはずですが、リリースの時期はまだわかりません。</p>
-<h2 id="heading-2">修正版がリリースされるまでのワークアラウンド</h2>
+<h2 id="修正版がリリースされるまでのワークアラウンド">修正版がリリースされるまでのワークアラウンド</h2>
 <p>Rust (rls)拡張機能0.6.2がリリースされるまでの間は、古いバージョン（0.5.4）を使うのが良いでしょう。
 以下の手順でダウングレードできます。</p>
-<h3 id="054">古いバージョン（0.5.4）へのダウングレード</h3>
+<h3 id="古いバージョン054へのダウングレード">古いバージョン（0.5.4）へのダウングレード</h3>
 <p>以下の手順はVS Codeの最新版 1.33.1で動作確認済みです。</p>
 <ol>
 <li>拡張機能の自動更新をオフにする
@@ -163,14 +163,14 @@ Gihyo Digital Publising（EPUB/PDFフォーマット）、Amazon Kindle、楽天
 <li><a href="https://code.visualstudio.com/docs/editor/extension-gallery#_extension-autoupdate">VS Code - Extension auto-update</a></li>
 <li><a href="https://code.visualstudio.com/updates/v1_30#_install-previous-versions">VS Code 1.30 Release Notes - Extensions: Install previous versions</a></li>
 </ul>
-<h3 id="heading-3">修正版がリリースされたら</h3>
+<h3 id="修正版がリリースされたら">修正版がリリースされたら</h3>
 <p>0.6.2がリリースされたら、拡張機能の自動更新をオンに戻すといいでしょう。</p>
 <ol>
 <li><code>Ctrl/Command</code> + <code>Shift</code> + <code>p</code>でコマンドパレットを開き、<code>enable auto</code>と入力する</li>
 <li>表示された「Enable Auto Updating Extentions」を選択する</li>
 </ol>
 <p>これでRust (rls)拡張機能が最新版に更新されます。</p>
-<h2 id="vs-code">VS Code内でターミナルを使う方法もある</h2>
+<h2 id="vs-code内でターミナルを使う方法もある">VS Code内でターミナルを使う方法もある</h2>
 <p>本書に書き忘れてしまったのですが、「ターミナル」メニューから「新しいターミナル」を選ぶと、VS Code内でターミナルを開けます。
 VS Codeで開いているフォルダがカレントディレクトリとして設定されますので、その場で、<code>carge run</code>などを実行できます。</p>
 <p>覚えておくと便利です。</p>

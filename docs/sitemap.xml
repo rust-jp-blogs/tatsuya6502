@@ -4,21 +4,46 @@
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/categories/</loc>
-    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/lucet/</loc>
-    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
+    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/</loc>
-    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
+    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/posts/</loc>
+    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/</loc>
+    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%83%9E%E3%82%AC%E3%82%B8%E3%83%B3/</loc>
+    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2020-01-shellmag-vol-64/</loc>
+    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/%E5%85%A5%E9%96%80%E8%80%85%E5%90%91%E3%81%91/</loc>
+    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/%E5%9F%B7%E7%AD%86/</loc>
+    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/lucet/</loc>
     <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
@@ -33,22 +58,17 @@
   </url>
   
   <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/</loc>
-    <lastmod>2019-12-31T12:05:00+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/tags/wasi/</loc>
     <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/webassembly/</loc>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/webassembly/</loc>
     <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/webassembly/</loc>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/webassembly/</loc>
     <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
@@ -105,11 +125,6 @@
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-27-coming-soon/</loc>
     <lastmod>2019-04-27T12:17:54+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/%E6%9B%B8%E7%B1%8D/</loc>
-    <lastmod>2019-04-23T12:20:00+08:00</lastmod>
   </url>
   
   <url>

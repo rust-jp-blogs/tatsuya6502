@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>シェルスクリプトマガジン on Oxidized Bookshelf</title>
+    <link>https://blog.rust-jp.rs/tatsuya6502/tags/%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%83%9E%E3%82%AC%E3%82%B8%E3%83%B3/</link>
+    <description>Recent content in シェルスクリプトマガジン on Oxidized Bookshelf</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <copyright>&amp;copy; 2019 Tatsuya Kawano (tatsuya6502)</copyright>
+    <lastBuildDate>Sun, 26 Jan 2020 10:00:00 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%83%9E%E3%82%AC%E3%82%B8%E3%83%B3/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>シェルスクリプトマガジンにRust入門記事を寄稿しました</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2020-01-shellmag-vol-64/</link>
+      <pubDate>Sun, 26 Jan 2020 10:00:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2020-01-shellmag-vol-64/</guid>
+      <description>はじめに シェルスクリプトマガジン Vol.64（2020年1月25日発売） にRust入門記事を寄稿しました。 どんな内容か紹介します。 ↑ シェルス</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019 Tatsuya Kawano (tatsuya6502)</copyright>
-    <lastBuildDate>Tue, 31 Dec 2019 12:05:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 26 Jan 2020 10:00:00 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>シェルスクリプトマガジンにRust入門記事を寄稿しました</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2020-01-shellmag-vol-64/</link>
+      <pubDate>Sun, 26 Jan 2020 10:00:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2020-01-shellmag-vol-64/</guid>
+      <description>はじめに シェルスクリプトマガジン Vol.64（2020年1月25日発売） にRust入門記事を寄稿しました。 どんな内容か紹介します。 ↑ シェルス</description>
+    </item>
     
     <item>
       <title>Rust meets Lucet：ネイティブアプリでwasm形式の動的リンクプラグインを実行する</title>

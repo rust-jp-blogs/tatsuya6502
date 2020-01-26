@@ -29,7 +29,7 @@
   
   
   
-  <meta name="generator" content="Hugo 0.61.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.62.2" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
   
   
   
@@ -103,7 +103,7 @@ ubuntu        18.04   ea4c82dcd15a  <span style="color:#ae81ff">4</span> weeks a
 </blockquote>
 <p>実は原稿の基本的な部分は1年前に書いてあったのですが&hellip;。
 公開が遅れてすみません。</p>
-<h2 id="linux-musl">Linux muslターゲットとは</h2>
+<h2 id="linux-muslターゲットとは">Linux muslターゲットとは</h2>
 <p>Rustには<code>*-linux-musl</code>というターゲットがあります。
 現時点（Rust 1.39）ではTier 2だけでも以下のものが用意されています。</p>
 <p><strong><a href="https://forge.rust-lang.org/release/platform-support.html">Rust Platform Support</a>（Tier 2）より</strong></p>
@@ -199,7 +199,7 @@ ubuntu        18.04   ea4c82dcd15a  <span style="color:#ae81ff">4</span> weeks a
 つまりRustの単一のバイナリファイルにこれら全てのライブラリが埋め込まれている状態になります。
 このようなバイナリならCPUアーキテクチャさえ一致すればどんなLinux環境でも実行できます。
 DEBやRPMなどのパッケージを使わず、単一のバイナリを渡すだけですみますので、気軽にバイナリを配布できます。</p>
-<h2 id="-linux-musl">*-linux-muslがデフォルトのターゲットではない理由</h2>
+<h2 id="-linux-muslがデフォルトのターゲットではない理由">*-linux-muslがデフォルトのターゲットではない理由</h2>
 <p>バイナリの配布に便利な<code>*-linux-musl</code>ターゲットですが、なぜLinux環境ではそれをデフォルトにせず、<code>*-linux-gnu</code>ターゲットが使われるのでしょうか？</p>
 <p>それはmuslを使うとビルドが面倒になるからです。
 <code>*-linux-musl</code>ではRustバイナリが外部ライブラリに依存しているときは、それなりの準備が必要です。
@@ -208,7 +208,7 @@ DEBやRPMなどのパッケージを使わず、単一のバイナリを渡す�
 <p>とはいえ、Rustでよく使われる外部ライブラリなら、自分で準備する必要はありません。
 よく使われるライブラリとRustコンパイラ/gccをセットにしたDockerイメージがいくつかありますので、それらを使えば簡単です。
 <a href="../2019-12-small-docker-image/">次回の記事</a> で紹介します。</p>
-<h2 id="hello-world">Hello Worldで実験</h2>
+<h2 id="hello-worldで実験">Hello Worldで実験</h2>
 <p>前置きが長くなりました。
 今回はHello Worldをビルドしてみましょう。
 このバイナリは標準Cライブラリだけに依存しますので、muslターゲットでも簡単にビルドできます。</p>
