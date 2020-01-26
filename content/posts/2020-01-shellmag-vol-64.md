@@ -1,6 +1,6 @@
 ---
 title: "シェルスクリプトマガジンにRust入門記事を寄稿しました"
-date: 2020-01-27T12:30:00+08:00
+date: 2020-01-26T10:00:00+08:00
 draft: false
 isCJKLanguage: true
 categories:
