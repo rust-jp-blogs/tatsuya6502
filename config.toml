@@ -11,7 +11,7 @@ theme = "hugo_theme_pickles"
 publishDir = "docs"
 
 # Copyright notice. This is displayer in the footer.
-copyright = "&copy; 2019 Tatsuya Kawano (tatsuya6502)"
+copyright = "&copy; 2019&mdash;2020 Tatsuya Kawano (tatsuya6502)"
 # custom_css = "/static/css/custom.css"
 
 [params]
