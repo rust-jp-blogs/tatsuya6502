@@ -7,11 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019&amp;mdash;2020 Tatsuya Kawano (tatsuya6502)</copyright>
-    <lastBuildDate>Sun, 26 Jan 2020 10:00:00 +0800</lastBuildDate>
-    
-	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/%E5%85%A5%E9%96%80%E8%80%85%E5%90%91%E3%81%91/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 26 Jan 2020 10:00:00 +0800</lastBuildDate><atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/%E5%85%A5%E9%96%80%E8%80%85%E5%90%91%E3%81%91/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>シェルスクリプトマガジンにRust入門記事を寄稿しました</title>
       <link>https://blog.rust-jp.rs/tatsuya6502/posts/2020-01-shellmag-vol-64/</link>

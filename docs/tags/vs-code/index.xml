@@ -7,11 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019&amp;mdash;2020 Tatsuya Kawano (tatsuya6502)</copyright>
-    <lastBuildDate>Mon, 29 Apr 2019 11:15:00 +0800</lastBuildDate>
-    
-	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/vs-code/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 29 Apr 2019 11:15:00 +0800</lastBuildDate><atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/vs-code/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>VS Code Rust (rls)拡張機能でcargo runタスクが見つからない場合の対処法</title>
       <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-04-29-vscode-rls/</link>

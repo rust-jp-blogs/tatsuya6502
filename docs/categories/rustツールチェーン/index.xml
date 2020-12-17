@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rustツールチェーン on Oxidized Bookshelf</title>
+    <link>https://blog.rust-jp.rs/tatsuya6502/categories/rust%E3%83%84%E3%83%BC%E3%83%AB%E3%83%81%E3%82%A7%E3%83%BC%E3%83%B3/</link>
+    <description>Recent content in Rustツールチェーン on Oxidized Bookshelf</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <copyright>&amp;copy; 2019&amp;mdash;2020 Tatsuya Kawano (tatsuya6502)</copyright>
+    <lastBuildDate>Thu, 17 Dec 2020 18:30:00 +0800</lastBuildDate><atom:link href="https://blog.rust-jp.rs/tatsuya6502/categories/rust%E3%83%84%E3%83%BC%E3%83%AB%E3%83%81%E3%82%A7%E3%83%BC%E3%83%B3/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>デバッグビルドを高速化するrustc_codegen_craneliftを試してみました</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-rustc-cranelift/</link>
+      <pubDate>Thu, 17 Dec 2020 18:30:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-rustc-cranelift/</guid>
+      <description>はじめに これは Rust Advent Calendar 2020 8日目のエントリーです。 飛び入り参加です。 この記事では、Rustコンパイラの実験的なバックエンドである「rustc_c</description>
+    </item>
+    
+  </channel>
+</rss>

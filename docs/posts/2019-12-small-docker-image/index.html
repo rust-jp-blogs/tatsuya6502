@@ -29,7 +29,7 @@
   
   
   
-  <meta name="generator" content="Hugo 0.62.2" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.79.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
   
   
   
@@ -96,13 +96,13 @@ SQLiteはそれ単独でデータベースサーバとして実行すること�
 <span style="color:#a6e22e">edition</span> = <span style="color:#e6db74">&#34;2018&#34;</span>
 
 [<span style="color:#a6e22e">dependencies</span>]
-<span style="color:#a6e22e">rusqlite</span> = <span style="color:#960050;background-color:#1e0010">{</span> <span style="color:#a6e22e">version</span> = <span style="color:#e6db74">&#34;0.20.0&#34;</span>, <span style="color:#a6e22e">features</span> = [<span style="color:#e6db74">&#34;bundled&#34;</span>] <span style="color:#960050;background-color:#1e0010">}</span>
+<span style="color:#a6e22e">rusqlite</span> = { <span style="color:#a6e22e">version</span> = <span style="color:#e6db74">&#34;0.20.0&#34;</span>, <span style="color:#a6e22e">features</span> = [<span style="color:#e6db74">&#34;bundled&#34;</span>] }
 </code></pre></div><p><code>main</code>関数を作成します。
 ほとんど意味がありませんが、SQLiteのテーブルに1から10までの整数を格納して、SQLの<code>SUM</code>関数でその合計を得ます。</p>
 <p><strong>hello-sqlite/src/main.rs</strong></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> rusqlite::{Connection, NO_PARAMS};
 
-<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() -&gt; Result<span style="color:#f92672">&lt;</span>(), Box<span style="color:#f92672">&lt;</span>dyn std::error::Error<span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span> {
+<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() -&gt; Result<span style="color:#f92672">&lt;</span>(), Box<span style="color:#f92672">&lt;</span>dyn std::error::Error<span style="color:#f92672">&gt;&gt;</span> {
     <span style="color:#75715e">// メモリ上にテーブルを作成する
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// `?`演算子を使うと処理に失敗した時にmain関数から抜けてエラーを返せる
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> conn <span style="color:#f92672">=</span> Connection::open_in_memory()<span style="color:#f92672">?</span>;
@@ -166,27 +166,27 @@ Dockerのマルチステージビルドを使います。
 <p><strong>hello-sqlite/Dockerifle</strong></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#75715e"># バイナリのビルド用にrust-musl-builderイメージを使用する</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> ekidd/rust-musl-builder:stable AS builder</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># カレントディレクトリ（このイメージでは/home/rust/src）にソースコードを追加する</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ADD</span> . ./<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># ソースコードのパーミッションを調整する（macOSだとここで止まってしまうので</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># コメントアウトしている）</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># RUN sudo chown -R rust:rust /home/rust</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># muslターゲット向けにバイナリをビルドする</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># 必須ではないがstripコマンドでデバッグシンボルなどを削ぎ落とし、バイナリを小さくする</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> cargo build --release <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>    strip /home/rust/src/target/x86_64-unknown-linux-musl/release/hello-sqlite<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># ここからは実行用のイメージを作成する</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># ベースイメージとしscratch（空のイメージ）を使用する</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> scratch</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># バイナリをルートディレクトリにコピーする</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>builder <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>    /home/rust/src/target/x86_64-unknown-linux-musl/release/hello-sqlite /<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># このイメージからコンテナを起動するとバイナリが実行されるようにする</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENTRYPOINT</span> [<span style="color:#e6db74">&#34;/hello-sqlite&#34;</span>]<span style="color:#960050;background-color:#1e0010">
 </span></code></pre></div><p>実行用イメージのベースイメージにはscratchを使いました。
@@ -200,26 +200,26 @@ Dockerのマルチステージビルドを使います。
 <table>
 <thead>
 <tr>
-<th align="left">ベースイメージ</th>
-<th align="right">サイズ</th>
-<th align="left">用途</th>
+<th style="text-align:left">ベースイメージ</th>
+<th style="text-align:right">サイズ</th>
+<th style="text-align:left">用途</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>scratch</code></td>
-<td align="right">0</td>
-<td align="left">Rustバイナリといくつかのファイルだけがあればいいとき</td>
+<td style="text-align:left"><code>scratch</code></td>
+<td style="text-align:right">0</td>
+<td style="text-align:left">Rustバイナリといくつかのファイルだけがあればいいとき</td>
 </tr>
 <tr>
-<td align="left"><code>busybox</code></td>
-<td align="right">約1.2MB</td>
-<td align="left">シェルや基本的なUNIXコマンドが必要なとき</td>
+<td style="text-align:left"><code>busybox</code></td>
+<td style="text-align:right">約1.2MB</td>
+<td style="text-align:left">シェルや基本的なUNIXコマンドが必要なとき</td>
 </tr>
 <tr>
-<td align="left"><code>alpine</code></td>
-<td align="right">約5.6MB</td>
-<td align="left">パッケージマネージャ（<code>apk</code>）が必要なとき</td>
+<td style="text-align:left"><code>alpine</code></td>
+<td style="text-align:right">約5.6MB</td>
+<td style="text-align:left">パッケージマネージャ（<code>apk</code>）が必要なとき</td>
 </tr>
 </tbody>
 </table>

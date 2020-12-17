@@ -7,10 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019&amp;mdash;2020 Tatsuya Kawano (tatsuya6502)</copyright>
-    <lastBuildDate>Sun, 26 Jan 2020 10:00:00 +0800</lastBuildDate>
-    
-	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Thu, 17 Dec 2020 18:30:00 +0800</lastBuildDate><atom:link href="https://blog.rust-jp.rs/tatsuya6502/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>デバッグビルドを高速化するrustc_codegen_craneliftを試してみました</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-rustc-cranelift/</link>
+      <pubDate>Thu, 17 Dec 2020 18:30:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-rustc-cranelift/</guid>
+      <description>はじめに これは Rust Advent Calendar 2020 8日目のエントリーです。 飛び入り参加です。 この記事では、Rustコンパイラの実験的なバックエンドである「rustc_c</description>
+    </item>
     
     <item>
       <title>シェルスクリプトマガジンにRust入門記事を寄稿しました</title>

@@ -7,11 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019&amp;mdash;2020 Tatsuya Kawano (tatsuya6502)</copyright>
-    <lastBuildDate>Sat, 07 Dec 2019 19:15:00 +0800</lastBuildDate>
-    
-	<atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/%E5%AE%9F%E8%B7%B5rust%E5%85%A5%E9%96%80/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 07 Dec 2019 19:15:00 +0800</lastBuildDate><atom:link href="https://blog.rust-jp.rs/tatsuya6502/tags/%E5%AE%9F%E8%B7%B5rust%E5%85%A5%E9%96%80/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>RustのLinux muslターゲット （その2：極小Dockerイメージを実現）</title>
       <link>https://blog.rust-jp.rs/tatsuya6502/posts/2019-12-small-docker-image/</link>

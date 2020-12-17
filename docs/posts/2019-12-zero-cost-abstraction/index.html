@@ -29,7 +29,7 @@
   
   
   
-  <meta name="generator" content="Hugo 0.62.2" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.79.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
   
   
   
@@ -104,11 +104,11 @@ Rustのゼロコスト抽象化が期待どおりに働いていることを、�
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
 
 <span style="color:#75715e">// 変数o1はOption&lt;&amp;i64&gt;型
-</span><span style="color:#75715e"></span><span style="color:#75715e">// nを指すポインタをSomeで包み、o1を束縛する
+</span><span style="color:#75715e">// nを指すポインタをSomeで包み、o1を束縛する
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> Some(<span style="color:#f92672">&amp;</span>n);
 
 <span style="color:#75715e">// 変数o2はOption&lt;i64&gt;型
-</span><span style="color:#75715e"></span><span style="color:#75715e">// o1がSomeなので、map()メソッドは変数nの値に456を加算してSomeで包む
+</span><span style="color:#75715e">// o1がSomeなので、map()メソッドは変数nの値に456を加算してSomeで包む
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> o1.map(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>);
 </code></pre></div><p>このコードはκeenさんが2016年に書かれた以下の記事で紹介されていたものをベースにしています。</p>
 <ul>
@@ -142,7 +142,7 @@ Rustのゼロコスト抽象化が期待どおりに働いていることを、�
 <p>タグが付与されていることは次のコードで確認できます。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
     <span style="color:#75715e">// Option&lt;i64&gt;型が使用するメモリ上のバイト数を表示する
-</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{} bytes&#34;</span>, std::mem::size_of::<span style="color:#f92672">&lt;</span>Option<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i64</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span>());
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{} bytes&#34;</span>, std::mem::size_of::<span style="color:#f92672">&lt;</span>Option<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i64</span><span style="color:#f92672">&gt;&gt;</span>());
     <span style="color:#75715e">// =&gt; &#34;16 bytes&#34; と表示される。
 </span><span style="color:#75715e"></span>}
 </code></pre></div><p><code>Option&lt;i64&gt;</code>のデータサイズは16バイトだそうです。
@@ -164,7 +164,7 @@ nullableポインタ最適化を適用できます。</p>
 <p><code>Option&lt;&amp;i64&gt;</code>型のデータサイズを確認すると、期待どおりタグがなくなって、全体で8バイトになっていることが確認できます。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
     <span style="color:#75715e">// Option&lt;&amp;i64&gt;型が使用するメモリ上のバイト数を表示する
-</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{} bytes&#34;</span>, std::mem::size_of::<span style="color:#f92672">&lt;</span>Option<span style="color:#f92672">&lt;</span><span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i64</span><span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span>());
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{} bytes&#34;</span>, std::mem::size_of::<span style="color:#f92672">&lt;</span>Option<span style="color:#f92672">&lt;&amp;</span><span style="color:#66d9ef">i64</span><span style="color:#f92672">&gt;&gt;</span>());
     <span style="color:#75715e">// =&gt; &#34;8 bytes&#34; と表示される。
 </span><span style="color:#75715e"></span>}
 </code></pre></div><p>メモリ上の表現は<code>Some(&amp;100)</code>ならこうなります。</p>
@@ -179,11 +179,11 @@ nullableポインタ最適化を適用できます。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// https://github.com/rust-lang/rust/blob/master/src/libcore/option.rs
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Option<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
 
-    <span style="color:#75715e">#[</span><span style="color:#75715e">inline</span><span style="color:#75715e">]</span>
+    <span style="color:#75715e">#[inline]</span>
     <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">map</span><span style="color:#f92672">&lt;</span>U, F: FnOnce(T) -&gt; <span style="color:#a6e22e">U</span><span style="color:#f92672">&gt;</span>(self, f: <span style="color:#a6e22e">F</span>) -&gt; Option<span style="color:#f92672">&lt;</span>U<span style="color:#f92672">&gt;</span> {
         <span style="color:#66d9ef">match</span> self {
-            Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some(f(x)),
-            None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
+            Some(x) <span style="color:#f92672">=&gt;</span> Some(f(x)),
+            None <span style="color:#f92672">=&gt;</span> None,
         }
     }
 
@@ -201,8 +201,8 @@ nullableポインタ最適化を適用できます。</p>
 
 <span style="color:#75715e">// map()メソッドをインライン化
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">match</span> o1 {
-    None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
-    Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some((<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>)(x)),
+    None <span style="color:#f92672">=&gt;</span> None,
+    Some(x) <span style="color:#f92672">=&gt;</span> Some((<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>)(x)),
 }
 </code></pre></div><p>コンパイル時にこれと等価なコード（コンパイラの内部表現）が生成されることが期待できます。</p>
 <p>さらに、<code>o1</code>にnullableポインタ最適化を適用します。</p>
@@ -210,7 +210,7 @@ nullableポインタ最適化を適用できます。</p>
 <span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>n;  <span style="color:#75715e">// o1の型がOption&lt;&amp;i64&gt;から&amp;i64へ変わった
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">//タグではなく、値がnullポインタかどうかでバリアントを識別する
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">==</span> null {
     None
 } <span style="color:#66d9ef">else</span> {
     Some((<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> <span style="color:#f92672">*</span>x <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>)(o1))
@@ -243,7 +243,7 @@ nullableポインタ最適化を適用できます。</p>
 </code></pre></div><p>これを呼び出すと以下のようになります。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
 <span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>n;
-<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">==</span> null {
     None
 } <span style="color:#66d9ef">else</span> {
     <span style="color:#75715e">// クロージャの環境を初期化する
@@ -301,8 +301,8 @@ vtableはメソッドの名前と実装コードのアドレスが対になっ�
 
     <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">map</span><span style="color:#f92672">&lt;</span>U, F: FnOnce(T) -&gt; <span style="color:#a6e22e">U</span><span style="color:#f92672">&gt;</span>(self, f: <span style="color:#a6e22e">F</span>) -&gt; Option<span style="color:#f92672">&lt;</span>U<span style="color:#f92672">&gt;</span> {
         <span style="color:#66d9ef">match</span> self {
-            Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some(f(x)),
-            None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
+            Some(x) <span style="color:#f92672">=&gt;</span> Some(f(x)),
+            None <span style="color:#f92672">=&gt;</span> None,
         }
     }
 
@@ -310,22 +310,22 @@ vtableはメソッドの名前と実装コードのアドレスが対になっ�
 </code></pre></div><p><strong>実際の型を当てはめた専用のメソッドを作る</strong></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">map_i32_anonymous_type</span>(self: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">i32</span>, f: <span style="color:#a6e22e">AnonymousType</span>) -&gt; Option<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i32</span><span style="color:#f92672">&gt;</span> {
     <span style="color:#66d9ef">match</span> self {
-        Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some(f(x)),
-        None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
+        Some(x) <span style="color:#f92672">=&gt;</span> Some(f(x)),
+        None <span style="color:#f92672">=&gt;</span> None,
     }
 }
 </code></pre></div><p><code>f</code>の具体的な型が分かったので、どのトレイトメソッドを呼ぶのか自然に特定されます。</p>
 <p><strong>トレイトメソッドが特定された</strong></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">map_i32_anonymous_type</span>(self: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">i32</span>, f: <span style="color:#a6e22e">AnonymousType</span>) -&gt; Option<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i32</span><span style="color:#f92672">&gt;</span> {
     <span style="color:#66d9ef">match</span> self {
-        Some(x) <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> Some(AnonymousType::call_once(f, x)),
-        None <span style="color:#f92672">=</span><span style="color:#f92672">&gt;</span> None,
+        Some(x) <span style="color:#f92672">=&gt;</span> Some(AnonymousType::call_once(f, x)),
+        None <span style="color:#f92672">=&gt;</span> None,
     }
 }
 </code></pre></div><p>静的ディスパッチを私たちのコードに適用します。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
 <span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>n;
-<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">==</span> null {
     None
 } <span style="color:#66d9ef">else</span> {
     <span style="color:#66d9ef">let</span> f <span style="color:#f92672">=</span> AnonymousType;
@@ -336,7 +336,7 @@ vtableはメソッドの名前と実装コードのアドレスが対になっ�
 </code></pre></div><p>さらに今回のクロージャは一ヶ所からしか呼ばれておらず、また本体が十分に小さいので、インライン化が期待できます</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span><span style="color:#66d9ef">i64</span>;
 <span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>n;
-<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">==</span> null {
     None
 } <span style="color:#66d9ef">else</span> {
     <span style="color:#75715e">// AnonymousType::call_once()は一ヶ所からしか呼ばれず
@@ -385,7 +385,7 @@ LLVM version: 9.0
     println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;let o1&#34;</span>);
     <span style="color:#75715e">// 変数o1はOption&lt;&amp;i64&gt;型
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// もしnが123ならo1はNoneに、さもなければSome(&amp;n)に束縛する
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span> {
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">==</span> <span style="color:#ae81ff">123</span> {
         None
     } <span style="color:#66d9ef">else</span> {
         Some(<span style="color:#f92672">&amp;</span>n)
@@ -484,14 +484,14 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
 <h2 id="nullableポインタ最適化の効果を確認">nullableポインタ最適化の効果を確認</h2>
 <p>列挙型のnullableポインタ最適化が働いていることを確認しましょう。
 以下のコードのコンパイル結果を調べます。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">let</span> o1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">==</span> <span style="color:#ae81ff">123</span> {
     None
 } <span style="color:#66d9ef">else</span> {
     Some(<span style="color:#f92672">&amp;</span>n)
 };
 </code></pre></div><p><code>o1</code>は<code>Option&lt;&amp;i64&gt;</code>型ですので、nullableポインタ最適化によって<code>i64</code>へのポインタになり、<code>None</code>や<code>Some</code>を識別するためのタグがなくなるはずです。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 最適化後の擬似的なコード。NoneやSomeがなくなるはず
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o1: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">i64</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">123</span> {
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o1: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">i64</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">==</span> <span style="color:#ae81ff">123</span> {
     null
 } <span style="color:#66d9ef">else</span> {
     <span style="color:#f92672">&amp;</span>n
@@ -534,7 +534,7 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
 }
 
 <span style="color:#75715e">//
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">==</span> null {
     None
 } <span style="color:#66d9ef">else</span> {
     <span style="color:#66d9ef">let</span> f: FnOnce<span style="color:#f92672">&lt;</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">i32</span>,)<span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> AnonymousType;
@@ -553,7 +553,7 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
     }
 }
 
-<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+<span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">==</span> null {
     None
 } <span style="color:#66d9ef">else</span> {
     <span style="color:#66d9ef">let</span> f <span style="color:#f92672">=</span> AnonymousType;
@@ -562,7 +562,7 @@ Intel形式は一般的なプログラム言語に慣れた人には、ポイン
 }
 </code></pre></div><p>インライン化によって<code>AnonymousType</code>自体が消滅し、最終的にはこうなるはずです。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 最適化後の擬似的なコード
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> null {
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> o2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> o1 <span style="color:#f92672">==</span> null {
     None
 } <span style="color:#66d9ef">else</span> {
     Some(<span style="color:#f92672">*</span>o1 <span style="color:#f92672">+</span> <span style="color:#ae81ff">456</span>)

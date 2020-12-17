@@ -4,22 +4,37 @@
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/categories/</loc>
-    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+    <lastmod>2020-12-17T18:30:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/</loc>
-    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+    <lastmod>2020-12-17T18:30:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/posts/</loc>
-    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+    <lastmod>2020-12-17T18:30:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/rust%E3%83%84%E3%83%BC%E3%83%AB%E3%83%81%E3%82%A7%E3%83%BC%E3%83%B3/</loc>
+    <lastmod>2020-12-17T18:30:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.rust-jp.rs/tatsuya6502/tags/</loc>
-    <lastmod>2020-01-26T10:00:00+08:00</lastmod>
+    <lastmod>2020-12-17T18:30:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%A9%E6%8A%80%E8%A1%93/</loc>
+    <lastmod>2020-12-17T18:30:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-rustc-cranelift/</loc>
+    <lastmod>2020-12-17T18:30:00+08:00</lastmod>
   </url>
   
   <url>
@@ -63,12 +78,12 @@
   </url>
   
   <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/webassembly/</loc>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/webassembly/</loc>
     <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.rust-jp.rs/tatsuya6502/tags/webassembly/</loc>
+    <loc>https://blog.rust-jp.rs/tatsuya6502/categories/webassembly/</loc>
     <lastmod>2019-12-31T12:05:00+08:00</lastmod>
   </url>
   
