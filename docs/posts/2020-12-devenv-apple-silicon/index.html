@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  
+  <title>Rustの環境構築（Apple Silicon） 2020年12月版</title>
+  <meta property="og:title" content="Rustの環境構築（Apple Silicon） 2020年12月版" />
+  <meta name="twitter:title" content="Rustの環境構築（Apple Silicon） 2020年12月版" />
+  
+
+  
+  <meta name="description" content="プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502">
+  <meta property="og:description" content="プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502">
+  <meta name="twitter:description" content="プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502">
+  
+
+  <meta name="author" content="Tatsuya Kawano (tatsuya6502)"/>
+  <meta property="og:site_name" content="Oxidized Bookshelf" />
+  <meta property="og:url" content="https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-devenv-apple-silicon/" />
+
+  
+  <meta name="twitter:card" content="summary" />
+
+  
+
+  
+  <meta property="og:type" content="article" />
+  
+  
+  
+  <meta name="generator" content="Hugo 0.79.1" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  
+  
+  
+  <script type="text/javascript" src="https://blog.rust-jp.rs/tatsuya6502/js/bundle.js"></script>
+  
+
+</head>
+
+<body>
+  <a href="#main" class="skip-link p-screen-reader-text">Skip to content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;" aria-hidden="true"> <symbol id="icon-500px" viewBox="0 0 16 16"><g> <path d="M3.953 10.512a5.24 5.24 0 0 0 6.996 3.141c.625-.262 1.184-.641 1.666-1.122s.859-1.041 1.122-1.666c.272-.647.412-1.331.412-2.037s-.137-1.394-.412-2.037c-.262-.625-.641-1.184-1.122-1.666s-1.041-.859-1.666-1.122a5.226 5.226 0 0 0-2.037-.413c-.716 0-1.431.144-2.066.413-.509.216-1.372.769-1.875 1.291l-.003.003V.984h7.241c.262-.003.262-.372.262-.491 0-.122 0-.487-.266-.491H4.377a.343.343 0 0 0-.344.341v6.066c0 .197.244.338.472.384.444.094.544-.047.653-.197l.016-.019c.166-.247.681-.766.688-.772a4.262 4.262 0 0 1 3.037-1.25c1.147 0 2.222.444 3.028 1.25a4.245 4.245 0 0 1 1.256 3.019 4.236 4.236 0 0 1-1.25 3.019 4.336 4.336 0 0 1-3.047 1.25 4.136 4.136 0 0 1-2.159-.597l.003-3.688c0-.491.213-1.028.572-1.431a2.09 2.09 0 0 1 1.588-.716c.594 0 1.15.225 1.566.634.409.406.637.95.637 1.528a2.179 2.179 0 0 1-2.206 2.197c-.238 0-.672-.106-.691-.109-.25-.075-.356.272-.391.387-.134.441.069.528.109.541.397.125.659.147 1.003.147a3.173 3.173 0 0 0 3.169-3.169c0-1.734-1.422-3.144-3.166-3.144-.856 0-1.659.328-2.263.919-.575.566-.903 1.319-.903 2.069v.019c-.003.094-.003 2.306-.006 3.031l-.003-.003c-.328-.363-.653-.919-.869-1.488-.084-.222-.275-.184-.534-.103-.125.034-.469.141-.391.394zm3.722-.865c0 .106.097.2.156.253l.019.019c.1.097.194.147.281.147a.181.181 0 0 0 .131-.05c.044-.041.537-.544.588-.591l.553.55c.05.056.106.088.172.088.088 0 .184-.053.284-.156.238-.244.119-.375.063-.438l-.559-.559.584-.588c.128-.137.016-.284-.097-.397-.162-.162-.322-.206-.422-.112l-.581.581-.588-.588a.16.16 0 0 0-.113-.047c-.078 0-.172.053-.275.156-.181.181-.219.306-.125.406l.588.584-.584.584c-.053.05-.078.103-.075.156zm1.278-7.931c-.938 0-1.938.191-2.669.506a.207.207 0 0 0-.134.181.753.753 0 0 0 .069.337c.047.116.166.425.4.334a6.689 6.689 0 0 1 2.334-.444 6.35 6.35 0 0 1 2.469.497c.622.263 1.206.644 1.844 1.194a.22.22 0 0 0 .147.059c.125 0 .244-.122.347-.237.169-.191.287-.35.119-.509a6.858 6.858 0 0 0-2.1-1.356 7.326 7.326 0 0 0-2.825-.563zM14.006 13.3c-.113-.113-.209-.178-.294-.203s-.162-.006-.222.053l-.056.056a6.32 6.32 0 0 1-6.938 1.356 6.336 6.336 0 0 1-2.013-1.356 6.046 6.046 0 0 1-1.356-2.012c-.288-.713-.381-1.247-.413-1.422-.003-.016-.006-.028-.006-.037-.041-.206-.231-.222-.503-.178-.112.019-.459.072-.428.319v.006a7.261 7.261 0 0 0 2.04 3.994 7.266 7.266 0 0 0 10.288 0l.059-.059c.069-.084.134-.225-.159-.516z"/> </g></symbol> <symbol id="icon-codepen" viewBox="0 0 16 16"><g> <path d="M14.777 5.751l-7-4.667a.5.5 0 0 0-.555 0l-7 4.667a.501.501 0 0 0-.223.416v4.667c0 .167.084.323.223.416l7 4.667a.5.5 0 0 0 .554 0l7-4.667a.501.501 0 0 0 .223-.416V6.167a.501.501 0 0 0-.223-.416zM7.5 10.232L4.901 8.5 7.5 6.768 10.099 8.5 7.5 10.232zM8 5.899V2.434l5.599 3.732L11 7.898l-3-2zm-1 0l-3 2-2.599-1.732L7 2.435V5.9zM3.099 8.5L1 9.899V7.101L3.099 8.5zM4 9.101l3 2v3.465l-5.599-3.732L4 9.102zm4 2l3-2 2.599 1.732L8 14.565V11.1zM11.901 8.5L14 7.101v2.798L11.901 8.5z"/> </g></symbol> <symbol id="icon-dribbble" viewBox="0 0 16 16"><g> <path d="M8 16c-4.412 0-8-3.588-8-8s3.587-8 8-8c4.412 0 8 3.587 8 8s-3.588 8-8 8zm6.747-6.906c-.234-.075-2.116-.634-4.256-.291a29.7 29.7 0 0 1 1.328 4.872 6.845 6.845 0 0 0 2.928-4.581zM10.669 14.3c-.103-.6-.497-2.688-1.456-5.181-.016.006-.031.009-.044.016-3.856 1.344-5.241 4.016-5.362 4.266a6.807 6.807 0 0 0 6.863.9zm-7.747-1.722c.156-.266 2.031-3.369 5.553-4.509a7.04 7.04 0 0 1 .269-.081 24.04 24.04 0 0 0-.553-1.159c-3.409 1.022-6.722.978-7.022.975-.003.069-.003.138-.003.209 0 1.753.666 3.356 1.756 4.566zM1.313 6.609c.306.003 3.122.016 6.319-.831a43.092 43.092 0 0 0-2.534-3.953 6.854 6.854 0 0 0-3.784 4.784zM6.4 1.366a36.612 36.612 0 0 1 2.55 4c2.431-.909 3.459-2.294 3.581-2.469A6.799 6.799 0 0 0 6.4 1.366zm6.891 2.325c-.144.194-1.291 1.663-3.816 2.694.159.325.313.656.453.991.05.119.1.234.147.353 2.275-.284 4.534.172 4.759.219a6.816 6.816 0 0 0-1.544-4.256z"/> </g></symbol> <symbol id="icon-facebook" viewBox="0 0 16 16"><g> <path d="M9.5 3H12V0H9.5C7.57 0 6 1.57 6 3.5V5H4v3h2v8h3V8h2.5l.5-3H9V3.5c0-.271.229-.5.5-.5z"/> </g></symbol> <symbol id="icon-feed" viewBox="0 0 16 16"><g> <path d="M2.13 11.733c-1.175 0-2.13.958-2.13 2.126 0 1.174.955 2.122 2.13 2.122a2.126 2.126 0 0 0 2.133-2.122 2.133 2.133 0 0 0-2.133-2.126zM.002 5.436v3.067c1.997 0 3.874.781 5.288 2.196a7.45 7.45 0 0 1 2.192 5.302h3.08c0-5.825-4.739-10.564-10.56-10.564zM.006 0v3.068C7.128 3.068 12.924 8.87 12.924 16H16C16 7.18 8.824 0 .006 0z"/> </g></symbol> <symbol id="icon-flickr" viewBox="0 0 16 16"><g> <path d="M0 8.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0zm9 0a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/> </g></symbol> <symbol id="icon-github" viewBox="0 0 16 16"><g> <path d="M8 .198a8 8 0 0 0-2.529 15.591c.4.074.547-.174.547-.385 0-.191-.008-.821-.011-1.489-2.226.484-2.695-.944-2.695-.944-.364-.925-.888-1.171-.888-1.171-.726-.497.055-.486.055-.486.803.056 1.226.824 1.226.824.714 1.223 1.872.869 2.328.665.072-.517.279-.87.508-1.07-1.777-.202-3.645-.888-3.645-3.954 0-.873.313-1.587.824-2.147-.083-.202-.357-1.015.077-2.117 0 0 .672-.215 2.201.82A7.672 7.672 0 0 1 8 4.066c.68.003 1.365.092 2.004.269 1.527-1.035 2.198-.82 2.198-.82.435 1.102.162 1.916.079 2.117.513.56.823 1.274.823 2.147 0 3.073-1.872 3.749-3.653 3.947.287.248.543.735.543 1.481 0 1.07-.009 1.932-.009 2.195 0 .213.144.462.55.384A8 8 0 0 0 8.001.196z"/> </g></symbol> <symbol id="icon-gitlab" viewBox="0 0 28 28"><g> <path d="M1.625 11.031L14 26.89.437 17.046a1.092 1.092 0 0 1-.391-1.203l1.578-4.813zm7.219 0h10.313L14.001 26.89zM5.75 1.469l3.094 9.562H1.625l3.094-9.562a.548.548 0 0 1 1.031 0zm20.625 9.562l1.578 4.813a1.09 1.09 0 0 1-.391 1.203l-13.563 9.844 12.375-15.859zm0 0h-7.219l3.094-9.562a.548.548 0 0 1 1.031 0z"/> </g></symbol> <symbol id="icon-google-plus" viewBox="0 0 16 16"><g> <path d="M5.091 7.147v1.747h2.888c-.116.75-.872 2.197-2.888 2.197-1.737 0-3.156-1.441-3.156-3.216s1.419-3.216 3.156-3.216c.991 0 1.65.422 2.028.784L8.5 4.112c-.888-.828-2.037-1.331-3.409-1.331C2.275 2.784 0 5.059 0 7.875s2.275 5.091 5.091 5.091c2.937 0 4.888-2.066 4.888-4.975 0-.334-.037-.591-.081-.844H5.092zM16 7h-1.5V5.5H13V7h-1.5v1.5H13V10h1.5V8.5H16z"/> </g></symbol> <symbol id="icon-google" viewBox="0 0 16 16"><g> <path d="M8.159 6.856V9.6h4.537c-.184 1.178-1.372 3.45-4.537 3.45C5.428 13.05 3.2 10.788 3.2 8s2.228-5.05 4.959-5.05c1.553 0 2.594.663 3.188 1.234l2.172-2.091C12.125.787 10.319-.001 8.16-.001c-4.422 0-8 3.578-8 8s3.578 8 8 8c4.616 0 7.681-3.247 7.681-7.816 0-.525-.056-.925-.125-1.325L8.16 6.855z"/> </g></symbol> <symbol id="icon-instagram" viewBox="0 0 22 22"><g> <path d="M15.445 0H6.554A6.559 6.559 0 0 0 0 6.554v8.891A6.559 6.559 0 0 0 6.554 22h8.891a6.56 6.56 0 0 0 6.554-6.555V6.554A6.557 6.557 0 0 0 15.445 0zm4.342 15.445a4.343 4.343 0 0 1-4.342 4.342H6.554a4.341 4.341 0 0 1-4.341-4.342V6.554a4.34 4.34 0 0 1 4.341-4.341h8.891a4.342 4.342 0 0 1 4.341 4.341l.001 8.891z"/> <path d="M11 5.312A5.693 5.693 0 0 0 5.312 11 5.694 5.694 0 0 0 11 16.688 5.694 5.694 0 0 0 16.688 11 5.693 5.693 0 0 0 11 5.312zm0 9.163a3.475 3.475 0 1 1-.001-6.95 3.475 3.475 0 0 1 .001 6.95zm5.7-10.484a1.363 1.363 0 1 1-1.364 1.364c0-.752.51-1.364 1.364-1.364z"/> </g></symbol> <symbol id="icon-linkedin" viewBox="0 0 16 16"><g> <path d="M6 6h2.767v1.418h.04C9.192 6.727 10.134 6 11.539 6 14.46 6 15 7.818 15 10.183V15h-2.885v-4.27c0-1.018-.021-2.329-1.5-2.329-1.502 0-1.732 1.109-1.732 2.255V15H6V6zM1 6h3v9H1V6zM4 3.5a1.5 1.5 0 1 1-3.001-.001A1.5 1.5 0 0 1 4 3.5z"/> </g></symbol> <symbol id="icon-mail" viewBox="0 0 22 18"><g> <path fill="#000" d="M0 17.225V.776h22v16.447H0v.002zm3.011-1.815h15.978l-5.111-5.115L11 13.179l-2.877-2.883-5.112 5.114zm-1.216-1.275l5.077-5.09L1.795 3.98v10.155zm13.332-5.09l5.079 5.09V3.979l-5.079 5.066zm-4.126 1.588l8.022-8.027-16.045-.001 8.023 8.028z"/> </g></symbol> <symbol id="icon-npm" viewBox="0 0 16 16"><g> <path d="M0 0v16h16V0H0zm13 13h-2V5H8v8H3V3h10v10z"/> </g></symbol> <symbol id="icon-pinterest" viewBox="0 0 16 16"><g> <path d="M8 1.069a6.93 6.93 0 0 0-2.525 13.384c-.059-.547-.116-1.391.025-1.988.125-.541.813-3.444.813-3.444s-.206-.416-.206-1.028c0-.963.559-1.684 1.253-1.684.591 0 .878.444.878.975 0 .594-.378 1.484-.575 2.306-.166.691.344 1.253 1.025 1.253 1.231 0 2.178-1.3 2.178-3.175 0-1.659-1.194-2.819-2.894-2.819-1.972 0-3.128 1.478-3.128 3.009 0 .597.228 1.234.516 1.581.056.069.066.128.047.2a95.89 95.89 0 0 1-.194.787c-.031.128-.1.153-.231.094-.866-.403-1.406-1.669-1.406-2.684 0-2.188 1.587-4.194 4.578-4.194 2.403 0 4.272 1.712 4.272 4.003 0 2.388-1.506 4.313-3.597 4.313-.703 0-1.362-.366-1.588-.797 0 0-.347 1.322-.431 1.647-.156.603-.578 1.356-.862 1.816a6.93 6.93 0 0 0 8.984-6.622 6.931 6.931 0 0 0-6.931-6.934z"/> </g></symbol> <symbol id="icon-pushpin" viewBox="0 0 16 16"><g> <path d="M8.5 0L7 1.5 8.5 3 5 7H1.5l2.75 2.75L0 15.385V16h.615l5.635-4.25L9 14.5V11l4-3.5L14.5 9 16 7.5 8.5 0zM7 8.5l-1-1L9.5 4l1 1L7 8.5z"/> </g></symbol> <symbol id="icon-search" viewBox="0 0 16 16"><g> <path d="M15.504 13.616l-3.79-3.223c-.392-.353-.811-.514-1.149-.499a6 6 0 1 0-.672.672c-.016.338.146.757.499 1.149l3.223 3.79c.552.613 1.453.665 2.003.115s.498-1.452-.115-2.003zM6 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/> </g></symbol> <symbol id="icon-tumblr" viewBox="0 0 16 16"><g> <path d="M9.001 7v3.659c0 .928-.012 1.463.086 1.727.098.262.342.534.609.691.354.212.758.318 1.214.318.81 0 1.289-.107 2.09-.633v2.405a9.089 9.089 0 0 1-1.833.639A7.93 7.93 0 0 1 9.369 16a4.9 4.9 0 0 1-1.725-.276 4.195 4.195 0 0 1-1.438-.79c-.398-.343-.672-.706-.826-1.091s-.23-.944-.23-1.676V6.556H3.003V4.29c.628-.204 1.331-.497 1.778-.877a4.386 4.386 0 0 0 1.08-1.374C6.133 1.505 6.32.825 6.422 0h2.579v4H13v3H9.001z"/> </g></symbol> <symbol id="icon-twitter" viewBox="0 0 16 16"><g> <path d="M16 3.538a6.461 6.461 0 0 1-1.884.516 3.301 3.301 0 0 0 1.444-1.816 6.607 6.607 0 0 1-2.084.797 3.28 3.28 0 0 0-2.397-1.034 3.28 3.28 0 0 0-3.197 4.028 9.321 9.321 0 0 1-6.766-3.431 3.284 3.284 0 0 0 1.015 4.381A3.301 3.301 0 0 1 .643 6.57v.041A3.283 3.283 0 0 0 3.277 9.83a3.291 3.291 0 0 1-1.485.057 3.293 3.293 0 0 0 3.066 2.281 6.586 6.586 0 0 1-4.862 1.359 9.286 9.286 0 0 0 5.034 1.475c6.037 0 9.341-5.003 9.341-9.341 0-.144-.003-.284-.009-.425a6.59 6.59 0 0 0 1.637-1.697z"/> </g></symbol> <symbol id="icon-vimeo" viewBox="0 0 16 16"><g> <path d="M15.994 4.281c-.072 1.556-1.159 3.691-3.263 6.397-2.175 2.825-4.016 4.241-5.522 4.241-.931 0-1.722-.859-2.366-2.581-.431-1.578-.859-3.156-1.291-4.734-.478-1.722-.991-2.581-1.541-2.581-.119 0-.538.253-1.256.753l-.753-.969c.791-.694 1.569-1.388 2.334-2.081 1.053-.909 1.844-1.387 2.372-1.438 1.244-.119 2.013.731 2.3 2.553.309 1.966.525 3.188.647 3.666.359 1.631.753 2.447 1.184 2.447.334 0 .838-.528 1.509-1.588.669-1.056 1.028-1.862 1.078-2.416.097-.912-.262-1.372-1.078-1.372a2.98 2.98 0 0 0-1.184.263c.787-2.575 2.287-3.825 4.506-3.753 1.641.044 2.416 1.109 2.322 3.194z"/> </g></symbol> <symbol id="icon-wordpress" viewBox="0 0 16 16"><g> <path d="M2 8c0 2.313 1.38 4.312 3.382 5.259L2.52 5.622A5.693 5.693 0 0 0 2 8zm10.05-.295c0-.722-.266-1.222-.495-1.612-.304-.482-.589-.889-.589-1.371 0-.537.418-1.037 1.008-1.037.027 0 .052.003.078.005A6.064 6.064 0 0 0 8 2.156 6.036 6.036 0 0 0 2.987 4.79c.141.004.274.007.386.007.627 0 1.599-.074 1.599-.074.323-.018.361.444.038.482 0 0-.325.037-.687.055l2.185 6.33 1.313-3.835-.935-2.495a12.304 12.304 0 0 1-.629-.055c-.323-.019-.285-.5.038-.482 0 0 .991.074 1.58.074.627 0 1.599-.074 1.599-.074.323-.018.362.444.038.482 0 0-.326.037-.687.055l2.168 6.282.599-1.947c.259-.809.457-1.389.457-1.889zm-3.945.806l-1.8 5.095a6.148 6.148 0 0 0 3.687-.093.52.52 0 0 1-.043-.081L8.105 8.511zm5.16-3.315c.026.186.04.386.04.601 0 .593-.114 1.259-.456 2.093l-1.833 5.16c1.784-1.013 2.983-2.895 2.983-5.051a5.697 5.697 0 0 0-.735-2.803zM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z"/> </g></symbol> <symbol id="icon-youtube" viewBox="0 0 16 16"><g> <path d="M15.841 4.8s-.156-1.103-.637-1.587c-.609-.637-1.291-.641-1.603-.678-2.237-.163-5.597-.163-5.597-.163h-.006s-3.359 0-5.597.163c-.313.038-.994.041-1.603.678C.317 3.697.164 4.8.164 4.8S.005 6.094.005 7.391v1.213c0 1.294.159 2.591.159 2.591s.156 1.103.634 1.588c.609.637 1.409.616 1.766.684 1.281.122 5.441.159 5.441.159s3.363-.006 5.6-.166c.313-.037.994-.041 1.603-.678.481-.484.637-1.588.637-1.588s.159-1.294.159-2.591V7.39c-.003-1.294-.162-2.591-.162-2.591zm-9.494 5.275V5.578l4.322 2.256-4.322 2.241z"/> </g></symbol></svg>
+  <header class="l-header">
+    
+    <p class="c-title p-title"><a href="https://blog.rust-jp.rs/tatsuya6502/" class="p-title__link">Oxidized Bookshelf</a></p>
+    
+    
+    <p class="p-subtitle">
+      プログラミング言語 Rust について気の向くままに綴っていきます | tatsuya6502
+    </p>
+    
+  </header>
+  <main id="main" class="l-main">
+
+
+<article class="p-article">
+  <header>
+    <h1>Rustの環境構築（Apple Silicon） 2020年12月版</h1>
+    <div>
+      <div class="c-time">
+        Posted on
+        <time datetime="2020-12-22T19:10:00&#43;08:00">
+          Dec 22, 2020
+        </time>
+      </div>
+      
+      <a href="https://blog.rust-jp.rs/tatsuya6502/tags/apple-silicon" class="c-tag">Apple-silicon</a>
+      
+    </div>
+  </header>
+  
+  <section id="js-article" class="p-article__body">
+    <p>これは <a href="https://qiita.com/advent-calendar/2020/rust">Rust Advent Calendar 2020</a> 15日目のエントリーです。
+飛び入り参加です。</p>
+<p>本記事ではApple siliconを搭載したMacにRustの開発環境をセットアップする方法を説明します。</p>
+<h2 id="重要プレビュー版のソフトウェアについて">重要：プレビュー版のソフトウェアについて</h2>
+<p>本記事に掲載されているのは2020年12月22日時点の情報です。
+Apple siliconネイティブなソフトウェアを中心にインストール方法を説明していますが、執筆時点ではそれらのほとんどがプレビュー版となっています。
+みなさんがこの記事を読まれるときには正式版がリリースされているかもしれません。
+他の情報源もチェックされることをお勧めします。</p>
+<p>また、プレビュー版のソフトウェアは品質が保証されていません。
+リリース前の正式なテストが行われておらず、重大な不具合が出る可能性もあります。
+大切なデータは事前にバックアップしておくなど、十分注意してお使いください。</p>
+<h2 id="ソフトウェアのバージョンについて">ソフトウェアのバージョンについて</h2>
+<p>本記事で扱うソフトウェアとバージョンは以下のとおりです。
+なお、macOSのバージョンはBig Sur 11.1です。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ソフトウェア</th>
+<th style="text-align:left">バージョン</th>
+<th style="text-align:left">アーキテクチャー</th>
+<th style="text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">rustup</td>
+<td style="text-align:left">1.23.1</td>
+<td style="text-align:left">Apple</td>
+<td style="text-align:left">正式版</td>
+</tr>
+<tr>
+<td style="text-align:left">Rustツールチェーン</td>
+<td style="text-align:left">1.49.0-beta.4</td>
+<td style="text-align:left">Apple</td>
+<td style="text-align:left">ベータ版。日本時間の2021年元日に安定版（Tier 2）がリリースされる</td>
+</tr>
+<tr>
+<td style="text-align:left">Homebrew（AArch64）</td>
+<td style="text-align:left">2.6.2</td>
+<td style="text-align:left">Apple</td>
+<td style="text-align:left">プレビュー版</td>
+</tr>
+<tr>
+<td style="text-align:left">Homebrew（x86_64）</td>
+<td style="text-align:left">2.6.2</td>
+<td style="text-align:left">Intel</td>
+<td style="text-align:left">Intel Mac向け正式版</td>
+</tr>
+<tr>
+<td style="text-align:left">sccache</td>
+<td style="text-align:left">0.2.14</td>
+<td style="text-align:left">Apple</td>
+<td style="text-align:left">正式版</td>
+</tr>
+<tr>
+<td style="text-align:left">Visual Studio Code</td>
+<td style="text-align:left">1.53.0-insider</td>
+<td style="text-align:left">Apple</td>
+<td style="text-align:left">プレビュー版</td>
+</tr>
+<tr>
+<td style="text-align:left">Rust Analyzer</td>
+<td style="text-align:left">2020-12-14</td>
+<td style="text-align:left">Apple</td>
+<td style="text-align:left">バイナリーがまだ配布されていないので、ソースコードからビルドする</td>
+</tr>
+<tr>
+<td style="text-align:left">Docker Desktop</td>
+<td style="text-align:left">Preview 7</td>
+<td style="text-align:left">Apple</td>
+<td style="text-align:left">プレビュー版。正式版のリリースは2021年第1四半期の予定</td>
+</tr>
+</tbody>
+</table>
+<p>アーキテクチャーの欄：</p>
+<ul>
+<li>Apple: Apple siliconネイティブ（AArch64）のソフトウェア</li>
+<li>Intel: Intel Mac（x86_84）向けのソフトウェア。M1 Mac上ではRosetta 2トランスレーターを通して実行する</li>
+</ul>
+<p>Homebrew（x86_64）は、まだApple siliconにネイティブ対応していないパッケージのインストールに使用します。
+（この記事ではx86_64版のパッケージは使いません）</p>
+<h2 id="rustupとrustツールチェーンのインストール">rustupとRustツールチェーンのインストール</h2>
+<ul>
+<li>rustupはネイティブ対応済み</li>
+<li>ツールチェインは1.49.0からネイティブ対応（2021年元日にリリースされる）
+<ul>
+<li>大晦日までは1.49.0-beta（ベータ版）を使用</li>
+<li>2021年元日になったら1.49.0のstable（安定版）に変更する</li>
+</ul>
+</li>
+<li>aarch64-apple-darwinはTier 2であることに注意</li>
+</ul>
+<p>rustupは2020年11月27日にリリース済みの1.23.0からネイティブ対応しています。</p>
+<p>Rustコンパイラなどを含むRustツールチェーンは1.49.0からネイティブ対応します。
+1.49.0は現在はbetaで、2021年元日（日本時間）にstableになります。</p>
+<p>ツールチェーンのターゲットトリプルは「aarch64-apple-darwin」です。
+筆者が試した範囲では問題なく使えていますが、RustプロジェクトのCI環境にはまだM1 Macがなく、自動テストケースが実行されていないことに注意してください。
+そのためこのターゲットは当分の間は <a href="https://doc.rust-lang.org/nightly/rustc/platform-support.html#tier-2">Tier 2</a> プラットフォームになります。</p>
+<p>インストール手順を説明します。
+ウェブブラウザーで <a href="https://rustup.rs/">https://rustup.rs/</a> を開き、表示されたコマンドをターミナルから実行します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">% curl --proto <span style="color:#e6db74">&#39;=https&#39;</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre></div><p>インストールオプションが表示されたら、（2020年12月中は）デフォルトのツールチェーンをbetaに変更します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## □のところでReturnキーを押す</span>
+
+Current installation options:
+
+   default host triple: aarch64-apple-darwin
+     default toolchain: stable <span style="color:#f92672">(</span>default<span style="color:#f92672">)</span>
+               profile: default
+  modify PATH variable: yes
+
+1<span style="color:#f92672">)</span> Proceed with installation <span style="color:#f92672">(</span>default<span style="color:#f92672">)</span>
+2<span style="color:#f92672">)</span> Customize installation
+3<span style="color:#f92672">)</span> Cancel installation
+&gt; 2□
+
+I<span style="color:#960050;background-color:#1e0010">&#39;</span>m going to ask you the value of each of these installation options.
+You may simply press the Enter key to leave unchanged.
+
+Default host triple?
+□
+
+Default toolchain? <span style="color:#f92672">(</span>stable/beta/nightly/none<span style="color:#f92672">)</span>
+beta□
+
+Profile <span style="color:#f92672">(</span>which tools and data to install<span style="color:#f92672">)</span>? <span style="color:#f92672">(</span>minimal/default/complete<span style="color:#f92672">)</span>
+□
+
+Modify PATH variable? <span style="color:#f92672">(</span>y/n<span style="color:#f92672">)</span>
+□
+
+Current installation options:
+
+   default host triple: aarch64-apple-darwin
+     default toolchain: beta
+               profile: default
+  modify PATH variable: yes
+
+1<span style="color:#f92672">)</span> Proceed with installation <span style="color:#f92672">(</span>default<span style="color:#f92672">)</span>
+2<span style="color:#f92672">)</span> Customize installation
+3<span style="color:#f92672">)</span> Cancel installation
+</code></pre></div><p>betaに変更できたらReturnキーを押してツールチェーンをインストールします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">info: profile set to <span style="color:#e6db74">&#39;default&#39;</span>
+info: setting default host triple to aarch64-apple-darwin
+info: syncing channel updates <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;beta-aarch64-apple-darwin&#39;</span>
+...
+
+  beta-aarch64-apple-darwin installed - rustc 1.49.0-beta.4 <span style="color:#f92672">(</span>877c7cbe1 2020-12-10<span style="color:#f92672">)</span>
+
+Rust is installed now. Great!
+</code></pre></div><p>現在のシェルセッションでツールチェーンを使えるよう、以下のコマンドを実行します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ source $HOME/.cargo/env
+</code></pre></div><p>バージョン情報などを表示してみましょう。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## ツールチェーンの情報を表示する</span>
+$ rustup show
+Default host: aarch64-apple-darwin
+rustup home:  /Users/tatsuya/.rustup
+
+beta-aarch64-apple-darwin <span style="color:#f92672">(</span>default<span style="color:#f92672">)</span>
+rustc 1.49.0-beta.4 <span style="color:#f92672">(</span>877c7cbe1 2020-12-10<span style="color:#f92672">)</span>
+
+<span style="color:#75715e">## rustupのバージョンを表示する</span>
+$ rustup -V 
+rustup 1.23.1 <span style="color:#f92672">(</span>3df2264a9 2020-11-30<span style="color:#f92672">)</span>
+info: This is the version <span style="color:#66d9ef">for</span> the rustup toolchain manager, not the rustc compiler.
+info: The currently active <span style="color:#e6db74">`</span>rustc<span style="color:#e6db74">`</span> version is <span style="color:#e6db74">`</span>rustc 1.49.0-beta.4 <span style="color:#f92672">(</span>877c7cbe1 2020-12-10<span style="color:#f92672">)</span><span style="color:#e6db74">`</span>
+
+<span style="color:#75715e">## Rustコンパイラのバージョンを表示する</span>
+$ rustc -Vv
+rustc 1.49.0-beta.4 <span style="color:#f92672">(</span>877c7cbe1 2020-12-10<span style="color:#f92672">)</span>
+binary: rustc
+commit-hash: 877c7cbe142a373f93d38a23741dcc3a0a17a2af
+commit-date: 2020-12-10
+host: aarch64-apple-darwin
+release: 1.49.0-beta.4
+</code></pre></div><h3 id="appleコマンドラインツールのインストール">Appleコマンドラインツールのインストール</h3>
+<p>Rustコンパイラが使用するリンカーをインストールしましょう。
+リンカーはAppleのコマンドラインツールに含まれています。
+ターミナルから以下のコマンドを実行し、画面の表示に従ってインストールしてください。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ xcode-select --install
+</code></pre></div><h3 id="2021年の元日になったら">2021年の元日になったら</h3>
+<p>2021年の元日に1.49.0のstable版（安定版）がリリースされます。
+以下のようにしてデフォルトツールチェーンをstableに変更してください。
+これにより、1.49.0 stableが自動的にインストールされます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ rustup default stable
+... （1.49.0 stableがインストールされる） ...
+
+$ rustup show
+</code></pre></div><h2 id="homebrewのインストール">Homebrewのインストール</h2>
+<ul>
+<li>Homebrewのネイティブ版は現在プレビュー版</li>
+<li>ネイティブ版ではビルドできないパッケージが多い</li>
+<li>ネイティブ版が正式リリースされるまでは、x86_64版のHomebrewもインストールし、ネイティブ対応していないパッケージはこちらでインストールする</li>
+</ul>
+<p>HomebrewはmacOS（とLinux）向けのパッケージマネージャーです。
+ネイティブ版は現在のところはプレビュー版の扱いで、ビルドできないパッケージも多いです。
+そのためx86_64版のHomebrewもインストールしておきます。</p>
+<p>ネイティブ版のHomebrewでビルドできないパッケージには、たとえば、Rustで書かれた<code>exa</code>、<code>procs</code>、<code>ripgrep</code>、<code>starship</code>などのコマンドラインツールがあります。
+これらはRust 1.49.0のstableがリリースされるまではHomebrewでビルドできません。</p>
+<p>筆者は現在のところRustで書かれたツールはRust 1.49.0-betaの<code>cargo install</code>を使ってビルドとインストールをしています。
+また、それ以外でビルドできないパッケージについてはx86_64版のHomebrewでインストールしています。</p>
+<h3 id="homebrewのインストールディレクトリー">Homebrewのインストールディレクトリー</h3>
+<p>Homebrewの <a href="https://docs.brew.sh/Installation#alternative-installs">ドキュメント</a> ではHomebrewを以下のディレクトリーにインストールすることを推奨しています。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">種類</th>
+<th style="text-align:left">アーキテクチャー</th>
+<th style="text-align:left">インストールディレクトリー</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ネイティブ版</td>
+<td style="text-align:left">Apple</td>
+<td style="text-align:left"><code>/opt/homebrew</code></td>
+</tr>
+<tr>
+<td style="text-align:left">x86_64版</td>
+<td style="text-align:left">Intel</td>
+<td style="text-align:left"><code>/usr/local</code></td>
+</tr>
+</tbody>
+</table>
+<p>これに従ってインストールしましょう。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="homebrewapple-siliconネイティブ版">Homebrew（Apple siliconネイティブ版）</h3>
+<p>ネイティブ版は以下のコマンドでインストールします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo mkdir /opt/homebrew
+$ sudo chown <span style="color:#e6db74">${</span>USER<span style="color:#e6db74">}</span>:staff /opt/homebrew
+$ curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip <span style="color:#ae81ff">1</span> -C /opt/homebrew
+</code></pre></div><p><code>PATH</code>環境変数を設定して、<code>brew</code>コマンドとHomebrewでインストールしたコマンド（例：<code>pkg-config</code>）が実行できるようにします。
+zshなら以下のようにします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ echo <span style="color:#e6db74">&#39;export PATH=/opt/homebrew/bin:$PATH&#39;</span> &gt;&gt; ~/.zshrc
+$ source ~/.zshrc
+</code></pre></div><p>こうすることで、ネイティブ版によってインストールされたコマンドの方が、x86_64版によって<code>/usr/local/bin</code>へインストールされたコマンドよりも優先されるようになります。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>最後に<code>brew update</code>を実行します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ brew update
+</code></pre></div><h3 id="homebrewx86_64版">Homebrew（x86_64版）</h3>
+<p>x86_64版は以下のコマンドでインストールします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## 念のため、PATHからネイティブ版のHomebrewを外す</span>
+$ export PATH<span style="color:#f92672">=</span>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+<span style="color:#75715e">## x86_64版のbashでインストールスクリプトを実行する</span>
+$ arch -x86_64 /bin/bash -c <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</code></pre></div><p>なお、MacにRosetta 2がインストールされていないときは、以下のようなエラーがでます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">arch: posix_spawnp: /bin/bash: Bad CPU type in executable
+</code></pre></div><p>その場合はRosetta 2をインストールしてから、再度、Homebrewのインストールスクリプトを実行してください。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ softwareupdate --install-rosetta
+I have read and agree to the terms of the software license agreement. A list of Apple SLAs may be found here: http://www.apple.com/legal/sla/
+Type A and press <span style="color:#66d9ef">return</span> to agree:
+A□
+...
+
+Install of Rosetta <span style="color:#ae81ff">2</span> finished successfully
+</code></pre></div><h3 id="brewコマンドの実行方法">brewコマンドの実行方法</h3>
+<p>ネイティブ版は単に<code>brew サブコマンド</code>とすれば実行できます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ brew config 
+HOMEBREW_VERSION: 2.6.2
+HOMEBREW_PREFIX: /opt/homebrew
+CPU: octa-core 64-bit arm_firestorm_icestorm
+macOS: 11.1-arm64
+Rosetta 2: false
+...
+</code></pre></div><p><strong>x86_64版</strong></p>
+<p>x86_64版はRosetta 2を通して実行するため、以下のように<code>arch</code>コマンドを併用します。
+またネイティブ版が優先されるよう<code>PATH</code>を設定したので、x86_64版を実行するときはフルパスで指定します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ arch -x86_64 /usr/local/bin/brew config
+HOMEBREW_VERSION: 2.6.2
+HOMEBREW_PREFIX: /usr/local
+CPU: octa-core 64-bit westmere
+macOS: 11.1-x86_64
+Rosetta 2: true
+...
+</code></pre></div><p>なお、フルパス指定を忘れると、x86_64版でありながら<code>HOMEBREW_PREFIX</code>はネイティブ版のものになってしまいます。
+忘れないように気をつけてください。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## フルパス指定を忘れると、HOMEBREW_PREFIXが間違ったものになってしまう</span>
+$ arch -x86_64 brew config 
+HOMEBREW_VERSION: 2.7.0
+HOMEBREW_PREFIX: /opt/homebrew   <span style="color:#75715e">## ← /usr/localが正しい</span>
+CPU: octa-core 64-bit westmere
+macOS: 11.1-x86_64
+Rosetta 2: true
+</code></pre></div><h2 id="sccache">sccache</h2>
+<p>sccacheはRust製のコンパイルキャッシュです。
+複数のRustプロジェクトから同じバージョンのクレートを使っているときなどに、2回目以降のビルド時間を短縮できます。
+Rustで開発するうえで必須ではありませんが、筆者は1年半ほど前から愛用しています。
+sccacheについて詳しくは <a href="https://qiita.com/tatsuya6502/items/76b28a6786a1ddc9d479">こちらの記事</a> をご覧ください。</p>
+<p>sccacheは2020年12月21日にリリース済みの0.2.14からネイティブ対応しています。
+Homebrewにパッケージがありますが、Rust 1.49.0がまだstableでないためHomebrewのネイティブ版ではインストールできません。代わりに<code>cargo install</code>コマンドでビルドしてインストールします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cargo install sccache
+</code></pre></div><p>Rustプロジェクトのビルド時に環境変数<code>RUSTC_WRAPPER</code>を<code>sccache</code>にセットするとsccacheが使われるようになります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ export RUSTC_WRAPPER<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>which sccache<span style="color:#66d9ef">)</span>
+</code></pre></div><h2 id="参考cargo-editをビルドしてみる">参考：Cargo Editをビルドしてみる</h2>
+<p>RustツールチェーンとHomebrewがインストールできたので、試しに何かビルドしてみましょう。
+筆者は <a href="https://crates.io/crates/cargo-edit">cargo edit</a> を選びました。</p>
+<p>cargo editはcrates.ioのAPIにアクセスするためにHTTPS通信を行います。
+ネイティブライブラリーのOpenSSLが必要になりますので、Homebrewのネイティブ版で<code>openssl@1.1</code>と<code>pkg-config</code>パッケージをインストールします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ brew install openssl@1.1 pkg-config
+</code></pre></div><p><code>cargo install</code>コマンドでcargo editをビルド、インストールします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cargo install cargo-edit
+...
+  Installing /Users/tatsuya/.cargo/bin/cargo-add
+  Installing /Users/tatsuya/.cargo/bin/cargo-rm
+  Installing /Users/tatsuya/.cargo/bin/cargo-upgrade
+   Installed package <span style="color:#e6db74">`</span>cargo-edit v0.7.0<span style="color:#e6db74">`</span> <span style="color:#f92672">(</span>executables <span style="color:#e6db74">`</span>cargo-add<span style="color:#e6db74">`</span>, <span style="color:#e6db74">`</span>cargo-rm<span style="color:#e6db74">`</span>, <span style="color:#e6db74">`</span>cargo-upgrade<span style="color:#e6db74">`</span><span style="color:#f92672">)</span>
+</code></pre></div><h2 id="visual-studio-code">Visual Studio Code</h2>
+<ul>
+<li>Visual Studio Codeは現在はプレビュー版</li>
+</ul>
+<p>Visual Studio Code（VS Code）はオープンソースかつクロスプラットフォームのコードエディターです。
+ネイティブ版は現時点ではプレビュー版です。</p>
+<p>ネイティブ版は「Insider Builds」のページからダウンロードできます。</p>
+<ul>
+<li><a href="https://code.visualstudio.com/insiders/">https://code.visualstudio.com/insiders/</a></li>
+</ul>
+<p>「.zip」の横にある「ARM64」ボタンをクリックし、ダウンロードしてください。
+（大きなDownloadのボタンをクリックすると、x86_64版がダウンロードされてしまいます）</p>
+<p>ダウンロードできたらzipファイルを解凍します。
+すると「Visual Studio Code - Insiders」というアプリになりますので、Finderで選択して<code>Command</code> + <code>I</code>で情報を表示します。
+ファイルの種類が「アプリケーション（Appleシリコン）」になっていることを確認してください。OKならアプリをアプリケーションフォルダー（Applicationsフォルダー）へ移動します。</p>
+<h2 id="rust-analyzerのビルドとインストール">Rust Analyzerのビルドとインストール</h2>
+<ul>
+<li>Rust Analyzerはまだバイナリー版のダウンロードはできない。ソースコードからビルドする</li>
+<li>Rust AnalyzerのVS CodeプラグインをビルドするにはNode.jsとnpmが必要。Homebrew（AArch64）でインストールできる</li>
+</ul>
+<p>Rust AnalyzerはRustのLSPサーバー実装のひとつです。
+LSP（Language Server Protocol）はマイクロソフトが提唱するオープンなプロトコルで、これを使うとエディターやIDEがコンパイラなどの言語処理系と連携できるようになります。
+Rust AnalyzerにはVS Codeの拡張機能が用意されており、VS Codeからすぐに使えます。
+またviやEmacsのような他のエディターからもLSPプラグインを通して使えます。</p>
+<p>Rust Analyzerは毎週バイナリー版のリリースが作られますが、現時点ではApple silicon向けのバイナリーはありません。
+そのため、ソースコードを取得して自分でビルドする必要があります。
+と、言っても特に難しいところはないと思います。</p>
+<p>なお、Rust Analyzer本体はRustツールチェーンだけでビルドできます。
+VS Code拡張機能もビルドする場合はNode.jsとnpmも必要です。</p>
+<h3 id="rust-analyzerのソースコード取得">Rust Analyzerのソースコード取得</h3>
+<p>適当なディレクトリーに移動してから、Rust Analyzerのgitリポジトリーをクローンします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd 適当なディレクトリー
+$ git clone https://github.com/rust-analyzer/rust-analyzer.git
+$ cd rust-analyzer
+</code></pre></div><h3 id="nodejsとnpmのインストール">Node.jsとnpmのインストール</h3>
+<p>Rust AnalyzerのVS Code拡張機能をビルドする場合は、ビルドに必要なNode.jsとnpmをインストールします。
+VS Code拡張機能が不要な場合はこのステップは飛ばして構いません。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## ネイティブ版のHomebrewでnodeパッケージをインストールする</span>
+<span style="color:#75715e">## Node.jsとnpmがインストールされる</span>
+$ brew install node
+
+$ node -v
+v15.4.0
+
+$ npm -v 
+7.0.15
+</code></pre></div><h3 id="最新リリースのタグでチェックアウト">最新リリースのタグでチェックアウト</h3>
+<p>Rust Analyzerは開発が活発に続けられており、毎週リリースされています。
+<code>git tag</code>コマンドで最新のリリースのタグを調べ、チェックアウトします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git tag | sort | tail -6
+2020-11-30
+2020-12-07
+2020-12-14
+2020-12-21
+guide-2019-01
+nightly
+
+$ git checkout 2020-12-21
+...
+Note: switching to <span style="color:#e6db74">&#39;2020-12-21&#39;</span>.
+
+You are in <span style="color:#e6db74">&#39;detached HEAD&#39;</span> state. ...
+...
+
+HEAD is now at ...
+</code></pre></div><h3 id="シェルからvs-codeバイナリーへのpathを設定">シェルからVS CodeバイナリーへのPATHを設定</h3>
+<p>VS Code拡張機能をビルドする場合はビルドスクリプトからVS Codeのバイナリー（<code>code</code>コマンド）が実行できるように設定します。
+VS Code拡張機能が不要な場合はこのステップは飛ばして構いません。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## 筆者はビルドのたびにPATHを設定するのが面倒だったので以下の内容のファイルを作った</span>
+$ cat vs-code-env
+export PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$PATH<span style="color:#e6db74">:/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin&#34;</span>
+
+$ source ./vs-code-env 
+
+<span style="color:#75715e">## codeコマンドが使えることを確認する</span>
+
+$ which code
+/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin/code
+
+$ code -v 
+1.53.0-insider
+c927a8015b9e26bd454d6e293bb0384aa1975d06
+arm64
+</code></pre></div><h3 id="rust-analyzerのビルドとインストール-1">Rust Analyzerのビルドとインストール</h3>
+<p>Rust Analyzerをビルドしましょう。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Rust AnalyzerとVS Code拡張機能をインストールする</span>
+$ cargo xtask install
+
+<span style="color:#75715e"># または</span>
+<span style="color:#75715e"># Rust AnalyzerのLSPサーバーだけをインストールする</span>
+$ cargo xtask install --server
+</code></pre></div><p><strong>実行例</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cargo xtask install
+...
+
+   Replacing /Users/tatsuya/.cargo/bin/rust-analyzer
+...
+
+Installing extensions...
+Extension <span style="color:#e6db74">&#39;rust-analyzer.vsix&#39;</span> was successfully installed.
+</code></pre></div><h3 id="新しいバージョンがリリースされたら">新しいバージョンがリリースされたら</h3>
+<p>Rust Analyzerの新しいバージョンがリリースされたら、以下のようにして最新のコードを取得します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## ローカルのgitリポジトリーを初期状態に戻す</span>
+$ git restore .
+$ git checkout master
+Previous HEAD position was ...
+Switched to branch <span style="color:#e6db74">&#39;master&#39;</span>
+Your branch is up to date with <span style="color:#e6db74">&#39;origin/master&#39;</span>.
+
+<span style="color:#75715e">## リモートリポジトリー（GitHub）から最新のコードを取得する</span>
+$ git fetch origin
+$ git pull origin master
+</code></pre></div><p>あとは「<a href="#%E6%9C%80%E6%96%B0%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%81%AE%E3%82%BF%E3%82%B0%E3%81%A7%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%82%A2%E3%82%A6%E3%83%88">最新リリースのタグでチェックアウト</a>」のステップから再び実行すればOKです。</p>
+<h2 id="docker-desktop">Docker Desktop</h2>
+<ul>
+<li>Docker Desktopは現時点ではプレビュー版</li>
+<li>Linux ARM 64（AArch64）版のイメージをネイティブ実行できる</li>
+<li>Docker DesktopにはQEMUが同梱されているので、x86_64など他のアーキテクチャのLinuxイメージも <strong>一応</strong> 実行可能</li>
+</ul>
+<p>Docker Desktop for Macは2020年12月16日からプレビュー版が一般公開されています。
+Linux ARM 64（AArch64）版のイメージをネイティブ実行できますが、それだけでなく、x86_64など他のアーキテクチャのLinuxイメージもQEMUを通して実行できます。</p>
+<p>ウェブブラウザーで以下のURLを開きます。</p>
+<ul>
+<li><a href="https://www.docker.com/blog/download-and-try-the-tech-preview-of-docker-desktop-for-m1/">https://www.docker.com/blog/download-and-try-the-tech-preview-of-docker-desktop-for-m1/</a></li>
+</ul>
+<p>「Download it here!」と書かれたリンクをクリックすると、プレビュー版のダウンロードが始まります。</p>
+<p>ダウンロードできたら、ディスクイメージファイルをダブルクリックします。
+仮想ディスクがマウントされますので、中にあるDockerアプリをアプリケーションフォルダーへコピーします。</p>
+<p>Dockerアプリをダブルクリックで起動すれば準備完了です。</p>
+<h3 id="linux-arm-64版のdockerイメージを使う">Linux ARM 64版のDockerイメージを使う</h3>
+<p>Apple siliconのアーキテクチャーはAArch64なので、Docker Desktop for MacでDockerホストとして動く仮想マシンのLinuxカーネルもAArch64版になります。<code>docker pull</code>したときに「ARM 64」版のDockerイメージが用意されていれば、そのイメージがダウンロードされます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker pull rust
+
+$ docker run -it --rm rust       
+
+root@cb45a4cbe687:/# uname -sm
+Linux aarch64
+
+root@cb45a4cbe687:/# rustc -Vv
+rustc 1.48.0 <span style="color:#f92672">(</span>7eac88abb 2020-11-16<span style="color:#f92672">)</span>
+binary: rustc
+commit-hash: 7eac88abb2e57e752f3302f02be5f3ce3d7adfb4
+commit-date: 2020-11-16
+host: aarch64-unknown-linux-gnu
+release: 1.48.0
+LLVM version: 11.0
+</code></pre></div><p><code>rust</code>のようなDockerの公式イメージなら基本的にARM 64版が用意されています。</p>
+<p>ARM 64版のコンテナーでビルドしたRustバイナリーは、64ビット版のRaspberry PiやAWS EC2のARMインスタンスでも実行できます。
+Linux x86_64上でこれらの環境向けにクロスコンパイルするよりも手軽でいいかもしれません。</p>
+<h3 id="linux-x86_64版のdockerイメージを使う">Linux x86_64版のDockerイメージを使う</h3>
+<p><code>docker pull</code>などで指定したイメージにARM 64版がないときはx86_64版などDocker Desktopが対応している非ネイティブアーキテクチャーのイメージがダウンロードされます。
+また、<code>docker pull</code>や<code>docker run</code>で<code>--platform</code>を指定することもできます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## イメージのプラットフォームを指定する（amd64はx86_64と同じ意味）</span>
+$ docker pull --platform linux/amd64 rust
+</code></pre></div><p>このようなイメージを使うときでも、Dockerホストとして動く仮想マシンのLinuxカーネルはAArch64版のままです。
+当然、x86_64などのバイナリーは直接実行できませんので、仮想マシン上のLinuxカーネルのbin_fmtという機能によってQEMUのユーザースペースエミュレーターが起動され、それを通して実行されます。
+macOSにおけるRosetta 2と似た技術ですが、Rosetta 2は事前にネイティブコードに変換してから実行するのに対し、QEMUではx86_64コードを逐次解釈しながら実行するインタープリター形式のようなので、実行速度は遅くなります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker run -it --rm --platform linux/amd64 rust
+
+<span style="color:#75715e">## 実はカーネルはAArch64版だが、見かけ上はx86_64版になる</span>
+root@cd6b4eca1faf:/# uname -sm
+Linux x86_64
+
+root@cd6b4eca1faf:/# rustc -Vv
+rustc 1.48.0 <span style="color:#f92672">(</span>7eac88abb 2020-11-16<span style="color:#f92672">)</span>
+binary: rustc
+commit-hash: 7eac88abb2e57e752f3302f02be5f3ce3d7adfb4
+commit-date: 2020-11-16
+host: x86_64-unknown-linux-gnu
+release: 1.48.0
+LLVM version: 11.0
+</code></pre></div><p>なお、OEMUユーザースペースエミュレーターにはサポートしていない機械語命令やLinuxシステムコールなどがあるため、うまく動かないバイナリーも結構あるようです。
+筆者が試した範囲では、x86_64版のRustコンパイラが内部エラー（Internal Compiler Error、ICE）で落ちてしまったり、QEMUプロセスがsegmentation faultしてしまうことが何度もありました。
+実用的に使うのはまだ難しいかもしれません。</p>
+<p>なお、ネイティブイメージだけを使用したいときは、<code>--platform</code>に<code>linux/arm64/v8</code>を指定します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## Apple siliconネイティブのイメージに限定する</span>
+$ docker pull --platform linux/arm64/v8 rust
+</code></pre></div><h2 id="まとめ">まとめ</h2>
+<p>Apple siliconを搭載したMacにRustの開発環境をセットアップする方法を説明しました。</p>
+
+  </section>
+  <footer>
+    
+    <nav class="p-pagination c-pagination">
+      <div class="c-pagination__ctrl">
+        <div class="c-pagination__newer">
+          
+          
+        </div>
+        <div class="c-pagination__older">
+          
+          <a href="https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-rustc-cranelift/">Older</a>
+          
+        </div>
+      </div>
+    </nav>
+    
+
+
+    
+<aside class="p-author">
+  
+  
+  <div class="p-author__body">
+    
+    <p class="c-title p-author__name ">Tatsuya Kawano (tatsuya6502)</p>
+    
+    
+    <p>Erlang/OTPやRustで分散DBを開発してます。最近、Rustの本を書きました。上海在住</p>
+    
+    
+  </div>
+  
+</aside>
+
+
+  </footer>
+</article>
+  </main>
+  
+<nav class="l-nav p-menu">
+  <ul class="p-menu__lists">
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tatsuya6502/categories">Categories</a>
+      </li>
+      
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tatsuya6502/tags">Tags</a>
+      </li>
+      
+    
+      
+      <li class="p-menu__listitem">
+        <a href="/tatsuya6502/index.xml">RSS</a>
+      </li>
+      
+    
+  </ul>
+</nav>
+
+
+  <footer class="l-footer">
+    
+<ul class="c-links">
+  
+  
+  
+  
+  
+  <li class="c-links__item">
+    <a href="https://github.com/tatsuya6502" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>github</title>
+        <use xlink:href="#icon-github"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  <li class="c-links__item">
+    <a href="https://gitlab.com/tatsuya6502" target="_blank">
+      <svg viewBox="0 0 64 64" class="c-links__icon">
+        <title>gitlab</title>
+        <use xlink:href="#icon-gitlab"></use>
+      </svg>
+    </a>
+  </li>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+
+    <p class="p-copyright">
+      
+        &copy; 2019&mdash;2020 Tatsuya Kawano (tatsuya6502)
+      
+    </p>
+  </footer>
+
+  
+    
+  
+<script src="https://utteranc.es/client.js"
+        repo="rust-jp-blogs/tatsuya6502"
+        issue-term="url"
+        label="blog comments"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+</body>
+</html>
+

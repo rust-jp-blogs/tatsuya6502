@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
     <copyright>&amp;copy; 2019&amp;mdash;2020 Tatsuya Kawano (tatsuya6502)</copyright>
-    <lastBuildDate>Thu, 17 Dec 2020 18:30:00 +0800</lastBuildDate><atom:link href="https://blog.rust-jp.rs/tatsuya6502/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Dec 2020 19:10:00 +0800</lastBuildDate><atom:link href="https://blog.rust-jp.rs/tatsuya6502/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rustの環境構築（Apple Silicon） 2020年12月版</title>
+      <link>https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-devenv-apple-silicon/</link>
+      <pubDate>Tue, 22 Dec 2020 19:10:00 +0800</pubDate>
+      
+      <guid>https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-devenv-apple-silicon/</guid>
+      <description>これは Rust Advent Calendar 2020 15日目のエントリーです。 飛び入り参加です。 本記事ではApple siliconを搭載したMacにRustの開発環境をセットアッ</description>
+    </item>
+    
     <item>
       <title>デバッグビルドを高速化するrustc_codegen_craneliftを試してみました</title>
       <link>https://blog.rust-jp.rs/tatsuya6502/posts/2020-12-rustc-cranelift/</link>
