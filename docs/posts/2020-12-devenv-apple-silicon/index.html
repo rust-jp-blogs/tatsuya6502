@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja-JP">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
@@ -29,7 +29,7 @@
   
   
   
-  <meta name="generator" content="Hugo 0.79.1" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
+  <meta name="generator" content="Hugo 0.80.0" /><link rel="stylesheet" href="https://blog.rust-jp.rs/tatsuya6502/css/style.css" />
   
   
   
@@ -85,6 +85,7 @@ Apple siliconネイティブなソフトウェアを中心にインストール�
 <h2 id="ソフトウェアのバージョンについて">ソフトウェアのバージョンについて</h2>
 <p>本記事で扱うソフトウェアとバージョンは以下のとおりです。
 なお、macOSのバージョンはBig Sur 11.1です。</p>
+<p><strong>2020年12月22日の状況</strong></p>
 <table>
 <thead>
 <tr>
@@ -296,8 +297,6 @@ $ rustup show
 </tbody>
 </table>
 <p>これに従ってインストールしましょう。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h3 id="homebrewapple-siliconネイティブ版">Homebrew（Apple siliconネイティブ版）</h3>
 <p>ネイティブ版は以下のコマンドでインストールします。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo mkdir /opt/homebrew
@@ -330,7 +329,8 @@ A□
 
 Install of Rosetta <span style="color:#ae81ff">2</span> finished successfully
 </code></pre></div><h3 id="brewコマンドの実行方法">brewコマンドの実行方法</h3>
-<p>ネイティブ版は単に<code>brew サブコマンド</code>とすれば実行できます。</p>
+<p><strong>Apple siliconネイティブ版</strong></p>
+<p>ネイティブ版は単に「<code>brew サブコマンド</code>」とすれば実行できます。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ brew config 
 HOMEBREW_VERSION: 2.6.2
 HOMEBREW_PREFIX: /opt/homebrew
@@ -357,14 +357,38 @@ HOMEBREW_PREFIX: /opt/homebrew   <span style="color:#75715e">## ← /usr/local�
 CPU: octa-core 64-bit westmere
 macOS: 11.1-x86_64
 Rosetta 2: true
+</code></pre></div><h3 id="パッケージがネイティブ対応しているか調べる2021年1月3日-追記">パッケージがネイティブ対応しているか調べる（2021年1月3日 追記）</h3>
+<p>以下のコマンドで、ネイティブのバイナリー（bottle）が用意されているパッケージ 一覧を表示できます。
+2021年1月3日の時点では約3,600パッケージについてbottleが用意されていました。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ brew update
+$ cd <span style="color:#66d9ef">$(</span>brew --repo homebrew/core<span style="color:#66d9ef">)</span>/Formula/
+$ rg -l <span style="color:#e6db74">&#39;:arm64_big_sur&#39;</span> | xargs -I<span style="color:#f92672">{}</span> basename <span style="color:#f92672">{}</span> .rb | sort
+a2ps
+a52dec
+aacgain
+aalib
+...
+zyre
+zzuf
+
+$ rg -l <span style="color:#e6db74">&#39;:arm64_big_sur&#39;</span> | wc -l
+    <span style="color:#ae81ff">3602</span>
+
+<span style="color:#75715e">## なお、`rg`コマンドは`brew install ripgrep` でインストールできる</span>
 </code></pre></div><h2 id="sccache">sccache</h2>
 <p>sccacheはRust製のコンパイルキャッシュです。
 複数のRustプロジェクトから同じバージョンのクレートを使っているときなどに、2回目以降のビルド時間を短縮できます。
 Rustで開発するうえで必須ではありませんが、筆者は1年半ほど前から愛用しています。
 sccacheについて詳しくは <a href="https://qiita.com/tatsuya6502/items/76b28a6786a1ddc9d479">こちらの記事</a> をご覧ください。</p>
 <p>sccacheは2020年12月21日にリリース済みの0.2.14からネイティブ対応しています。
-Homebrewにパッケージがありますが、Rust 1.49.0がまだstableでないためHomebrewのネイティブ版ではインストールできません。代わりに<code>cargo install</code>コマンドでビルドしてインストールします。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cargo install sccache
+Homebrewにパッケージがありますが、Rust 1.49.0がまだstableでないためHomebrewのネイティブ版ではインストールできません。</p>
+<p><strong>2021年1月3日 追記</strong>：sccacheは現在はHomebrewでバイナリーパッケージからインストールできるようになっています。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## 2021年1月現在はbrewでバイナリーパッケージからインストールできる</span>
+$ brew install sccache
+</code></pre></div><p>（<strong>追記おわり</strong>）</p>
+<p>Homebrewのネイティブ版でインストールできるようになるまでの間は、<code>cargo install</code>コマンドでビルドしてインストールします。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">## 2020年12月中はcargoでビルド、インストールする必要があった</span>
+$ cargo install sccache
 </code></pre></div><p>Rustプロジェクトのビルド時に環境変数<code>RUSTC_WRAPPER</code>を<code>sccache</code>にセットするとsccacheが使われるようになります。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ export RUSTC_WRAPPER<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>which sccache<span style="color:#66d9ef">)</span>
 </code></pre></div><h2 id="参考cargo-editをビルドしてみる">参考：Cargo Editをビルドしてみる</h2>
@@ -396,8 +420,11 @@ Homebrewにパッケージがありますが、Rust 1.49.0がまだstableでな�
 すると「Visual Studio Code - Insiders」というアプリになりますので、Finderで選択して<code>Command</code> + <code>I</code>で情報を表示します。
 ファイルの種類が「アプリケーション（Appleシリコン）」になっていることを確認してください。OKならアプリをアプリケーションフォルダー（Applicationsフォルダー）へ移動します。</p>
 <h2 id="rust-analyzerのビルドとインストール">Rust Analyzerのビルドとインストール</h2>
+<p><strong>2021年1月3日 追記</strong>：2020年12月28日からRust AnalyzerのApple siliconネイティブバイナリーの配布が始まりました。
+そのため、ここで解説しているソースコードからのビルドは<strong>不要</strong>です。
+VS Codeならmatklad.rust-analyzer拡張機能をインストールすると、自動的にネイティブ版がダウンロードされます。（<strong>追記おわり</strong>）</p>
 <ul>
-<li>Rust Analyzerはまだバイナリー版のダウンロードはできない。ソースコードからビルドする</li>
+<li>Rust Analyzerは <del>まだバイナリー版のダウンロードはできない。ソースコードからビルドする</del> → 12月28日からバイナリー版が提供されるようになった</li>
 <li>Rust AnalyzerのVS CodeプラグインをビルドするにはNode.jsとnpmが必要。Homebrew（AArch64）でインストールできる</li>
 </ul>
 <p>Rust AnalyzerはRustのLSPサーバー実装のひとつです。
@@ -536,7 +563,9 @@ Linux x86_64上でこれらの環境向けにクロスコンパイルするよ�
 $ docker pull --platform linux/amd64 rust
 </code></pre></div><p>このようなイメージを使うときでも、Dockerホストとして動く仮想マシンのLinuxカーネルはAArch64版のままです。
 当然、x86_64などのバイナリーは直接実行できませんので、仮想マシン上のLinuxカーネルのbin_fmtという機能によってQEMUのユーザースペースエミュレーターが起動され、それを通して実行されます。
-macOSにおけるRosetta 2と似た技術ですが、Rosetta 2は事前にネイティブコードに変換してから実行するのに対し、QEMUではx86_64コードを逐次解釈しながら実行するインタープリター形式のようなので、実行速度は遅くなります。</p>
+macOSにおけるRosetta 2と似た技術ですが、Rosetta 2は事前にネイティブコードに変換してから実行するのに対し、QEMUではx86_64コードを <del>逐次解釈しながら実行するインタープリター形式のようなので、実行速度は遅くなります。</del></p>
+<p><strong>2021年1月3日 訂正</strong>：<a href="https://msyksphinz.hatenablog.com/entry/2020/12/29/040000#QEMU%E3%81%8C%E9%AB%98%E9%80%9F%E3%81%AA%E7%90%86%E7%94%B1TCG-Binary-Translation">こちらの記事</a> によると、QEMUのエミュレーターはインタープリター形式ではなく、ネイティブコードへの変換を行っているようです。（<strong>追記おわり</strong>）</p>
+<p><strong>Linux x86_64版のDockerイメージからコンテナを実行する</strong></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ docker run -it --rm --platform linux/amd64 rust
 
 <span style="color:#75715e">## 実はカーネルはAArch64版だが、見かけ上はx86_64版になる</span>
@@ -588,7 +617,7 @@ $ docker pull --platform linux/arm64/v8 rust
     <p class="c-title p-author__name ">Tatsuya Kawano (tatsuya6502)</p>
     
     
-    <p>Erlang/OTPやRustで分散DBを開発してます。最近、Rustの本を書きました。上海在住</p>
+    <p>Rustが好きです。上海在住</p>
     
     
   </div>
@@ -668,7 +697,7 @@ $ docker pull --platform linux/arm64/v8 rust
 
     <p class="p-copyright">
       
-        &copy; 2019&mdash;2020 Tatsuya Kawano (tatsuya6502)
+        &copy; 2019&mdash;2021 Tatsuya Kawano (tatsuya6502)
       
     </p>
   </footer>
