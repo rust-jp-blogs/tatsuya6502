@@ -35,6 +35,8 @@ Apple siliconネイティブなソフトウェアを中心にインストール�
 本記事で扱うソフトウェアとバージョンは以下のとおりです。
 なお、macOSのバージョンはBig Sur 11.1です。
 
+**2020年12月22日の状況**
+
 | ソフトウェア | バージョン | アーキテクチャー | 備考 |
 |:--|:--|:--|:--|
 | rustup | 1.23.1 | Apple | 正式版 |
@@ -227,9 +229,6 @@ Homebrewの [ドキュメント][homebrew-doc] ではHomebrewを以下のディ�
 
 これに従ってインストールしましょう。
 
-<!--
-GH issue
--->
 
 ### Homebrew（Apple siliconネイティブ版）
 
@@ -308,7 +307,9 @@ Install of Rosetta 2 finished successfully
 
 ### brewコマンドの実行方法
 
-ネイティブ版は単に`brew サブコマンド`とすれば実行できます。
+**Apple siliconネイティブ版**
+
+ネイティブ版は単に「`brew サブコマンド`」とすれば実行できます。
 
 ```bash
 $ brew config 
@@ -349,6 +350,30 @@ Rosetta 2: true
 ```
 
 
+### パッケージがネイティブ対応しているか調べる（2021年1月3日 追記）
+
+以下のコマンドで、ネイティブのバイナリー（bottle）が用意されているパッケージ 一覧を表示できます。
+2021年1月3日の時点では約3,600パッケージについてbottleが用意されていました。
+
+```bash
+$ brew update
+$ cd $(brew --repo homebrew/core)/Formula/
+$ rg -l ':arm64_big_sur' | xargs -I{} basename {} .rb | sort
+a2ps
+a52dec
+aacgain
+aalib
+...
+zyre
+zzuf
+
+$ rg -l ':arm64_big_sur' | wc -l
+    3602
+
+## なお、`rg`コマンドは`brew install ripgrep` でインストールできる
+```
+
+
 ## sccache
 
 sccacheはRust製のコンパイルキャッシュです。
@@ -359,9 +384,21 @@ sccacheについて詳しくは [こちらの記事][qiita-sccache] をご覧く
 [qiita-sccache]: https://qiita.com/tatsuya6502/items/76b28a6786a1ddc9d479
 
 sccacheは2020年12月21日にリリース済みの0.2.14からネイティブ対応しています。
-Homebrewにパッケージがありますが、Rust 1.49.0がまだstableでないためHomebrewのネイティブ版ではインストールできません。代わりに`cargo install`コマンドでビルドしてインストールします。
+Homebrewにパッケージがありますが、Rust 1.49.0がまだstableでないためHomebrewのネイティブ版ではインストールできません。
+
+**2021年1月3日 追記**：sccacheは現在はHomebrewでバイナリーパッケージからインストールできるようになっています。
 
 ```bash
+## 2021年1月現在はbrewでバイナリーパッケージからインストールできる
+$ brew install sccache
+```
+
+（**追記おわり**）
+
+Homebrewのネイティブ版でインストールできるようになるまでの間は、`cargo install`コマンドでビルドしてインストールします。
+
+```bash
+## 2020年12月中はcargoでビルド、インストールする必要があった
 $ cargo install sccache
 ```
 
@@ -419,7 +456,11 @@ Visual Studio Code（VS Code）はオープンソースかつクロスプラッ�
 
 ## Rust Analyzerのビルドとインストール
 
-- Rust Analyzerはまだバイナリー版のダウンロードはできない。ソースコードからビルドする
+**2021年1月3日 追記**：2020年12月28日からRust AnalyzerのApple siliconネイティブバイナリーの配布が始まりました。
+そのため、ここで解説しているソースコードからのビルドは**不要**です。
+VS Codeならmatklad.rust-analyzer拡張機能をインストールすると、自動的にネイティブ版がダウンロードされます。（**追記おわり**）
+
+- Rust Analyzerは ~~まだバイナリー版のダウンロードはできない。ソースコードからビルドする~~ → 12月28日からバイナリー版が提供されるようになった
 - Rust AnalyzerのVS CodeプラグインをビルドするにはNode.jsとnpmが必要。Homebrew（AArch64）でインストールできる
 
 Rust AnalyzerはRustのLSPサーバー実装のひとつです。
@@ -621,7 +662,12 @@ $ docker pull --platform linux/amd64 rust
 
 このようなイメージを使うときでも、Dockerホストとして動く仮想マシンのLinuxカーネルはAArch64版のままです。
 当然、x86_64などのバイナリーは直接実行できませんので、仮想マシン上のLinuxカーネルのbin_fmtという機能によってQEMUのユーザースペースエミュレーターが起動され、それを通して実行されます。
-macOSにおけるRosetta 2と似た技術ですが、Rosetta 2は事前にネイティブコードに変換してから実行するのに対し、QEMUではx86_64コードを逐次解釈しながら実行するインタープリター形式のようなので、実行速度は遅くなります。
+macOSにおけるRosetta 2と似た技術ですが、Rosetta 2は事前にネイティブコードに変換してから実行するのに対し、QEMUではx86_64コードを ~~逐次解釈しながら実行するインタープリター形式のようなので、実行速度は遅くなります。~~
+
+**2021年1月3日 訂正**：[こちらの記事][qemu-translaton] によると、QEMUのエミュレーターはインタープリター形式ではなく、ネイティブコードへの変換を行っているようです。（**追記おわり**）
+
+
+**Linux x86_64版のDockerイメージからコンテナを実行する**
 
 ```bash
 $ docker run -it --rm --platform linux/amd64 rust
@@ -650,6 +696,8 @@ LLVM version: 11.0
 ## Apple siliconネイティブのイメージに限定する
 $ docker pull --platform linux/arm64/v8 rust
 ```
+
+[qemu-translaton]: https://msyksphinz.hatenablog.com/entry/2020/12/29/040000#QEMU%E3%81%8C%E9%AB%98%E9%80%9F%E3%81%AA%E7%90%86%E7%94%B1TCG-Binary-Translation
 
 
 ## まとめ
