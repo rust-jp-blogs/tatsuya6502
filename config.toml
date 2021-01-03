@@ -1,5 +1,5 @@
 baseURL = "https://blog.rust-jp.rs/tatsuya6502/"
-languageCode = "ja-JP"
+languageCode = "ja"
 title = "Oxidized Bookshelf"
 
 pygmentsCodeFences = true
@@ -11,7 +11,7 @@ theme = "hugo_theme_pickles"
 publishDir = "docs"
 
 # Copyright notice. This is displayer in the footer.
-copyright = "&copy; 2019&mdash;2020 Tatsuya Kawano (tatsuya6502)"
+copyright = "&copy; 2019&mdash;2021 Tatsuya Kawano (tatsuya6502)"
 # custom_css = "/static/css/custom.css"
 
 [params]
@@ -44,7 +44,7 @@ copyright = "&copy; 2019&mdash;2020 Tatsuya Kawano (tatsuya6502)"
   # authorwebsite = "example.com"
   # avatar = "/path/to/avatar"
   # contact = "Your contact link (ex. mailto:foo@example.com)"
-  bio = "Erlang/OTPやRustで分散DBを開発してます。最近、Rustの本を書きました。上海在住"
+  bio = "Rustが好きです。上海在住"
   # Logo image. This is displayed ogp image.
   # logo = "/path/to/logo"
   # favicon = "/path/to/favicon"
